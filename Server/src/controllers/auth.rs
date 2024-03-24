@@ -1,27 +1,36 @@
-use super::Response;
-use super::SuccessResponse;
+use super::{SuccessResponse, ErrorResponse, Response};
+use jsonwebtoken::{encode, Header, EncodingKey, Claims};
 use rocket::{
     http::Status,
     serde::{json::Json, Serialize, Deserialize},
     State,
 };
 
-#[post("/login", data="req_sign_in")]
+use crate::{ database::db::DB, entities::data_models::User };
+
+#[post("/login", data="<req_sign_in>")]
 pub async fn login(
     db: &State<DB>,
     req_sign_in: Json<ReqSignIn>,
-) -> Response<ReqSignIn> {
+) -> Response<Json<ResSignIn>> {
+    let db: &DB = db as &DB;
     let user = db.fetch_user(&req_sign_in.email).await.unwrap();
     if user.password == req_sign_in.password {
-        Ok(SuccessResponse((Status::Ok, ResSignIn {
-            token: "token".to_string(),
-        })))
+       let token = encode(
+           &Header::default(),
+           &Claims {
+               sub: user.id.to_string(),
+               exp: (SystemTime::now() + Duration::from_secs(60)).duration_since(UNIX_EPOCH).unwrap().as_secs() as usize,
+               role: "user".to_string(),
+           },
+           &EncodingKey::from_secret("secret".as_ref()),
+       ); 
     } else {
         Ok(ErrorResponse((Status::Unauthorized, "Unauthorized".to_string())))
     }
 }
 
-#[post("/register", data="req_sign_up")]
+#[post("/register", data="<req_sign_up>")]
 pub async fn register(
     db: &State<DB>,
     req_sign_up: Json<ReqSignUp>,
@@ -36,8 +45,16 @@ pub async fn logout() -> Response<String> {
 }
 
 #[get("/me")]
-pub async fn me() -> Response<String> {
-    Ok(SuccessResponse((Status::Ok, "Id: 00 \nUsername: Test \nPassword: test123".to_string())))
+pub async fn me(db: &DB, user: AuthenticatedUser) -> Response<String> {
+    let db = db as &DB;
+
+    let user: data_models::User = db.fetch_user(&req_sign_in.email).await.unwrap();
+
+    Ok(SuccessResponse((Status::Ok, ResMe {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+    })))
 }
 
 #[derive(Deserialize)]
@@ -58,6 +75,7 @@ pub struct ResSignIn {
 pub struct ReqSignUp {
     email: String,
     password: String,
+    username: String,
 }
 
 #[derive(Serialize, Deserialize)]
