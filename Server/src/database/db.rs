@@ -1,12 +1,9 @@
 use std::env;
 use std::time::SystemTime;
 use dotenv::dotenv;
-use mongodb::bson::{doc, document::Document, oid::ObjectId, Bson};
+use mongodb::bson::{doc, document::Document, oid::ObjectId, Bson, extjson::de::Error};
 use mongodb::{Client, options::ClientOptions, Collection};
-<<<<<<< HEAD
 use crate::entities::data_models::User;
-=======
->>>>>>> parent of 4c9e574 (Test Commit)
 
 const DB_NAME: &str = "test";
 
@@ -18,11 +15,10 @@ pub struct DB {
 impl DB {
     pub async fn init() -> Self {
         dotenv().ok();
-        let uri = match env::var("mongodb+srv://admin:igXWJEOYuEgN7zJj@urbanoasis.iga2ujs.mongodb.net/?retryWrites=true&w=majority&appName=UrbanOasis") {
+        let uri = match env::var("MONGOURI") {
             Ok(v) => v.to_string(),
             Err(_) => format!("Error loading env variable"),
         };
-<<<<<<< HEAD
         DB {
             client: Client::with_uri_str(uri).unwrap().await,
         }
@@ -34,7 +30,7 @@ impl DB {
         let filter = doc! { "email": email };
         let user = collection.find_one(filter, None).await.unwrap().unwrap();
         Ok(User {
-            _id: user.get_object_id("_id").unwrap().to_hex(),
+            id: user.get_object_id("_id").unwrap().to_hex(),
             email: user.get_str("email").unwrap().to_string(),
             password: user.get_str("password").unwrap().to_string(),
         })
@@ -50,7 +46,7 @@ impl DB {
             username: user.get_str("username").unwrap().to_string(),
             email: user.get_str("email").unwrap().to_string(),
             password: user.get_str("password").unwrap().to_string(),
-            created_at: SystemTime::now().to_string(), 
+            created_at: SystemTime::now().to_string(),
         })
     }
 
@@ -71,11 +67,3 @@ impl DB {
         Ok(())
     }
 }
-=======
-        let client = Client::with_uri_str(uri).unwrap();
-        let db = client.database("rustDB");
-    }
-
-    pub async fn fetch_user(&self) -> Result<User, >
-}
->>>>>>> parent of 4c9e574 (Test Commit)

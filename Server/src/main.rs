@@ -23,7 +23,6 @@ fn index() -> Response<String> {
 
 #[launch]
 async fn rocket() -> _ {
-
     let _db = database::DB::init().await;
 
     rocket::build()
@@ -37,8 +36,4 @@ async fn rocket() -> _ {
             controllers::auth::logout,
             controllers::auth::me],
         )
-=======
-fn main() {
-    println!("Hello, world!");
->>>>>>> parent of 4c9e574 (Test Commit)
 }
