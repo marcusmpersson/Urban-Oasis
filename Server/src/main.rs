@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-#[macro_use] extern crate rocket;
+#[macro_use] 
+extern crate rocket;
 use rocket::http::Status;
 use crate::controllers::SuccessResponse;
 use crate::controllers::Response;

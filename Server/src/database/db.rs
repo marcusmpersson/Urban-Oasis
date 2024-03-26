@@ -2,68 +2,47 @@ use std::env;
 use std::time::SystemTime;
 use dotenv::dotenv;
 use mongodb::bson::{doc, document::Document, oid::ObjectId, Bson, extjson::de::Error};
-use mongodb::{Client, options::ClientOptions, Collection};
+use mongodb::{Client, options::ClientOptions, Database};
+use rocket::fairing::AdHoc;
 use crate::entities::data_models::User;
+use crate::private::URL_DB;
 
 const DB_NAME: &str = "test";
 
 #[derive(Clone, Debug)]
 pub struct DB {
-    pub(crate) client: Client,
+    pub(crate) database: Database,
+}
+
+
+pub async fn init() -> AdHoc {
+    AdHoc::on_ignite("Database", |rocket| async {
+        match connect().await {
+            Ok(database) => rocket.manage(DB::new(database)),
+            Err(e) => {
+                panic!("Failed to connect to database: {}", e);
+            }    
+        }
+    })    
+}
+
+async fn connect() -> mongodb::error::Result<Database> {
+    let client_options = ClientOptions::parse(URL_DB).await?;
+    let client = Client::with_options(client_options)?;
+
+    client
+        .database("UrbanOasis")
+        .run_command(doc! {"ping": 1}, None)
+        .await?;
+
+    println!("Connected to database");
+
+    Ok(client.database("UrbanOasis"))
 }
 
 impl DB {
-    pub async fn init() -> Self {
-        dotenv().ok();
-        let uri = match env::var("MONGOURI") {
-            Ok(v) => v.to_string(),
-            Err(_) => format!("Error loading env variable"),
-        };
-        DB {
-            client: Client::with_uri_str(uri).unwrap().await,
-        }
-    }
-
-    pub async fn fetch_user(&self, email: &str) -> Result<User, Error> {
-        let db = self.client.database(DB_NAME);
-        let collection = db.collection("users");
-        let filter = doc! { "email": email };
-        let user = collection.find_one(filter, None).await.unwrap().unwrap();
-        Ok(User {
-            id: user.get_object_id("_id").unwrap().to_hex(),
-            email: user.get_str("email").unwrap().to_string(),
-            password: user.get_str("password").unwrap().to_string(),
-        })
-    }
-
-    pub async fn create_user(&self, username: &str, email: &str, password: &str) -> Result<User, Error> {
-        let db = self.client.database(DB_NAME);
-        let collection = db.collection("users");
-        let user = doc! { "email": email, "password": password };
-        collection.insert_one(user, None).await.unwrap();
-        Ok(User {
-            _id: user.get_object_id("_id").unwrap().to_hex(),
-            username: user.get_str("username").unwrap().to_string(),
-            email: user.get_str("email").unwrap().to_string(),
-            password: user.get_str("password").unwrap().to_string(),
-            created_at: SystemTime::now().to_string(),
-        })
-    }
-
-    pub async fn update_user(&self, id: &str, email: &str, password: &str) -> mongodb::error::Result<()> {
-        let db = self.client.database(DB_NAME);
-        let collection = db.collection("users");
-        let filter = doc! { "_id": ObjectId::(id).unwrap() };
-        let update = doc! { "$set": { "email": email, "password": password } };
-        collection.find_one_and_update(filter, update, None).await.unwrap().unwrap();
-        Ok(())
-    }
-
-    pub async fn delete_user(&self, id: &str) -> mongodb::error::Result<()> {
-        let db = self.client.database(DB_NAME);
-        let collection = db.collection("users");
-        let filter = doc! { "_id": ObjectId::(id).unwrap() };
-        let user = collection.find_one_and_delete(filter, None).await.unwrap().unwrap();
-        Ok(())
+    pub fn new(database: Database) -> Self {
+        DB { database }
     }
 }
+

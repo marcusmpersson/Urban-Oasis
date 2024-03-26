@@ -1,4 +1,4 @@
-use Rocket::error::Error;
+use rocket::error::Error;
 
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use rocket::{
@@ -8,10 +8,11 @@ use rocket::{
 };
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
 pub struct Claims {
-    pub sub: String,
-    pub exp: usize,
+    pub sub: i32,
     pub role: String,
+    pub exp: u64,
 }
 
 pub struct AuthenticatedUser {
@@ -27,8 +28,8 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
 
             let data = decode::<Claims>(
                 token,
-                &DecodingKey::from_secret();
-                &Validation::default(),
+                &DecodingKey::from_secret(),
+                &Validation::new(jsonwebtoken::Algorithm::HS256),
             );
 
             let claims = match data {
