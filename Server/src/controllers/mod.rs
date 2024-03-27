@@ -1,6 +1,4 @@
 pub(crate) mod auth;
-mod db;
-mod user;
 
 use rocket::http::Status;
 
