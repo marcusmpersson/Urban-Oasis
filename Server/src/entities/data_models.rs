@@ -1,5 +1,5 @@
 #[derive(Debug, Serialize, Deserialize)]
-pub struct User {
+pub struct entities.User {
     id: i32,
     email: String,
     username: String,
