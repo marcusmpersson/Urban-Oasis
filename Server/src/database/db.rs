@@ -2,10 +2,6 @@ use std::env;
 use std::time::SystemTime;
 use dotenv::dotenv;
 use mongodb::bson::{doc, document::Document, oid::ObjectId, Bson, extjson::de::Error};
-use mongodb::{Client, options::ClientOptions, Database};
-use rocket::fairing::AdHoc;
-use crate::entities::data_models::User;
-use crate::private::URL_DB;
 
 const DB_NAME: &str = "test";
 
