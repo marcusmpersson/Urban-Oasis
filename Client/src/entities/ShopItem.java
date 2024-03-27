@@ -2,5 +2,11 @@ package entities;
 
 public class ShopItem extends Item {
 
-    private int price;
+    public Image image;
+    public String name;
+
+    public ShopItem(){}
+
+
+
 }
