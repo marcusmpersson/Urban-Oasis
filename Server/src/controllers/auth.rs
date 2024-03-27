@@ -1,16 +1,18 @@
 use super::{SuccessResponse, ErrorResponse, Response};
-use jsonwebtoken::{encode, Header, EncodingKey, Claims};
+use jsonwebtoken::{encode, Header, EncodingKey};
 use rocket::{
     http::Status,
     serde::{json::Json, Serialize, Deserialize},
     State,
 };
-use std::time::{SystemTime, UNIX_EPOCH, Duration, strftime};
-use mongodb::bson::doc;
+use std::time::SystemTime;
+use mongodb::bson::{doc, oid::ObjectId};
+use bcrypt::{hash, verify, DEFAULT_COST};
+use chrono::{DateTime, offset::Utc};
 
 
 use crate::{ database::db::DB, entities::data_models::User };
-use crate::auth::token::AuthenticatedUser;
+use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private::{JWT_SECRET, REFRESH_SECRET};
 
 #[post("/login", data="<req_sign_in>")]
@@ -20,12 +22,12 @@ pub async fn login(
 ) -> Response<Json<ResSignIn>> {
     let db: &DB = db as &DB;
     let u: User = db.fetch_user(&req_sign_in.email).await.unwrap();
-    if u.password != req_sign_in.password {
-       return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string())));
+    if !verify(&req_sign_in.password, &u.password).unwrap() {
+        return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string())));
     }
 
     let claims = Claims {
-        sub: u.id,
+        sub: u._id,
         role: "user".to_string(),
         exp: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 4*60*60,
     };
@@ -67,12 +69,11 @@ pub async fn me(
 ) -> Response<Json<ResMe>> {
     let db = db as &DB;
 
-    let u: User = db.fetch_user_by_id(user.id).await.unwrap();
+    let u: User = db.fetch_user_by_id(user._id).await.unwrap();
 
     Ok(SuccessResponse((
         Status::Ok,
         Json(ResMe {
-            id: u.id,
             email: u.email,
             username: u.username,
         }),
@@ -115,7 +116,6 @@ pub struct ReqSignUp {
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct ResMe {
-    id: i32,
     email: String,
     username: String,
 }
@@ -127,7 +127,7 @@ impl DB {
         Ok(mongodb::bson::from_document(user).unwrap())
     }
 
-    async fn fetch_user_by_id(&self, id: i32) -> Result<User, String> {
+    async fn fetch_user_by_id(&self, id: ObjectId) -> Result<User, String> {
         let filter = doc! { "id": id };
         let user = self.database.collection("users").find_one(filter, None).await.unwrap().unwrap();
         Ok(mongodb::bson::from_document(user).unwrap())
@@ -136,27 +136,28 @@ impl DB {
     async fn insert_user(&self, email: &str, password: &str, username: &str) -> Result<(), String> {
 
         let user = User {
-            id: self.database.collection("users").count_documents(None, None).await.unwrap() as i32,
+            _id: ObjectId::new(), 
             email: email.to_string(),
-            password: password.to_string(),
+            password: hash(password, DEFAULT_COST).unwrap(),
             username: username.to_string(),
-            created_at: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs().to_string(),
+            created_at: DateTime::<Utc>::from(SystemTime::now()).format("%Y-%m-%d %H:%M:%S").to_string,
         };
 
         self.database.collection("users").insert_one(mongodb::bson::to_document(&user).unwrap(), None).await.unwrap();
         Ok(())
     }
 
-    async fn update_user(&self, id: i32, email: &str, password: &str, username: &str) -> Result<(), String> {
+    async fn update_user(&self, id: ObjectId, email: &str, password: &str, username: &str) -> mongodb::error::Result<()> {
         let filter = doc! { "id": id };
         let update = doc! { "$set": { "email": email, "password": password, "username": username } };
-        self.database.collection("users").update_one(filter, update, None).await.unwrap();
+
+        self.database.collection::<User>("users").update_one(filter, update, None).await.unwrap();
         Ok(())
     }
 
-    async fn delete_user(&self, id: i32) -> Result<(), String> {
-        let filter = doc! { "id": id };
-        self.database.collection("users").delete_one(filter, None).await.unwrap();
+    async fn delete_user(&self, id: ObjectId) -> mongodb::error::Result<()> {
+
+        self.database.collection::<User>("users").delete_one(doc! { "id": id }, None).await;
         Ok(())
     }
 }

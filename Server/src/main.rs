@@ -10,6 +10,8 @@ use mongodb::{
     Collection
 };
 
+use crate::database::db::init;
+
 mod controllers;
 mod auth;
 mod database;
@@ -23,11 +25,10 @@ fn index() -> Response<String> {
 
 #[launch]
 async fn rocket() -> _ {
-    let _db = database::DB::init().await;
 
     rocket::build()
         .attach(Cors)
-        .manage(_db)
+        .manage(init().await)
         .mount("/", routes![options])
         .mount("/", routes![index])
         .mount("/auth", routes![

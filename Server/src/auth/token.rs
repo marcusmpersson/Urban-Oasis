@@ -6,17 +6,18 @@ use rocket::{
     request::{self, Request, FromRequest, Outcome},
     serde::{Deserialize, Serialize},
 };
+use mongodb::bson::oid::ObjectId;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Claims {
-    pub sub: i32,
+    pub sub: ObjectId,
     pub role: String,
     pub exp: u64,
 }
 
 pub struct AuthenticatedUser {
-    pub id: i32,
+    pub id: ObjectId,
 }
 
 #[rocket::async_trait]
