@@ -13,7 +13,8 @@ use chrono::{DateTime, offset::Utc};
 
 use crate::{ database::db::DB, entities::data_models::User };
 use crate::auth::token::{ AuthenticatedUser, Claims };
-use crate::private::{JWT_SECRET, REFRESH_SECRET};
+use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
+use crate::controllers::validators::{check_valid_login, check_valid_signup};
 
 #[post("/login", data="<req_sign_in>")]
 pub async fn login(
@@ -22,23 +23,29 @@ pub async fn login(
 ) -> Response<Json<ResSignIn>> {
     let db: &DB = db as &DB;
     let u: User = db.fetch_user(&req_sign_in.email).await.unwrap();
-    if !verify(&req_sign_in.password, &u.password).unwrap() {
-        return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string())));
+
+    match check_valid_login(&req_sign_in.email, &req_sign_in.password) {
+        Ok(_) => {
+            if !verify(&req_sign_in.password, &u.password).unwrap() {
+                return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string())));
+            }
+
+            let claims = Claims {
+                sub: u._id,
+                role: "user".to_string(),
+                exp: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 4*60*60,
+            };
+
+            let token = encode(
+                &Header::default(),
+                &claims, 
+                &EncodingKey::from_secret(JWT_SECRET.as_ref()),
+            ).unwrap();
+
+            Ok(SuccessResponse((Status::Ok, Json(ResSignIn { token }))))
+        },
+        Err(e) => Err(ErrorResponse((Status::UnprocessableEntity, e.to_string()))),
     }
-
-    let claims = Claims {
-        sub: u._id,
-        role: "user".to_string(),
-        exp: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 4*60*60,
-    };
-
-    let token = encode(
-        &Header::default(),
-        &claims, 
-        &EncodingKey::from_secret(JWT_SECRET),
-    ).unwrap();
-
-    Ok(SuccessResponse((Status::Ok, Json(ResSignIn { token }))))
 }
 
 #[post("/register", data="<req_sign_up>")]
@@ -48,13 +55,18 @@ pub async fn register(
 ) -> Response<String> {
     let db = db as &DB;
 
-    if db.fetch_user(&req_sign_up.email).await.is_ok() {
-        return Err(ErrorResponse((Status::UnprocessableEntity, "User already exists".to_string())));
-    }
+        match check_valid_signup(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username) {
+        Ok(_) => {
+            if db.fetch_user(&req_sign_up.email).await.is_ok() {
+                return Err(ErrorResponse((Status::UnprocessableEntity, "User already exists".to_string())));
+            }
 
-    db.insert_user(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
-
-    Ok(SuccessResponse((Status::Created, "Registered".to_string())))
+            db.insert_user(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
+        
+            Ok(SuccessResponse((Status::Created, "Registered".to_string())))
+        },
+        Err(e) => Err(ErrorResponse((Status::UnprocessableEntity, e.to_string()))),
+    } 
 }
 
 #[post("/logout")]
@@ -69,7 +81,7 @@ pub async fn me(
 ) -> Response<Json<ResMe>> {
     let db = db as &DB;
 
-    let u: User = db.fetch_user_by_id(user._id).await.unwrap();
+    let u: User = db.fetch_user_by_id(user.id).await.unwrap();
 
     Ok(SuccessResponse((
         Status::Ok,
@@ -124,12 +136,14 @@ impl DB {
     async fn fetch_user(&self, email: &str) -> Result<User, String> {
         let filter = doc! { "email": email };
         let user = self.database.collection("users").find_one(filter, None).await.unwrap().unwrap();
+
         Ok(mongodb::bson::from_document(user).unwrap())
     }
 
     async fn fetch_user_by_id(&self, id: ObjectId) -> Result<User, String> {
         let filter = doc! { "id": id };
         let user = self.database.collection("users").find_one(filter, None).await.unwrap().unwrap();
+
         Ok(mongodb::bson::from_document(user).unwrap())
     }
 
@@ -140,7 +154,7 @@ impl DB {
             email: email.to_string(),
             password: hash(password, DEFAULT_COST).unwrap(),
             username: username.to_string(),
-            created_at: DateTime::<Utc>::from(SystemTime::now()).format("%Y-%m-%d %H:%M:%S").to_string,
+            created_at: DateTime::<Utc>::from(SystemTime::now()).format("%Y-%m-%d %H:%M:%S").to_string(),
         };
 
         self.database.collection("users").insert_one(mongodb::bson::to_document(&user).unwrap(), None).await.unwrap();
