@@ -3,6 +3,7 @@ package entities;
 import enums.Rarity;
 import enums.Species;
 import java.util.Random;
+import javafx.scene.image.Image;
 import java.util.ArrayList;
 
 public class Seed extends ShopItem{

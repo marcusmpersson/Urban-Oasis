@@ -1,6 +1,7 @@
 package entities;
 import enums.Species;
 import enums.Stage;
+import javafx.scene.image.Image;
 
 public class PlantTop {
     private Image image;
@@ -25,5 +26,9 @@ public class PlantTop {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

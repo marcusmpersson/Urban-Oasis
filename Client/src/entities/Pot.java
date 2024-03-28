@@ -1,4 +1,5 @@
 package entities;
+import javafx.scene.image.Image;
 
 public class Pot extends Deco {
 
