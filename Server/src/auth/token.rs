@@ -7,6 +7,7 @@ use rocket::{
     serde::{Deserialize, Serialize},
 };
 use mongodb::bson::oid::ObjectId;
+use crate::private_cons::JWT_SECRET;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -29,19 +30,19 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
 
             let data = decode::<Claims>(
                 token,
-                &DecodingKey::from_secret(),
+                &DecodingKey::from_secret(JWT_SECRET.as_ref()),
                 &Validation::new(jsonwebtoken::Algorithm::HS256),
             );
 
             let claims = match data {
                 Ok(c) => c.claims,
-                Err(_) => return Outcome::Failure((Status::Unauthorized, "Invalid token".to_string())),
+                Err(_) => return Outcome::Error((Status::Unauthorized, "Invalid token".to_string())),
             };
 
             Outcome::Success(AuthenticatedUser { id: claims.sub })
 
         } else {
-            Outcome::Failure((Status::Unauthorized, "No token provided".to_string()))
+            Outcome::Error((Status::Unauthorized, "No token provided".to_string()))
         }
     }
 }

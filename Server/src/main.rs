@@ -17,6 +17,7 @@ mod auth;
 mod database;
 mod entities;
 mod fairings;
+mod private_cons;
 
 #[get("/")]
 fn index() -> Response<String> {
