@@ -1,16 +1,23 @@
-#[macro_use] extern crate rocket;
+#[macro_use] 
+extern crate rocket;
 use rocket::http::Status;
 use crate::controllers::SuccessResponse;
 use crate::controllers::Response;
+use fairings::cors::{Cors, options};
 use mongodb::{
     bson::{Document, doc},
     Client,
     Collection
 };
 
+use crate::database::db::init;
+
 mod controllers;
 mod auth;
 mod database;
+mod entities;
+mod fairings;
+mod private_cons;
 
 #[get("/")]
 fn index() -> Response<String> {
@@ -20,9 +27,10 @@ fn index() -> Response<String> {
 #[launch]
 async fn rocket() -> _ {
 
-    let db = database::DB::init().await?;
-
     rocket::build()
+        .attach(Cors)
+        .manage(init().await)
+        .mount("/", routes![options])
         .mount("/", routes![index])
         .mount("/auth", routes![
             controllers::auth::login,
