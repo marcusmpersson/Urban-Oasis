@@ -28,8 +28,8 @@ fn index() -> Response<String> {
 async fn rocket() -> _ {
 
     rocket::build()
+        .attach(init().await)
         .attach(Cors)
-        .manage(init().await)
         .mount("/", routes![options])
         .mount("/", routes![index])
         .mount("/auth", routes![
