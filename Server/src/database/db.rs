@@ -31,13 +31,13 @@ async fn connect() -> mongodb::error::Result<Database> {
     let client = Client::with_options(client_options)?;
 
     client
-        .database("UrbanOasis")
+        .database("urbanoasis")
         .run_command(doc! {"ping": 1}, None)
         .await?;
 
     println!("Connected to database");
 
-    Ok(client.database("UrbanOasis"))
+    Ok(client.database("urbanoasis"))
 }
 
 impl DB {

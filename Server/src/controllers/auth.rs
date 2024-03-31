@@ -7,6 +7,7 @@ use rocket::{
 };
 use std::time::SystemTime;
 use mongodb::bson::{doc, oid::ObjectId};
+use mongodb::bson;
 use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{DateTime, offset::Utc};
 
@@ -22,7 +23,11 @@ pub async fn login(
     req_sign_in: Json<ReqSignIn>,
 ) -> Response<Json<ResSignIn>> {
     let db: &DB = db as &DB;
-    let u: User = db.fetch_user(&req_sign_in.email).await.unwrap();
+
+    let u: User = match db.fetch_user(&req_sign_in.email).await.unwrap() {
+        Some(u) => u,
+        None => return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string()))),
+    };
 
     match check_valid_login(&req_sign_in.email, &req_sign_in.password) {
         Ok(_) => {
@@ -57,9 +62,9 @@ pub async fn register(
 
         match check_valid_signup(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username) {
         Ok(_) => {
-            if db.fetch_user(&req_sign_up.email).await.is_ok() {
-                return Err(ErrorResponse((Status::UnprocessableEntity, "User already exists".to_string())));
-            }
+            if db.fetch_user(&req_sign_up.email).await.unwrap().is_some() {
+                return Err(ErrorResponse((Status::Conflict, "Email already exists".to_string())));
+            } 
 
             db.insert_user(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
         
@@ -133,11 +138,10 @@ pub struct ResMe {
 }
 
 impl DB {
-    async fn fetch_user(&self, email: &str) -> Result<User, String> {
-        let filter = doc! { "email": email };
-        let user = self.database.collection("users").find_one(filter, None).await.unwrap().unwrap();
+    async fn fetch_user(&self, email: &str) -> mongodb::error::Result<Option<User>> {
+        let collection_user = self.database.collection::<User>("users"); 
 
-        Ok(mongodb::bson::from_document(user).unwrap())
+        Ok(collection_user.find_one(bson::doc! { "email": email }, None).await?)
     }
 
     async fn fetch_user_by_id(&self, id: ObjectId) -> Result<User, String> {
