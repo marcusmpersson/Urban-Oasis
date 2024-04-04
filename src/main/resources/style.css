@@ -1,7 +1,16 @@
-.backgroundColor{
-    -fx-background-color: linear-gradient(to right, 0B0D1E, #1D2035);
+.backgroundColor {
+    -fx-background-color: linear-gradient(to right,
+                                         #000D1E 0%,
+                                         #050A18 25%,
+                                         #0A1024 50%,
+                                         #151A2F 75%,
+                                         #1D2035 100%);
 }
+
 
 .borderColor{
     -fx-background-color: #131528;
+    -fx-font-family: 'Pixeloid Sans';
+    -fx-font-size: 16;
+    -fx-text-fill: white;
 }

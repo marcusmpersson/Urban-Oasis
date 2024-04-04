@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1461.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.MainController">
+   <children>
+      <Group fx:id="roomView" layoutX="149.0" layoutY="-5.0">
+         <children>
+            <ImageView fx:id="roomBackground" cache="true" fitHeight="1029.0" fitWidth="1336.0" layoutX="5.0">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Group>
+      <ImageView id="backgroundImage" cache="true" fitHeight="1024.0" fitWidth="1545.0" opacity="0.0">
+         <image>
+            <Image url="@../loginbackground.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </ImageView>
+      <Group fx:id="menuBar" layoutX="-50.0">
+         <children>
+            <VBox layoutX="88.0" layoutY="323.0" prefHeight="250.0" prefWidth="75.0" spacing="15.0">
+               <children>
+                  <ImageView id="roomButtonList" cache="true" fitHeight="77.0" fitWidth="75.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                     <image>
+                        <Image url="@../RoomButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView id="storeButtonList" cache="true" fitHeight="77.0" fitWidth="75.0" onMouseClicked="#switchToStoreView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                     <image>
+                        <Image url="@../StoreButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView id="inventoryButtonList" cache="true" fitHeight="77.0" fitWidth="75.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                     <image>
+                        <Image url="@../InventoryButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </VBox>
+            <ImageView cache="true" fitHeight="1024.0" fitWidth="27.0" layoutX="188.0">
+               <image>
+                  <Image url="@../LineSeperator.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Group>
+      <Group fx:id="storeView" layoutX="149.0" opacity="0.0">
+         <children>
+            <ImageView id="backgroundImage" cache="true" fitHeight="73.0" fitWidth="1312.0">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+               <image>
+                  <Image url="@../storeRectangle.png" />
+               </image>
+            </ImageView>
+            <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="59.0" prefWidth="1302.0" spacing="150.0">
+               <children>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0">
+                     <image>
+                        <Image url="@../SEEDSButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="590.0" layoutY="20.0">
+                     <image>
+                        <Image url="@../SEEDSButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="736.0" layoutY="10.0">
+                     <image>
+                        <Image url="@../SEEDSButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+            </HBox>
+            <ImageView id="backgroundImage" cache="true" fitHeight="911.0" fitWidth="1280.0" layoutX="21.0" layoutY="96.0">
+               <image>
+                  <Image url="@../storeBigRectangle.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Group>
+   </children>
+</AnchorPane>
