@@ -13,9 +13,7 @@ public class Seed extends ShopItem{
     private Species species;
 
     public Seed(Rarity rarity, ArrayList<Species> possibilities,String name, Image image, int price){
-        super.name = name ;
-        super.price = price;
-        super.image = image;
+        super(image, name, price);
         this.rarity = rarity;
         this.possiblePlants = possibilities;
         this.species = speciesAtRandom();

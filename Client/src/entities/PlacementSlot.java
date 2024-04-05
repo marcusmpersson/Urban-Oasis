@@ -19,6 +19,6 @@ public class PlacementSlot {
     }
     public void setPlacedItem(Placeable placedItem) {
         this.placedItem = placedItem;
-        placedItem.setPlacementSlot(this);
+        placedItem.setPlacedAt(this);
     }
 }
