@@ -2,5 +2,5 @@ package entities;
 
 public interface Placeable {
 
-    public void setPlacementSlot(PlacementSlot slot);
+    public void setPlacedAt(PlacementSlot slot);
 }

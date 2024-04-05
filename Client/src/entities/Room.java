@@ -2,12 +2,18 @@ package entities;
 
 import java.util.ArrayList;
 
+//import javafx.scene.image.Image;
+
+
 public class Room {
     private ArrayList<PlacementSlot> slots;
+    public ArrayList<String> imageFilePaths;
 
 
-    public Room(ArrayList<PlacementSlot> slots){
+
+    public Room(ArrayList<PlacementSlot> slots, ArrayList<String> imageFilePaths){
         this.slots = slots;
+        this.imageFilePaths = imageFilePaths;
     }
     public PlacementSlot getSlot(int index){
         if (index < slots.size()) {

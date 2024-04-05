@@ -1,4 +1,5 @@
 package entities;
+import enums.Rarity;
 import enums.Species;
 import enums.Stage;
 import javafx.scene.image.Image;
@@ -8,12 +9,15 @@ public class PlantTop {
     private Species species;
     private Stage stage;
     private HealthStat healthStat;
+    private Rarity rarity;
+    private int price;
 
-    public PlantTop(Image image, Species species, Stage stage){
+    public PlantTop(Image image, Species species, Stage stage, int price){
         this.image = image;
         this.stage = stage;
         this.species= species;
         this.healthStat= new HealthStat();
+        this.price = price;
     }
 
     public Species getSpecies() {
@@ -31,4 +35,5 @@ public class PlantTop {
     public void setImage(Image image) {
         this.image = image;
     }
+    public int getPrice(){return price;}
 }
