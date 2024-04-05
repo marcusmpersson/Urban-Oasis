@@ -2,24 +2,30 @@ package entities;
 import enums.Rarity;
 import enums.Species;
 import enums.Stage;
-import javafx.scene.image.Image;
+
+import java.util.ArrayList;
 
 public class PlantTop {
-    private Image image;
+    private ArrayList<String> imageFilePaths;
     private Species species;
     private Stage stage;
     private HealthStat healthStat;
     private Rarity rarity;
     private int price;
     private int age;
+    private PottedPlant belongingPottedPlant;
 
-    public PlantTop(Image image, Species species, Stage stage, int price){
-        this.image = image;
+    public PlantTop(ArrayList<String> imageFilePaths, Species species, Stage stage, int price){
+        this.imageFilePaths = imageFilePaths;
         this.stage = stage;
         this.species= species;
         this.healthStat= new HealthStat();
         this.price = price;
         age = 0;
+    }
+
+    public void setBelongingPottedPlant (PottedPlant belongingPottedPlant){
+        this.belongingPottedPlant = belongingPottedPlant;
     }
 
     public Species getSpecies() {
@@ -28,6 +34,7 @@ public class PlantTop {
 
     public Stage getStage() {
         updateStage();
+        checkHealth();
         return stage;
     }
     public void updateStage(){
@@ -49,22 +56,50 @@ public class PlantTop {
             this.stage = Stage.ADULT;
         }
     }
+
     public void raiseAge(int amount){
         age += amount;
         updateStage();
     }
 
     public void checkHealth(){
-        if (healthStat.getWaterLevel() == 0 || healthStat.getOverallMood() == 0){
+        if (healthStat.getWaterLevel() == 0 || healthStat.getOverallMood() == 0
+        || healthStat.getWaterLevel() >= 200){
             this.stage = Stage.DEAD;
+        }
+    }
+
+    public void updateEnvSatisfaction(){
+        // if placed at desired environment, raise satisfaction
+        if (belongingPottedPlant.getPlacedAt().getEnvironment() == species.getPreferredEnvironment()){
+            healthStat.raiseEnvSatisfaction();
+        }
+        // otherwise, lower satisfaction
+        else {
+            healthStat.lowerEnvSatisfaction();
         }
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    public void setImage(Image image) {
-        this.image = image;
-    }
     public int getPrice(){return price;}
+
+    public String getImageFilePath() {
+        updateStage();
+        checkHealth();
+
+        synchronized (this) {
+            if (this.stage == Stage.BABY) {
+                return imageFilePaths.get(0);
+            } else if (this.stage == Stage.YOUNG) {
+                return imageFilePaths.get(1);
+            } else if (this.stage == Stage.ADULT) {
+                return imageFilePaths.get(2);
+            } else if (this.stage == Stage.DEAD) {
+                return imageFilePaths.get(3);
+            }
+            return null; //if stage "planted", returns no image for PlantTop
+        }
+    }
 }

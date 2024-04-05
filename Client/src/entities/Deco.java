@@ -1,11 +1,10 @@
 package entities;
-import javafx.scene.image.Image;
 
 public class Deco extends ShopItem implements Placeable {
     public PlacementSlot placedAt;
 
-    public Deco(String name, Image image, int price){
-        super(image, name, price);
+    public Deco(String name, String imageFilePath, int price){
+        super(imageFilePath, name, price);
     }
     @Override
     public PlacementSlot getPlacedAt() {
@@ -15,12 +14,6 @@ public class Deco extends ShopItem implements Placeable {
     public void setPlacedAt(PlacementSlot slot) {
         this.placedAt = slot;
     }
-
-    @Override
-    public String getImageFilePath(){
-        //TODO: create/return imageFilePath (if used)
-    };
-
     public void setPrice(int price) {
         this.price = price;
     }

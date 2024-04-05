@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Controller {
     private GameHandler gameHandler;
-    private ClientConnection connection;
+    private ClientConnection clientConnection;
     private GUIController guiController;
     private WidgetHandler widgetHandler;
     private LocalFileHandler localFileHandler;
@@ -16,7 +16,7 @@ public class Controller {
 
     /** Constructor */
     public Controller(){
-        connection = new ClientConnection(this);
+        clientConnection = new ClientConnection(this);
         guiController = new GUIController(this);
         widgetHandler = new WidgetHandler(this);
         localFileHandler = new LocalFileHandler(this);
@@ -52,7 +52,7 @@ public class Controller {
     *  -------------------------- */
 
     public void loginAttempt(String email, String password){
-        //TODO: skicka till ClientConnection eller LoginHandler
+            clientConnection.setJwtToken(loginHandler.login(email,password));
     }
 
     /** method returns an ArrayList of String containing filepath to room images,

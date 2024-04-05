@@ -42,11 +42,10 @@ public class RoomBuilder {
 
         ArrayList<String> imageFilePaths = new ArrayList<>();
 
-        //TODO: fill image file paths:
-        imageFilePaths.add(""); // daytime (index 0)
-        imageFilePaths.add(""); // sunset (index 2)
-        imageFilePaths.add(""); // night (index 3)
-        imageFilePaths.add(""); // sunrise (index 4)
+        imageFilePaths.add("images/CommonRoom_Daytime.png"); // daytime (index 0)
+        imageFilePaths.add("images/CommonRoom_Sunset.png"); // sunset (index 2)
+        imageFilePaths.add("images/CommonRoom_Night.png"); // night (index 3)
+        imageFilePaths.add("images/CommonRoom_Sunrise.png"); // sunrise (index 4)
 
         return new Room(slots, imageFilePaths);
     }
