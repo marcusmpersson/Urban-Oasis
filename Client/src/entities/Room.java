@@ -9,8 +9,6 @@ public class Room {
     private ArrayList<PlacementSlot> slots;
     public ArrayList<String> imageFilePaths;
 
-
-
     public Room(ArrayList<PlacementSlot> slots, ArrayList<String> imageFilePaths){
         this.slots = slots;
         this.imageFilePaths = imageFilePaths;
@@ -33,4 +31,15 @@ public class Room {
         return null;
     }
 
+    public ArrayList<Placeable> getPlacedItems() {
+        ArrayList<Placeable> placedItems = new ArrayList<>();
+        for (PlacementSlot slot : slots){
+            placedItems.add(slot.getPlacedItem());
+        }
+        return placedItems;
+    }
+
+    public ArrayList<String> getImageFilePaths() {
+        return imageFilePaths;
+    }
 }

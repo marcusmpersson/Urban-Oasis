@@ -37,64 +37,118 @@ public class Controller {
         widgetHandler.loadWidgets(user.getUsername());
     }
 
+    /** Method called if email change was approved by server */
+    public void emailChangeSuccessful(String newEmail){
+        currentUser.setEmail(newEmail);
+    }
+
+    /** Method called if email change was NOT approved by server */
+    public void emailChangeUnsuccessful(){
+        // TODO: show error in GUI
+    }
+
     /* --------------------------
     *  methods for GUIController
     *  -------------------------- */
-    /** method returns an ArrayList<String> containing filepath to room images,
+
+    public void loginAttempt(String email, String password){
+        //TODO: skicka till ClientConnection eller LoginHandler
+    }
+
+    /** method returns an ArrayList of String containing filepath to room images,
      * for daytime (index 0), sunset (index 1), night (index 2), sun-rise (index 3).
      * @param index the index of chosen room */
     public ArrayList<String> getRoomImagePaths(int index){
         return gameHandler.getRoomImagePaths(index);
     }
-    public ArrayList<PottedPlant> getRoomPlants(){
+
+    /** Method returns an ArrayList containing only the PottedPlant items placed in the room */
+    public ArrayList<PottedPlant> getRoomPlants(int index){
         ArrayList<PottedPlant> plants = new ArrayList<PottedPlant>();
-        for (Item item : gameHandler.getRoomItems()){
+        for (Placeable item : gameHandler.getRoomItems(index)){
             if (item instanceof PottedPlant){
                 plants.add((PottedPlant) item);
             }
         }
         return plants;
     }
-    public ArrayList<Pot> getRoomPots(){
+
+    /** Method returns an ArrayList containing only the Pot items placed in the room.
+     * @param index the index of chosen room */
+    public ArrayList<Pot> getRoomPots(int index){
         ArrayList<Pot> pots = new ArrayList<Pot>();
-        for (Item item : gameHandler.getRoomItems()){
+        for (Placeable item : gameHandler.getRoomItems(index)){
             if (item instanceof Pot){
                 pots.add((Pot) item);
             }
         }
         return pots;
     }
-    public ArrayList<Deco> getRoomDecos(){
+
+    /** Method returns an ArrayList containing only the Deco items placed in the room.
+     * @param index the index of chosen room */
+    public ArrayList<Deco> getRoomDecos(int index){
         ArrayList<Deco> decos = new ArrayList<Deco>();
-        for (Item item : gameHandler.getRoomItems()){
+        for (Placeable item : gameHandler.getRoomItems(index)){
             if (item instanceof Deco){
                 decos.add((Deco) item);
             }
         }
         return decos;
     }
-    public ArrayList<Item> getRoomItems(){
-        return gameHandler.getRoomItems();
+
+    /** Method returns an ArrayList containing all items placed in the room as implementations
+     * of Placeable.
+     * @param index the index of chosen room*/
+    public ArrayList<Placeable> getRoomItems(int index){
+        return gameHandler.getRoomItems(index);
     }
+
+    /** Method returns an ArrayList containing all PottedPlant items in players inventory.*/
     public ArrayList<PottedPlant> getInventoryPlants(){
         return gameHandler.getInventoryPlants();
     }
+
+    /** Method returns an ArrayList containing all Pot items in players inventory.*/
     public ArrayList<Pot> getInventoryPots(){
         return gameHandler.getInventoryPots();
     }
+
+    /** Method returns an ArrayList containing all Seed items in players inventory.*/
     public ArrayList<Seed> getInventorySeeds(){
         return gameHandler.getInventorySeeds();
     }
+
+    /** Method returns an ArrayList containing all Deco items in players inventory.*/
     public ArrayList<Deco> getInventoryDecos(){
         return gameHandler.getInventoryDecos();
     }
+
+    /** Gets current player's username */
     public String getPlayerUsername(){
         return currentUser.getUsername();
     }
+
+    /** Gets current player's currency amount */
     public int getPlayerCoins(){
         return currentUser.getShopCurrency();
     }
+
+    /** Gets current player's email */
     public String getPlayerEmail(){
         return currentUser.getEmail();
     }
+
+    /** Method called by GUI when user attempts to change email */
+    public void emailChangeAttempt(String newEmail){
+        //TODO: skicka till ClientConnection för att kontrollera email change på server
+        // (asynchronous method call)
+    }
+
+    /** Method called by GUI when user attempts to purchase an item from the shop.
+     * @return true if user had enough currency, false if not */
+    public boolean purchaseShopItem(int index){
+        return gameHandler.purchaseShopItem(index);
+    }
+
 }

@@ -7,6 +7,7 @@ public class Deco extends ShopItem implements Placeable {
     public Deco(String name, Image image, int price){
         super(image, name, price);
     }
+    @Override
     public PlacementSlot getPlacedAt() {
         return placedAt;
     }
@@ -15,6 +16,10 @@ public class Deco extends ShopItem implements Placeable {
         this.placedAt = slot;
     }
 
+    @Override
+    public String getImageFilePath(){
+        //TODO: create/return imageFilePath (if used)
+    };
 
     public void setPrice(int price) {
         this.price = price;

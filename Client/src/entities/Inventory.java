@@ -17,7 +17,6 @@ public class Inventory {
         decorations = new ArrayList<>();
 
         for (Item item : allItems){
-            /*
             if (item instanceof PottedPlant){
 
                 pottedPlants.add((PottedPlant)item);
@@ -31,7 +30,6 @@ public class Inventory {
             else if (item instanceof Deco){
                 decorations.add((Deco)item);
             }
-             */
         }
     }
 
@@ -44,6 +42,21 @@ public class Inventory {
         this.decorations = decorations;
     }
 
+    public void addItem(Item item){
+        if (item instanceof PottedPlant){
+            pottedPlants.add((PottedPlant)item);
+        }
+        else if (item instanceof Pot){
+            pots.add((Pot)item);
+        }
+        else if (item instanceof Seed){
+            seeds.add((Seed)item);
+        }
+        else if (item instanceof Deco){
+            decorations.add((Deco)item);
+        }
+    }
+
     public ArrayList<PottedPlant> getPottedPlants() {
         return pottedPlants;
     }
@@ -54,11 +67,6 @@ public class Inventory {
             } else {
                 return null;
             }
-        }
-    }
-    public void addPottedPlant(PottedPlant plant) {
-        synchronized (pottedPlants) {
-            pottedPlants.add(plant);
         }
     }
     public void removePottedPlantAt(int index) {
@@ -79,11 +87,6 @@ public class Inventory {
             }
         }
     }
-    public void addPot(Pot pot) {
-        synchronized (pots) {
-            pots.add(pot);
-        }
-    }
     public void removePotAt(int index) {
         synchronized (pots) {
             pots.remove(index);
@@ -102,11 +105,6 @@ public class Inventory {
             }
         }
     }
-    public void addSeed(Seed seed) {
-        synchronized (seeds) {
-            seeds.add(seed);
-        }
-    }
     public void removeSeedAt(int index) {
         synchronized (seeds) {
             seeds.remove(index);
@@ -123,11 +121,6 @@ public class Inventory {
             } else {
                 return null;
             }
-        }
-    }
-    public void addDecoration (Deco deco) {
-        synchronized (decorations) {
-            decorations.add(deco);
         }
     }
     public void removeDecorationAt(int index) {

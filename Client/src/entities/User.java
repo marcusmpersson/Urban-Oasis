@@ -49,4 +49,11 @@ public class User {
         return email;
     }
 
+    public Room getRoom(int index) {
+        return rooms.get(index);
+    }
+
+    public void subtractCurrency(int price) {
+        shopCurrency -= price;
+    }
 }

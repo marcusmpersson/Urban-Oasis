@@ -24,6 +24,7 @@ public class PottedPlant extends Item implements Placeable {
         return plant;
     }
 
+    @Override
     public PlacementSlot getPlacedAt() {
         return placedAt;
     }
@@ -32,5 +33,10 @@ public class PottedPlant extends Item implements Placeable {
     public void setPlacedAt(PlacementSlot slot) {
         this.placedAt = slot;
     }
+
+    @Override
+    public String getImageFilePath(){
+        //TODO: create/return imageFilePath (if used)
+    };
 
 }
