@@ -1,52 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1461.0" styleClass=".backgroundColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1461.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.LoginController">
    <children>
-      <ImageView fitHeight="1024.0" fitWidth="1509.0" layoutX="27.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="backgroundImage" cache="true" fitHeight="1024.0" fitWidth="1545.0">
          <image>
             <Image url="@../loginbackground.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="203.0" fitWidth="206.0" layoutX="628.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../logo.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="488.0" fitWidth="786.0" layoutX="420.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../loginRectangle.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="57.0" fitWidth="273.0" layoutX="585.0" layoutY="330.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../signIn.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="signInButtonId" fitHeight="47.0" fitWidth="176.0" layoutX="745.0" layoutY="594.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../signInButton.png" />
          </image>
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
-      <ImageView fitHeight="40.0" fitWidth="189.0" layoutX="520.0" layoutY="594.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../resetButton.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="47.0" fitWidth="176.0" layoutX="633.0" layoutY="666.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../registerButton.png" />
-         </image>
-      </ImageView>
-      <TextField layoutX="512.0" layoutY="422.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
-      <TextField layoutX="517.0" layoutY="518.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+      <Group fx:id="registerFrame" layoutX="420.0" layoutY="169.0" opacity="0.0">
+         <children>
+            <ImageView fitHeight="698.0" fitWidth="623.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../signupRectangle.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="57.0" fitWidth="273.0" layoutX="165.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../signup.png" />
+               </image>
+            </ImageView>
+            <ImageView id="signUpButton" fitHeight="47.0" fitWidth="176.0" layoutX="326.0" layoutY="402.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../signUpButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" layoutX="101.0" layoutY="402.0" onMouseClicked="#switchToMainFrame" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../backButton.png" />
+               </image>
+            </ImageView>
+            <TextField id="emailSignup" layoutX="97.0" layoutY="147.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+            <TextField id="passwordSignup" layoutX="97.0" layoutY="326.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="128.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../E-mailText.png" />
+               </image>
+            </ImageView>
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="307.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../PasswordText.png" />
+               </image>
+            </ImageView>
+            <TextField id="usernameSignup" layoutX="97.0" layoutY="231.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="212.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../UsernameText.png" />
+               </image>
+            </ImageView>
+            <ImageView id="reset" fitHeight="134.0" fitWidth="423.0" layoutX="100.0" layoutY="480.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../registerRules.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <Group fx:id="mainLoginFrame" layoutX="420.0" layoutY="274.0">
+         <children>
+            <ImageView fitHeight="488.0" fitWidth="786.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../loginRectangle.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="57.0" fitWidth="273.0" layoutX="165.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../signIn.png" />
+               </image>
+            </ImageView>
+            <Group layoutX="100.0" layoutY="320.0" translateY="15.0">
+               <children>
+                  <ImageView id="signIn" fitHeight="47.0" fitWidth="176.0" layoutX="225.0" onMouseClicked="#signIn" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../signInButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resetButton.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView id="register" fitHeight="47.0" fitWidth="176.0" layoutX="113.0" layoutY="72.0" onMouseClicked="#switchToSignupScene" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../registerButton.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <TextField fx:id="email" layoutX="92.0" layoutY="148.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor">
+               <font>
+                  <Font name="Pixeloid Sans" size="12.0" />
+               </font></TextField>
+            <PasswordField fx:id="password" layoutX="97.0" layoutY="244.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="128.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../E-mailText.png" />
+               </image>
+            </ImageView>
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="223.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../PasswordText.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="wrongLogin" fitHeight="24.0" fitWidth="369.0" layoutX="113.0" layoutY="303.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../wronglogin.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="successfulLogin" fitHeight="15.0" fitWidth="253.0" layoutX="218.0" layoutY="302.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../successfulLogin.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
    </children>
 </AnchorPane>
