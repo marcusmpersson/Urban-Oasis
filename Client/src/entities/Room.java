@@ -38,6 +38,7 @@ public class Room {
         }
         return placedItems;
     }
+    public ArrayList<PlacementSlot> getSlots(){return slots;}
 
     public ArrayList<String> getImageFilePaths() {
         return imageFilePaths;

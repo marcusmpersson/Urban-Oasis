@@ -38,21 +38,21 @@ public class PlantTop {
         return stage;
     }
     public void updateStage(){
-        // every 2 minutes the age is raised by +1
+        // every minute the age is raised by +1
         // the plant would be "planted" for 20 minutes:
-        if (age < 10){
+        if (age < 20){
             this.stage = Stage.PLANTED;
         }
         // the plant would be a baby for 2 hours (120 mins):
-        else if (age < 70){
+        else if (age < 140){
             this.stage = Stage.BABY;
         }
         // the plant would be young for 5 hours (300 mins):
-        else if (age < 220){
+        else if (age < 440){
             this.stage = Stage.YOUNG;
         }
         // after, the plant would be adult forever (unless it dies):
-        else if (220 <= age){
+        else if (440 <= age){
             this.stage = Stage.ADULT;
         }
     }
@@ -63,15 +63,18 @@ public class PlantTop {
     }
 
     public void checkHealth(){
-        if (healthStat.getWaterLevel() == 0 || healthStat.getOverallMood() == 0
+        // if water level 0 or below, overall health 0 or below, or water level 200 or above
+        if (healthStat.getWaterLevel() <= 0 || healthStat.getOverallMood() <= 0
         || healthStat.getWaterLevel() >= 200){
+            // then kill plant
             this.stage = Stage.DEAD;
         }
     }
 
     public void updateEnvSatisfaction(){
         // if placed at desired environment, raise satisfaction
-        if (belongingPottedPlant.getPlacedAt().getEnvironment() == species.getPreferredEnvironment()){
+        if (belongingPottedPlant.getPlacedAt().getEnvironment()
+                == species.getPreferredEnvironment()){
             healthStat.raiseEnvSatisfaction();
         }
         // otherwise, lower satisfaction
