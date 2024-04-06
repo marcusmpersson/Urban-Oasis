@@ -13,8 +13,10 @@ import com.google.gson.Gson;
 public class ClientConnection {
     private CloseableHttpClient httpClient;
     private HttpGet httpGet;
+    private Controller controller;
     private String jwtToken = "";
-    public ClientConnection(){
+    public ClientConnection(Controller controller){
+        this.controller = controller;
         this.httpClient = HttpClients.createDefault();
         this.httpGet = new HttpGet("serverURL");
     }

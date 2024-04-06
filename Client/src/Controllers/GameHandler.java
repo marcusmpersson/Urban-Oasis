@@ -1,6 +1,7 @@
 package Controllers;
 
 import entities.*;
+import enums.Rarity;
 
 import java.util.ArrayList;
 
@@ -53,4 +54,74 @@ public class GameHandler {
         return currentUser.getRoom(index).getImageFilePaths();
     }
 
+
+    /* ---------------------------------
+     * Methods for TimeEventHandler
+     * --------------------------------- */
+    public void autoIncreaseCurrency() {
+        int amount = 0;
+
+        // for every room player has
+        for (Room room : currentUser.getRoomsArray()){
+            // for every item placed in the room
+            for (Placeable item : room.getPlacedItems()){
+                // if it's a plant
+                if (item instanceof PottedPlant){
+                    if (((PottedPlant) item).getPlantTop().getRarity() == Rarity.COMMON) {
+                        amount += 1;
+                    } else if (((PottedPlant) item).getPlantTop().getRarity() == Rarity.RARE){
+                        amount += 2;
+                    } else if (((PottedPlant) item).getPlantTop().getRarity() == Rarity.EPIC){
+                        amount += 3;
+                    } else {
+                        amount += 4;
+                    }
+                }
+            }
+        }
+        currentUser.increaseCurrency(amount);
+    }
+
+    public void raiseAges() {
+        for (Room room : currentUser.getRoomsArray()){
+            for (Placeable item : room.getPlacedItems()){
+                if (item instanceof PottedPlant){
+                    ((PottedPlant)item).getPlantTop().raiseAge(1);
+                }
+            }
+        }
+    }
+
+    public void lowerAllWaterLevels() {
+        for (Room room : currentUser.getRoomsArray()){
+            for (Placeable item : room.getPlacedItems()){
+                if (item instanceof PottedPlant){
+                    ((PottedPlant)item).getPlantTop().lowerWaterLevel();
+                }
+            }
+        }
+    }
+
+    public void updateEnvSatisfactions() {
+        for (Room room : currentUser.getRoomsArray()){
+            for (Placeable item : room.getPlacedItems()){
+                if (item instanceof PottedPlant){
+                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction();
+                }
+            }
+        }
+    }
+
+    /* ---------------------------------
+     * Methods for Startup / changes since last time
+     * --------------------------------- */
+    public void raiseAges(int amount) {
+        for (Room room : currentUser.getRoomsArray()){
+            for (Placeable item : room.getPlacedItems()){
+                if (item instanceof PottedPlant){
+                    ((PottedPlant)item).getPlantTop().raiseAge(amount);
+                }
+            }
+        }
+    }
 }

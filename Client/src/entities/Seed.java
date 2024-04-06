@@ -3,7 +3,6 @@ package entities;
 import enums.Rarity;
 import enums.Species;
 import java.util.Random;
-import javafx.scene.image.Image;
 import java.util.ArrayList;
 
 public class Seed extends ShopItem{
@@ -12,8 +11,8 @@ public class Seed extends ShopItem{
     private Rarity rarity;
     private Species species;
 
-    public Seed(Rarity rarity, ArrayList<Species> possibilities,String name, Image image, int price){
-        super(image, name, price);
+    public Seed(Rarity rarity, ArrayList<Species> possibilities,String name, String imageFilePath, int price){
+        super(imageFilePath, name, price);
         this.rarity = rarity;
         this.possiblePlants = possibilities;
         this.species = speciesAtRandom();

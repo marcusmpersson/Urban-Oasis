@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.ArrayList;
+
 public class PottedPlant extends Item implements Placeable {
 
     private Pot pot;
@@ -34,9 +36,12 @@ public class PottedPlant extends Item implements Placeable {
         this.placedAt = slot;
     }
 
-    @Override
-    public String getImageFilePath(){
-        //TODO: create/return imageFilePath (if used)
-    };
+    public ArrayList<String> getImagesFilePaths(){
+        ArrayList<String> filePathArray = new ArrayList<>();
+        filePathArray.add(plant.getImageFilePath());
+        filePathArray.add(pot.getImageFilePath());
+
+        return filePathArray;
+    }
 
 }

@@ -11,8 +11,10 @@ import java.io.IOException;
 public class LoginHandler {
     private CloseableHttpClient httpClient;
     private HttpPost httpPost;
+    private Controller controller;
 
-    public LoginHandler(){
+    public LoginHandler(Controller controller){
+        this.controller = controller;
         this.httpClient = HttpClients.createDefault();
         this.httpPost = new HttpPost("/login");
     }
