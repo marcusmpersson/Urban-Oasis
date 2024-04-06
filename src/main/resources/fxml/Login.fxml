@@ -19,6 +19,14 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
+      <ImageView id="backgroundImage" cache="true" fitHeight="161.0" fitWidth="176.0" layoutX="624.0" layoutY="14.0">
+         <image>
+            <Image url="@../URBAN_OASIS_LOGO2.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </ImageView>
       <Group fx:id="registerFrame" layoutX="420.0" layoutY="169.0" opacity="0.0">
          <children>
             <ImageView fitHeight="698.0" fitWidth="623.0" pickOnBounds="true">

@@ -61,7 +61,7 @@ public class LoginController implements Initializable {
     private Image currentBackground;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        createFlyUpAnimation(1500, registerFrame, 0.1);
+        createFlyUpAnimation(1400, registerFrame, 0.1);
     }
     private void createFlyUpAnimation(double val, Group group, double seconds) {
         TranslateTransition flyUpAnimation = new TranslateTransition(Duration.seconds(seconds), group);
@@ -127,14 +127,14 @@ public class LoginController implements Initializable {
     }
 
     public void switchToMainFrame(MouseEvent mouseEvent) throws IOException, InterruptedException {
-        createFlyUpAnimation(1500, registerFrame, 1);
+        createFlyUpAnimation(1400, registerFrame, 1);
         createFlyUpAnimation(1500, mainLoginFrame, 1);
     }
 
     public void switchToSignupScene(MouseEvent mouseEvent) throws IOException {
         registerFrame.setOpacity(1);
         createFlyUpAnimation(-1500, mainLoginFrame, 1);
-        createFlyUpAnimation(-1500, registerFrame, 1);
+        createFlyUpAnimation(-1400, registerFrame, 1);
     }
 
     public void handleMouseEntered(MouseEvent mouseEvent) {
