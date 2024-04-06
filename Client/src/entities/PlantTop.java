@@ -15,12 +15,13 @@ public class PlantTop {
     private int age;
     private PottedPlant belongingPottedPlant;
 
-    public PlantTop(ArrayList<String> imageFilePaths, Species species, Stage stage, int price){
+    public PlantTop(ArrayList<String> imageFilePaths, Species species, Stage stage, int price, Rarity rarity){
         this.imageFilePaths = imageFilePaths;
         this.stage = stage;
         this.species= species;
         this.healthStat= new HealthStat();
         this.price = price;
+        this.rarity = rarity;
         age = 0;
     }
 
@@ -30,6 +31,9 @@ public class PlantTop {
 
     public Species getSpecies() {
         return species;
+    }
+    public Rarity getRarity() {
+        return rarity;
     }
 
     public Stage getStage() {
@@ -83,6 +87,8 @@ public class PlantTop {
         }
     }
 
+    public HealthStat getHealthStat(){return healthStat;}
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -104,5 +110,11 @@ public class PlantTop {
             }
             return null; //if stage "planted", returns no image for PlantTop
         }
+    }
+
+    public void lowerWaterLevel() {
+        healthStat.lowerWaterLevel(species.getWaterRate());
+        healthStat.establishOverallMood();
+        checkHealth();
     }
 }

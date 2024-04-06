@@ -1,5 +1,7 @@
 package entities;
 
+import enums.Rarity;
+
 import java.util.ArrayList;
 
 public class User {
@@ -55,5 +57,9 @@ public class User {
 
     public void subtractCurrency(int price) {
         shopCurrency -= price;
+    }
+
+    public void increaseCurrency(int amount){
+        shopCurrency += amount;
     }
 }

@@ -3,7 +3,6 @@ package Builders;
 import entities.PlacementSlot;
 import entities.Room;
 import enums.Environment;
-
 import java.util.ArrayList;
 
 public class RoomBuilder {
@@ -14,6 +13,7 @@ public class RoomBuilder {
     public Room buildCommonRoom(){
         ArrayList<PlacementSlot> slots = new ArrayList<>();
 
+        /*
         slots.add(new PlacementSlot(Environment.SHADE)); //index 0
         slots.add(new PlacementSlot(Environment.SHADE)); //index 1
         slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 2
@@ -39,6 +39,7 @@ public class RoomBuilder {
         slots.add(new PlacementSlot(Environment.SUNNY)); //index 22
         slots.add(new PlacementSlot(Environment.SHADE)); //index 23
         slots.add(new PlacementSlot(Environment.SHADE)); //index 24
+        */
 
         ArrayList<String> imageFilePaths = new ArrayList<>();
 

@@ -4,50 +4,59 @@ public class TimeEventHandler {
 
     private GameHandler gameHandler;
     private boolean threadsAreRunning;
+    private OneMinuteThread oneMinuteThread;
+    private FiveMinuteThread fiveMinuteThread;
+    private Controller controller;
 
-    public TimeEventHandler(GameHandler gameHandler){
+    public TimeEventHandler(GameHandler gameHandler, Controller controller){
         this.gameHandler = gameHandler;
+        this.controller = controller;
     }
 
     public void startThreads(){
-        OneMinuteThread oneMinuteThread = new OneMinuteThread();
-        OneHourThread oneHourThread = new OneHourThread();
-        FiveMinuteThread fiveMinuteThread = new FiveMinuteThread();
+        oneMinuteThread = new OneMinuteThread();
+        fiveMinuteThread = new FiveMinuteThread();
 
         threadsAreRunning = true;
 
         oneMinuteThread.start();
-        oneHourThread.start();
         fiveMinuteThread.start();
     }
 
     public void stopAllThreads(){
         threadsAreRunning = false;
+        try {
+            oneMinuteThread.join();
+            fiveMinuteThread.join();
+        } catch(InterruptedException e){
+            System.out.println("TimeEventHandler: joining threads was interrupted.");
+        } finally {
+            oneMinuteThread = null;
+            fiveMinuteThread = null;
+        }
     }
 
     public class OneMinuteThread extends Thread {
 
         public OneMinuteThread(){
-            //save current time as instance variable
+            //TODO: save current time as instance variable
         }
-
 
         @Override
         public void run() {
             while (threadsAreRunning) {
                 try {
-                    //sleep thread for 1 min
-                    Thread.sleep(60000);
-                    //increase coins
-                    //raise age
+                    Thread.sleep(60000); //sleep thread for 1 min
+                    gameHandler.autoIncreaseCurrency();
+                    gameHandler.raiseAges();
 
-                    //check if its been over an hour
+                    //TODO: if (its been over an hour)
                     // save new time
-                    //lower water level thread (every hour)
-                    //update env satisfaction (every hour)
+                    gameHandler.lowerAllWaterLevels();
+                    gameHandler.updateEnvSatisfactions();
 
-                } catch (Exception e) {
-                    //TODO: separate catch clause based on exception types
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -58,11 +67,13 @@ public class TimeEventHandler {
         public void run() {
             while (threadsAreRunning) {
                 try {
-                    Thread.sleep();
-                    //auto saves every 5 mins
+                    Thread.sleep(300000);
+                    controller.saveGame();
+                    //TODO: add lastUpdatedTime instance variable for user.
+                    // here: update lastUpdatedTime for user
 
-                } catch (Exception e) {
-                    //TODO: separate catch clause based on exception types
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }

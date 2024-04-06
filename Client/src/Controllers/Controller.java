@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Controller {
     private GameHandler gameHandler;
     private ClientConnection clientConnection;
-    private GUIController guiController;
+    //private GUIController guiController;
     private WidgetHandler widgetHandler;
     private LocalFileHandler localFileHandler;
     private LoginHandler loginHandler;
@@ -17,7 +17,7 @@ public class Controller {
     /** Constructor */
     public Controller(){
         clientConnection = new ClientConnection(this);
-        guiController = new GUIController(this);
+        //guiController = new GUIController(this);
         widgetHandler = new WidgetHandler(this);
         localFileHandler = new LocalFileHandler(this);
         loginHandler = new LoginHandler(this);
@@ -35,6 +35,10 @@ public class Controller {
         gameHandler = new GameHandler(this, user);
         //TODO: guiController.startGame(); eller metod med annan namn
         widgetHandler.loadWidgets(user.getUsername());
+    }
+
+    public void saveGame() {
+        //TODO: save game (user object "currentUser") in the database
     }
 
     /** Method called if email change was approved by server */
@@ -150,5 +154,4 @@ public class Controller {
     public boolean purchaseShopItem(int index){
         return gameHandler.purchaseShopItem(index);
     }
-
 }
