@@ -60,8 +60,7 @@ public class Controller {
     }
 
     /** method returns an ArrayList of String containing filepath to room images,
-     * for overlay (index 0), daytime (index 1), sunset (index 2), night (index 3),
-     * sun-rise (index 4).
+     * for daytime (index 0), sunset (index 1), night (index 2), sun-rise (index 3).
      * @param index the index of chosen room */
     public ArrayList<String> getRoomImagePaths(int index){
         return gameHandler.getRoomImagePaths(index);
