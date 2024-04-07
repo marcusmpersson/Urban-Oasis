@@ -60,7 +60,8 @@ public class Controller {
     }
 
     /** method returns an ArrayList of String containing filepath to room images,
-     * for daytime (index 0), sunset (index 1), night (index 2), sun-rise (index 3).
+     * for overlay (index 0), daytime (index 1), sunset (index 2), night (index 3),
+     * sun-rise (index 4).
      * @param index the index of chosen room */
     public ArrayList<String> getRoomImagePaths(int index){
         return gameHandler.getRoomImagePaths(index);
@@ -107,6 +108,10 @@ public class Controller {
     public ArrayList<Placeable> getRoomItems(int index){
         return gameHandler.getRoomItems(index);
     }
+
+    /** Method returns an ArrayList of PlacementSlots in a room.
+     * @param index the index of chosen room*/
+    public ArrayList<PlacementSlot> getRoomPlacementSlots(int index){return currentUser.getRoom(index).getSlots();}
 
     /** Method returns an ArrayList containing all PottedPlant items in players inventory.*/
     public ArrayList<PottedPlant> getInventoryPlants(){

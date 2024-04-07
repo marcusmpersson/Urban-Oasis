@@ -13,40 +13,39 @@ public class RoomBuilder {
     public Room buildCommonRoom(){
         ArrayList<PlacementSlot> slots = new ArrayList<>();
 
-        /*
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 0
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 1
-        slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 2
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 3
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 4
-        slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 5
-        slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 6
-        slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 7
-        slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 8
-        slots.add(new PlacementSlot(Environment.HALF_SHADE)); //index 9
-        slots.add(new PlacementSlot(Environment.HUMID)); //index 10
-        slots.add(new PlacementSlot(Environment.HUMID)); //index 11
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 12
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 13
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 14
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 15
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 16
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 17
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 18
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 19
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 20
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 21
-        slots.add(new PlacementSlot(Environment.SUNNY)); //index 22
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 23
-        slots.add(new PlacementSlot(Environment.SHADE)); //index 24
-        */
+        slots.add(new PlacementSlot(Environment.SHADE, 87, 258)); //index 0
+        slots.add(new PlacementSlot(Environment.HUMID, 87, 430)); //index 1
+        slots.add(new PlacementSlot(Environment.HALF_SHADE, 87, 656)); //index 2
+        slots.add(new PlacementSlot(Environment.SHADE, 265, 220)); //index 3
+        slots.add(new PlacementSlot(Environment.SHADE, 387, 220)); //index 4
+        slots.add(new PlacementSlot(Environment.HALF_SHADE, 265, 568)); //index 5
+        slots.add(new PlacementSlot(Environment.HALF_SHADE, 387, 568)); //index 6
+        slots.add(new PlacementSlot(Environment.HALF_SHADE, 265, 744)); //index 7
+        slots.add(new PlacementSlot(Environment.HALF_SHADE, 386, 744)); //index 8
+        slots.add(new PlacementSlot(Environment.HALF_SHADE, 265, 923)); //index 9
+        slots.add(new PlacementSlot(Environment.HUMID, 570, 246)); //index 10
+        slots.add(new PlacementSlot(Environment.HUMID, 705, 246)); //index 11
+        slots.add(new PlacementSlot(Environment.SUNNY, 570, 439)); //index 12
+        slots.add(new PlacementSlot(Environment.SUNNY, 705, 439)); //index 13
+        slots.add(new PlacementSlot(Environment.SUNNY, 906, 229)); //index 14
+        slots.add(new PlacementSlot(Environment.SUNNY, 1038, 229)); //index 15
+        slots.add(new PlacementSlot(Environment.SUNNY, 1169, 229)); //index 16
+        slots.add(new PlacementSlot(Environment.SUNNY, 906, 435)); //index 17
+        slots.add(new PlacementSlot(Environment.SUNNY, 1038, 435)); //index 18
+        slots.add(new PlacementSlot(Environment.SUNNY, 1169, 435)); //index 19
+        slots.add(new PlacementSlot(Environment.SUNNY, 813, 656)); //index 20
+        slots.add(new PlacementSlot(Environment.SHADE, 802, 931)); //index 21
+        slots.add(new PlacementSlot(Environment.SUNNY, 1020, 756)); //index 22
+        slots.add(new PlacementSlot(Environment.SHADE, 1200, 660)); //index 23
+        slots.add(new PlacementSlot(Environment.SHADE, 1200, 879)); //index 24
 
         ArrayList<String> imageFilePaths = new ArrayList<>();
 
-        imageFilePaths.add("images/CommonRoom_Daytime.png"); // daytime (index 0)
-        imageFilePaths.add("images/CommonRoom_Sunset.png"); // sunset (index 2)
-        imageFilePaths.add("images/CommonRoom_Night.png"); // night (index 3)
-        imageFilePaths.add("images/CommonRoom_Sunrise.png"); // sunrise (index 4)
+        imageFilePaths.add("images/commonRoom/overlay.png"); // overlay (index 0)
+        imageFilePaths.add("images/commonRoom/daytime.png"); // daytime (index 1)
+        imageFilePaths.add("images/commonRoom/sunset.png"); // sunset (index 2)
+        imageFilePaths.add("images/commonRoom/night.png"); // night (index 3)
+        imageFilePaths.add("images/commonRoom/sunrise.png"); // sunrise (index 4)
 
         return new Room(slots, imageFilePaths);
     }
