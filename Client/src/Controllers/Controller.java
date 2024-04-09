@@ -38,7 +38,8 @@ public class Controller {
     }
 
     public void saveGame() {
-        //TODO: save game (user object "currentUser") in the database
+        clientConnection.saveUser();
+        //TODO: save game (user object "currentUser") in the database --- SHOULD WORK NOW
     }
 
     /** Method called if email change was approved by server */
@@ -57,6 +58,15 @@ public class Controller {
 
     public void loginAttempt(String email, String password){
             clientConnection.setJwtToken(loginHandler.login(email,password));
+    }
+    public void registerAccountAttempt(String email, String userName, String password){
+        loginHandler.register(email, userName, password);
+    }
+    public void logoutAttempt(){
+        clientConnection.logout();
+    }
+    public void deleteAccountAttempt(){
+        clientConnection.delete();
     }
 
     /** method returns an ArrayList of String containing filepath to room images,

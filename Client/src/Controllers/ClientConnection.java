@@ -3,6 +3,8 @@ import entities.User;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -13,6 +15,7 @@ import com.google.gson.Gson;
 public class ClientConnection {
     private CloseableHttpClient httpClient;
     private HttpGet httpGet;
+    private HttpPost httpPost;
     private Controller controller;
     private String jwtToken = "";
     public ClientConnection(Controller controller){
@@ -38,13 +41,56 @@ public class ClientConnection {
         }catch(IOException  |URISyntaxException e){
             e.printStackTrace();
         }
-        finally{
-            try{
-            httpClient.close();
-            }catch(IOException e){
-                e.printStackTrace();
+    }
+    public String saveUser(){ // GLÖM INTE ATT FIXA MED CURRENT USER NÄR DET ÄR DAGS. ALLT ÄR KLART FÖRRUTOM CURRENT USER.
+        try{
+            HttpPost httpPost1 = new HttpPost("serverURL/saveUser");
+            httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
+            User user = currentUser;
+            Gson gson = new Gson();
+            String json = gson.toJson(user);
+            StringEntity entity = new StringEntity(json);
+            httpPost1.setEntity(entity);
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+                HttpEntity responseEntity = response.getEntity();
+                if(responseEntity != null){
+                    return EntityUtils.toString(responseEntity);
+                }
             }
+        }catch(IOException e){
+            e.printStackTrace();
         }
+        return null;
+    }
+    public String logout(){ // Sends a request to the server with the JWT token in the request to ensure that the server knows who's supposed to log out.
+        try{
+            HttpPost httpPost1 = new HttpPost("serverURL/logout");
+            httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+                HttpEntity responseEntity = response.getEntity();
+                if(responseEntity != null){
+                    return EntityUtils.toString(responseEntity);
+                }
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String delete(){ // Sends a request to the server with the JWT token in the request body to ensure that the server knows what user is supposed to be deleted.
+        try{
+            HttpPost httpPost1 = new HttpPost("serverURL/delete");
+            httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+                HttpEntity responseEntity = response.getEntity();
+                if(responseEntity != null){
+                    return EntityUtils.toString(responseEntity);
+                }
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
     public String getJwtToken() {
         return jwtToken;
