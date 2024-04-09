@@ -108,6 +108,10 @@ public class Controller {
         return gameHandler.getRoomItems(index);
     }
 
+    /** Method returns an ArrayList of PlacementSlots in a room.
+     * @param index the index of chosen room*/
+    public ArrayList<PlacementSlot> getRoomPlacementSlots(int index){return currentUser.getRoom(index).getSlots();}
+
     /** Method returns an ArrayList containing all PottedPlant items in players inventory.*/
     public ArrayList<PottedPlant> getInventoryPlants(){
         return gameHandler.getInventoryPlants();
@@ -153,5 +157,17 @@ public class Controller {
      * @return true if user had enough currency, false if not */
     public boolean purchaseShopItem(int index){
         return gameHandler.purchaseShopItem(index);
+    }
+
+
+    /* --------------------------------------------
+     *  methods for GameHandler + TimeEventHandler
+     *  ------------------------------------------- */
+    /** method called every second by TimeEventHandler to update the gui */
+    public void updateGUI() {
+        widgetHandler.update();
+
+        //TODO: if (application is open)
+        // guiController.update();
     }
 }

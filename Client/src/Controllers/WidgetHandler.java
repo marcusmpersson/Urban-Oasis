@@ -6,4 +6,7 @@ public class WidgetHandler {
 
     public void loadWidgets(String username) {
     }
+
+    public void update() {
+    }
 }
