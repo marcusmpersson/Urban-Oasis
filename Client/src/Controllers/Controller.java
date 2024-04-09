@@ -158,4 +158,16 @@ public class Controller {
     public boolean purchaseShopItem(int index){
         return gameHandler.purchaseShopItem(index);
     }
+
+
+    /* --------------------------------------------
+     *  methods for GameHandler + TimeEventHandler
+     *  ------------------------------------------- */
+    /** method called every second by TimeEventHandler to update the gui */
+    public void updateGUI() {
+        widgetHandler.update();
+
+        //TODO: if (application is open)
+        // guiController.update();
+    }
 }

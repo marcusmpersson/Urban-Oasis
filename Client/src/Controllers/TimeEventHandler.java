@@ -4,8 +4,8 @@ public class TimeEventHandler {
 
     private GameHandler gameHandler;
     private boolean threadsAreRunning;
-    private OneMinuteThread oneMinuteThread;
-    private FiveMinuteThread fiveMinuteThread;
+    private GameThread gameThread;
+    private GUIThread guiThread;
     private Controller controller;
 
     public TimeEventHandler(GameHandler gameHandler, Controller controller){
@@ -14,34 +14,32 @@ public class TimeEventHandler {
     }
 
     public void startThreads(){
-        oneMinuteThread = new OneMinuteThread();
-        fiveMinuteThread = new FiveMinuteThread();
+        gameThread = new GameThread();
+        guiThread = new GUIThread();
 
         threadsAreRunning = true;
 
-        oneMinuteThread.start();
-        fiveMinuteThread.start();
+        gameThread.start();
+        guiThread.start();
     }
 
     public void stopAllThreads(){
         threadsAreRunning = false;
         try {
-            oneMinuteThread.join();
-            fiveMinuteThread.join();
+            gameThread.join();
+            guiThread.join();
         } catch(InterruptedException e){
             System.out.println("TimeEventHandler: joining threads was interrupted.");
         } finally {
-            oneMinuteThread = null;
-            fiveMinuteThread = null;
+            gameThread = null;
+            guiThread = null;
         }
     }
 
-    public class OneMinuteThread extends Thread {
-
-        public OneMinuteThread(){
+    public class GameThread extends Thread {
+        public GameThread(){
             //TODO: save current time as instance variable
         }
-
         @Override
         public void run() {
             while (threadsAreRunning) {
@@ -49,6 +47,11 @@ public class TimeEventHandler {
                     Thread.sleep(60000); //sleep thread for 1 min
                     gameHandler.autoIncreaseCurrency();
                     gameHandler.raiseAges();
+
+                    Thread.sleep(2400000); //sleep thread for 4 more mins
+                    controller.saveGame();
+                    //TODO: add lastUpdatedTime instance variable for user.
+                    // here: update lastUpdatedTime for user
 
                     //TODO: if (its been over an hour)
                     // save new time
@@ -62,15 +65,13 @@ public class TimeEventHandler {
         }
     }
 
-    public class FiveMinuteThread extends Thread {
+    public class GUIThread extends Thread {
         @Override
         public void run() {
             while (threadsAreRunning) {
                 try {
-                    Thread.sleep(300000);
-                    controller.saveGame();
-                    //TODO: add lastUpdatedTime instance variable for user.
-                    // here: update lastUpdatedTime for user
+                    Thread.sleep(1000);
+                    controller.updateGUI();
 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
