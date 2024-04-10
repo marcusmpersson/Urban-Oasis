@@ -17,7 +17,7 @@ public class LoginHandler {
         this.controller = controller;
         this.httpClient = HttpClients.createDefault();
     }
-    public String login(String email, String password){ // A method that sends user login info to the server and returns JWT token if successfull.
+    public String login(String email, String password){ // A method that sends user login info to the server and returns JWT token if successful.
         try{
             HttpPost httpPost1 = new HttpPost("serverURL/login");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
@@ -34,7 +34,7 @@ public class LoginHandler {
         }
         return null;
     }
-    public String register(String email, String userName, String password){ // A method that send user info to the server and returns a string to confirm if registration was successfull.
+    public String register(String email, String userName, String password){ // A method that send user info to the server and returns a string to confirm if registration was successful.
         try{
             HttpPost httpPost1 = new HttpPost("serverURL/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";

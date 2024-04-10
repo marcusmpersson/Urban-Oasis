@@ -23,9 +23,9 @@ public class ClientConnection {
         this.httpClient = HttpClients.createDefault();
         this.httpGet = new HttpGet("serverURL");
     }
-    public void makeRequest(String url){ //A test method that makes a https request to the server with the jwt token set in the request header.
+    public void getUserInfo(){ //A test method that makes a https request to the server with the jwt token set in the request header.
                                         //This test method handles the return data of a user entity. Server returns a Json file which is parsed into a user class.
-        try{httpGet.setURI(new URI(url));
+        try{httpGet.setURI(new URI("serverURL/getUserData"));
             httpGet.setHeader("Authorization", "Bearer " + jwtToken);
             try(CloseableHttpResponse response = httpClient.execute(httpGet)){
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -42,11 +42,11 @@ public class ClientConnection {
             e.printStackTrace();
         }
     }
-    public String saveUser(){ // GLÖM INTE ATT FIXA MED CURRENT USER NÄR DET ÄR DAGS. ALLT ÄR KLART FÖRRUTOM CURRENT USER.
+    public String saveUser(User user){ //Method that takes in a user, remakes it to Json format and sends it to the server. Returns
+                                            //a string to confirm if it worked or not.
         try{
             HttpPost httpPost1 = new HttpPost("serverURL/saveUser");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
-            User user = currentUser;
             Gson gson = new Gson();
             String json = gson.toJson(user);
             StringEntity entity = new StringEntity(json);

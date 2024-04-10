@@ -37,8 +37,8 @@ public class Controller {
         widgetHandler.loadWidgets(user.getUsername());
     }
 
-    public void saveGame() {
-        clientConnection.saveUser();
+    public void saveGame(User user) {
+        clientConnection.saveUser(user);
         //TODO: save game (user object "currentUser") in the database --- SHOULD WORK NOW
     }
 
