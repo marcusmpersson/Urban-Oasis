@@ -16,16 +16,16 @@ public class LoginHandler {
     public LoginHandler(Controller controller){
         this.controller = controller;
         this.httpClient = HttpClients.createDefault();
-        this.httpPost = new HttpPost("/login");
     }
-    public String login(String userName, String password){
+    public String login(String email, String password){ // A method that sends user login info to the server and returns JWT token if successful.
         try{
-            String requestBody = "{\"email\": \"" + userName + "\", \"password\": \"" + password + "\"}";
+            HttpPost httpPost1 = new HttpPost("serverURL/login");
+            String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);
-            try(CloseableHttpResponse response = httpClient.execute(httpPost)){
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
                 HttpEntity responseEntity = response.getEntity();
-                if(entity != null){
+                if(responseEntity != null){
                     return EntityUtils.toString(responseEntity);
                 }
             }
@@ -34,7 +34,21 @@ public class LoginHandler {
         }
         return null;
     }
-    public void register(String email, String userName, String password){
-
+    public String register(String email, String userName, String password){ // A method that send user info to the server and returns a string to confirm if registration was successful.
+        try{
+            HttpPost httpPost1 = new HttpPost("serverURL/register");
+            String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
+            StringEntity entity = new StringEntity(requestBody);
+            httpPost.setEntity(entity);
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+                HttpEntity responseEntity = response.getEntity();
+                if(responseEntity != null){
+                    return EntityUtils.toString(responseEntity);
+                }
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
