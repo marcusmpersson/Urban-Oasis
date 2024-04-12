@@ -6,17 +6,25 @@ public class HealthStat {
     private int envSatisfaction;
 
     public HealthStat() {
-        this.waterLevel=5;
-        this.envSatisfaction= 5;
+        this.waterLevel=50;
+        this.envSatisfaction= 50;
         this.overallMood= establishOverallMood();
 
     }
-    public void water(){
-        this.waterLevel++;
+    public void water() {
+        //if water level is below 100%, watering it should put it to 100%
+        if (waterLevel < 90){
+            waterLevel = 100;
+        }
+        // otherwise, should raise by 20%
+        else if (waterLevel >= 100 ) {
+            waterLevel += 20;
+        }
     }
-    public void lowerWaterLevel(){
-        this.waterLevel--;
+    public void lowerWaterLevel(int multiplicationRate){
+        this.waterLevel -= multiplicationRate;
     }
+
     public int getWaterLevel() {
         return waterLevel;
     }
@@ -24,14 +32,19 @@ public class HealthStat {
     public int getEnvSatisfaction() {
         return envSatisfaction;
     }
-    public void raiseEnvSatisfaction(){
-        this.envSatisfaction++;
+    public void raiseEnvSatisfaction() {
+        if (envSatisfaction < 100) {
+            this.envSatisfaction++;
+        }
     }
     public void lowerEnvSatisfaction(){
-        this.envSatisfaction--;
+        if (envSatisfaction > 0) {
+            this.envSatisfaction--;
+        }
     }
 
     public int getOverallMood() {
+        establishOverallMood();
         return overallMood;
     }
 

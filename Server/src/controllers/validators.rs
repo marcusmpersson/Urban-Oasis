@@ -1,7 +1,6 @@
 use regex::Regex;
 
 const EMAIL_REGEX: &str = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-const PASSWORD_REGEX: &str = r"^(?:[^A-Z]*[A-Z])(?:[^a-z]*[a-z])(?:[^0-9]*[0-9])(?:[^\@\$!\*\%\#\?\&]*[@\$!\*\%\#\?\&])[A-Za-z\d@\$!\*\%\#\?\&]{8,}$";
 const USERNAME_REGEX: &str = r"^[a-zA-Z0-9_]{3,}$";
 
 struct LenText {
@@ -34,13 +33,12 @@ pub fn check_valid_text(text: &str, max_size: usize, min_size: usize) -> bool {
 
 pub fn check_valid_login(email: &str, password: &str) -> Result<(), LoginError> {
     let re_email = Regex::new(EMAIL_REGEX).unwrap();
-    let re_password = Regex::new(PASSWORD_REGEX).unwrap();
 
     if !re_email.is_match(email) || !check_valid_text(email, 50, 3) {
         return Err(LoginError::Email);
     } 
 
-    if !re_password.is_match(password) || !check_valid_text(password, LEN_PASSWORD.max, LEN_PASSWORD.min) {
+    if !is_password_valid(password) || !check_valid_text(password, LEN_PASSWORD.max, LEN_PASSWORD.min) {
         return Err(LoginError::Password);
     }
 
@@ -57,4 +55,17 @@ pub fn check_valid_signup(email: &str, password: &str, username: &str) -> Result
     }
 
     Ok(())
+}
+
+fn is_password_valid(password: &str) -> bool {
+    let mut checks: [bool; 5] = [false; 5]; 
+
+    for c in password.chars() {
+        checks[0] |= c.is_uppercase(); 
+        checks[1] |= c.is_lowercase();
+        checks[2] |= c.is_whitespace();
+        checks[3] |= c.is_ascii_digit();
+    }
+
+    checks[0] && checks[1] && !checks[2] && checks[3] && password.len() >= 8 && password.len() <= 50
 }

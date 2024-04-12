@@ -1,13 +1,18 @@
 package entities;
-import javafx.scene.image.Image;
 
 public class ShopItem extends Item {
 
-    public Image image;
+    public String imageFilePath;
     public String name;
 
-    public ShopItem(){}
+    public ShopItem(String imageFilePath, String name, int price){
+        super(price);
+        this.imageFilePath = imageFilePath;
+        this.name = name;
+    }
 
-
+    public String getImageFilePath(){
+        return this.imageFilePath;
+    }
 
 }
