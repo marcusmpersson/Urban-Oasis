@@ -60,7 +60,8 @@ public class Controller {
             clientConnection.setJwtToken(loginHandler.login(email,password));
     }
     public void registerAccountAttempt(String email, String userName, String password){
-        loginHandler.register(email, userName, password);
+       // loginHandler.register(email, userName, password);
+        System.out.println("nice");
     }
     public void logoutAttempt(){
         clientConnection.logout();

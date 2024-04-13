@@ -1,5 +1,6 @@
-package Application;
+package main.java.Application;
 
+import Controllers.Controller;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -17,6 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -62,6 +65,10 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createFlyUpAnimation(1400, registerFrame, 0.1);
+
+        Controller controller = new Controller();
+        controller.registerAccountAttempt("Test@gmail.com", "Hello", "123456789F");
+
     }
     private void createFlyUpAnimation(double val, Group group, double seconds) {
         TranslateTransition flyUpAnimation = new TranslateTransition(Duration.seconds(seconds), group);
@@ -98,7 +105,11 @@ public class LoginController implements Initializable {
     }
 
     public void switchToLoggedInScene(MouseEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/Main.fxml"));
+        ClassLoader classLoader = getClass().getClassLoader();
+        System.out.println(classLoader);
+        URL mainClass = classLoader.getResource("fxml/Main.fxml");
+        System.out.println(mainClass);
+        root = FXMLLoader.load(mainClass);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

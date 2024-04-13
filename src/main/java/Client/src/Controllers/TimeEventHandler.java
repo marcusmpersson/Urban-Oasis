@@ -49,7 +49,7 @@ public class TimeEventHandler {
                     gameHandler.raiseAges();
 
                     Thread.sleep(2400000); //sleep thread for 4 more mins
-                    controller.saveGame();
+                    //controller.saveGame();
                     //TODO: add lastUpdatedTime instance variable for user.
                     // here: update lastUpdatedTime for user
 
