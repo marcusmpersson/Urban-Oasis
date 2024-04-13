@@ -1,4 +1,4 @@
-package Application;
+package main.java.Application;
 
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
@@ -99,7 +99,7 @@ public class MainController implements Initializable {
         switchToRoomView(null);
         startBackgroundTimeChecker();
 
-        createPlantGroups(); // Refactored for clarity
+        //createPlantGroups(); // Refactored for clarity
     }
 
     private void createPlantGroups() {
@@ -220,6 +220,7 @@ public class MainController implements Initializable {
     }
 
     public void updateRoomBackground(String timeOfDay) {
+        System.out.println(timeOfDay);
         String imagePath;
 
         try {
@@ -229,7 +230,7 @@ public class MainController implements Initializable {
                 imagePath = String.valueOf(getClass().getClassLoader().getResource("rooms/roomNighttime.jpg"));
             }
             currentBackground = new Image(imagePath);
-            roomBackground.setImage(currentBackground);
+            //roomBackground.setImage(currentBackground);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -241,7 +242,7 @@ public class MainController implements Initializable {
                 LocalTime currentTime = LocalTime.now();
 
                 if (isNightTime(currentTime)) {
-                    Platform.runLater(() -> updateRoomBackground("Nighttime"));
+                   // Platform.runLater(() -> updateRoomBackground("Nighttime"));
                 } else {
                     Platform.runLater(() -> updateRoomBackground("Daytime"));
                 }
