@@ -17,12 +17,13 @@ public class LoginHandler {
         this.controller = controller;
         this.httpClient = HttpClients.createDefault();
     }
+
     public String login(String email, String password){ // A method that sends user login info to the server and returns JWT token if successful.
         try{
-            HttpPost httpPost1 = new HttpPost("serverURL/login");
+            HttpPost httpPost1 = new HttpPost("http://127.0.0.1:8000/auth/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
             StringEntity entity = new StringEntity(requestBody);
-            httpPost.setEntity(entity);
+            httpPost1.setEntity(entity);
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
                 HttpEntity responseEntity = response.getEntity();
                 if(responseEntity != null){
@@ -34,12 +35,13 @@ public class LoginHandler {
         }
         return null;
     }
+
     public String register(String email, String userName, String password){ // A method that send user info to the server and returns a string to confirm if registration was successful.
         try{
-            HttpPost httpPost1 = new HttpPost("serverURL/register");
+            HttpPost httpPost1 = new HttpPost("http://127.0.0.1:8000/auth/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
             StringEntity entity = new StringEntity(requestBody);
-            httpPost.setEntity(entity);
+            httpPost1.setEntity(entity);
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
                 HttpEntity responseEntity = response.getEntity();
                 if(responseEntity != null){
