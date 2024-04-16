@@ -174,11 +174,8 @@ public class Controller {
     /* --------------------------------------------
      *  methods for GameHandler + TimeEventHandler
      *  ------------------------------------------- */
-    /** method called every second by TimeEventHandler to update the gui */
-    public void updateGUI() {
-        widgetHandler.update();
+    public void updateGUI(){
 
-        //TODO: if (application is open)
-        // guiController.update();
     }
+ 
 }
