@@ -100,7 +100,6 @@ public class MainController implements Initializable {
             {"25", "1200", "879", "Shade"}
     };
 
-
     /**
      * private PlantTop plantTop;
      *     private Pot pot;
