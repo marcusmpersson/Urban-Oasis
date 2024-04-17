@@ -1,5 +1,9 @@
 package main.java.Application;
 
+import entities.Plant;
+import entities.PlantTop;
+import entities.Pot;
+import entities.PottedPlant;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,8 +17,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.awt.event.ActionEvent;
@@ -93,13 +101,55 @@ public class MainController implements Initializable {
     };
 
 
+    /**
+     * private PlantTop plantTop;
+     *     private Pot pot;
+     *
+     *     double xOffset = 0;
+     *     double yOffset = 0;
+     * @param url
+     * @param resourceBundle
+     */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         switchToRoomView(null);
         startBackgroundTimeChecker();
+        /**
+         *   ArrayList<String> imageArraysPlants = new ArrayList<>();
+         *         imageArraysPlants.add(String.valueOf(getClass().getClassLoader().getResource("plants/plantTop2.png")));
+         *         plantTop = new PlantTop(imageArraysPlants, null, null, 0, null);
+         *
+         *         pot = new Pot("Pot", String.valueOf(getClass().getClassLoader().getResource("pots/pot1.png")), 0);
+         *
+         *         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
+         *
+         *
+         *         Stage widgetStage = new Stage();
+         *         widgetStage.initStyle(StageStyle.TRANSPARENT);
+         *
+         *         Circle circle = new Circle(50, Color.BLUE);
+         *         Pane root = new Pane(circle);
+         *
+         *
+         *         root.setOnMousePressed(event -> {
+         *             xOffset = widgetStage.getX() - event.getScreenX();
+         *             yOffset = widgetStage.getY() - event.getScreenY();
+         *         });
+         *
+         *         root.setOnMouseDragged(event -> {
+         *             widgetStage.setX(event.getScreenX() + xOffset);
+         *             widgetStage.setY(event.getScreenY() + yOffset);
+         *         });
+         *
+         *         Scene scene = new Scene(root, 100, 100);
+         *         scene.setFill(Color.TRANSPARENT);
+         *
+         *         widgetStage.setScene(scene);
+         *         widgetStage.show();
+         */
 
-        //createPlantGroups(); // Refactored for clarity
+
     }
 
     private void createPlantGroups() {
@@ -108,7 +158,7 @@ public class MainController implements Initializable {
             plantContainer.setLayoutX(87);
             plantContainer.setLayoutY(258);
 
-            String imagePath = String.valueOf(getClass().getClassLoader().getResource("plants/plant1.png"));
+            String imagePath = String.valueOf(getClass().getClassLoader().getResource("plants/plantTop2.png"));
             Image plantImage = new Image(imagePath);
             ImageView imageView = new ImageView(plantImage);
             imageView.setId("Plant");
