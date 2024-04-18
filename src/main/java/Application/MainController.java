@@ -95,10 +95,6 @@ public class MainController implements Initializable {
             {"25", "1200", "879", "Shade"}
     };
 
-    public MainController(Controller controller) {
-        this.controller = controller;
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         switchToRoomView(null);

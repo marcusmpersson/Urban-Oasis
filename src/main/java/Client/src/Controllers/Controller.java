@@ -16,14 +16,14 @@ public class Controller {
     private User currentUser;
     private MainController guiController;
 
-    /** Constructor initializes all controller classes connected to this controller */
-    public Controller() {
+    /** Constructor initializes all controller classes connected to this controller. */
+    public Controller(MainController guiController) {
         clientConnection = new ClientConnection(this);
         localFileHandler = new LocalFileHandler(this);
         widgetHandler = new WidgetHandler(this, localFileHandler);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
-        guiController = new MainController(this);
+        this.guiController = guiController;
     }
 
     /* --------------------------
