@@ -15,14 +15,14 @@ public class PlantTop {
     private int age;
     private PottedPlant belongingPottedPlant;
 
-    public PlantTop(ArrayList<String> imageFilePaths, Species species, Stage stage, int price, Rarity rarity){
+    public PlantTop(ArrayList<String> imageFilePaths, Species species, int price, Rarity rarity){
         this.imageFilePaths = imageFilePaths;
-        this.stage = stage;
         this.species= species;
         this.healthStat= new HealthStat();
         this.price = price;
         this.rarity = rarity;
         age = 0;
+        updateStage();
     }
 
     public void setBelongingPottedPlant (PottedPlant belongingPottedPlant){
@@ -41,6 +41,7 @@ public class PlantTop {
         checkHealth();
         return stage;
     }
+
     public void updateStage(){
         // every minute the age is raised by +1
         // the plant would be "planted" for 20 minutes:
@@ -72,6 +73,7 @@ public class PlantTop {
         || healthStat.getWaterLevel() >= 200){
             // then kill plant
             this.stage = Stage.DEAD;
+            price = 0;
         }
     }
 

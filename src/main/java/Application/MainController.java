@@ -1,5 +1,6 @@
 package main.java.Application;
 
+import Controllers.Controller;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -28,6 +29,8 @@ public class MainController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private Controller controller;
+
     Transitions transitions = new Transitions();
 
     @FXML
@@ -92,7 +95,9 @@ public class MainController implements Initializable {
             {"25", "1200", "879", "Shade"}
     };
 
-
+    public MainController(Controller controller) {
+        this.controller = controller;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

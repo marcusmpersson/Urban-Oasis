@@ -6,19 +6,20 @@ import enums.Rarity;
 import java.util.ArrayList;
 
 public class GameHandler {
+
     private User currentUser;
     private Controller controller;
     private Shop shop;
 
-
-    /** Constructor */
+    /** Constructor, receives reference of the main controller, and reference
+     * for the user that is logged in. */
     public GameHandler(Controller controller, User user) {
         shop = new Shop();
         this.controller = controller;
         this.currentUser = user;
     }
 
-    public boolean purchaseShopItem(int index){
+    public boolean purchaseShopItem(int index) {
         // if user can afford it
         if (currentUser.getShopCurrency() >= shop.getShopItem(index).getPrice()){
             currentUser.subtractCurrency(shop.getShopItem(index).getPrice());
@@ -31,10 +32,10 @@ public class GameHandler {
         }
     }
 
-
     /* ---------------------------------
     * [BELOW] Methods for Controller -> GUIController - May be removed later!
     * --------------------------------- */
+
     public ArrayList<Placeable> getRoomItems(int index) {
         return currentUser.getRoom(index).getPlacedItems();
     }
@@ -54,10 +55,10 @@ public class GameHandler {
         return currentUser.getRoom(index).getImageFilePaths();
     }
 
-
     /* ---------------------------------
      * Methods for TimeEventHandler
      * --------------------------------- */
+
     public void autoIncreaseCurrency() {
         int amount = 0;
 
@@ -115,6 +116,7 @@ public class GameHandler {
     /* ---------------------------------
      * Methods for Startup / changes since last time
      * --------------------------------- */
+
     public void raiseAges(int amount) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
