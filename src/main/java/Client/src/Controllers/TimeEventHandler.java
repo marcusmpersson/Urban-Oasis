@@ -8,12 +8,12 @@ public class TimeEventHandler {
     private GUIThread guiThread;
     private Controller controller;
 
-    public TimeEventHandler(GameHandler gameHandler, Controller controller){
+    public TimeEventHandler(GameHandler gameHandler, Controller controller) {
         this.gameHandler = gameHandler;
         this.controller = controller;
     }
 
-    public void startThreads(){
+    public void startThreads() {
         gameThread = new GameThread();
         guiThread = new GUIThread();
 
@@ -23,23 +23,28 @@ public class TimeEventHandler {
         guiThread.start();
     }
 
-    public void stopAllThreads(){
+    public void stopAllThreads() {
         threadsAreRunning = false;
         try {
             gameThread.join();
             guiThread.join();
-        } catch(InterruptedException e){
+
+        } catch(InterruptedException e) {
             System.out.println("TimeEventHandler: joining threads was interrupted.");
+
         } finally {
             gameThread = null;
             guiThread = null;
+
         }
     }
 
     public class GameThread extends Thread {
-        public GameThread(){
+
+        public GameThread() {
             //TODO: save current time as instance variable
         }
+
         @Override
         public void run() {
             while (threadsAreRunning) {
@@ -60,6 +65,7 @@ public class TimeEventHandler {
 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+
                 }
             }
         }
@@ -68,13 +74,16 @@ public class TimeEventHandler {
     public class GUIThread extends Thread {
         @Override
         public void run() {
+
             while (threadsAreRunning) {
+
                 try {
                     Thread.sleep(1000);
                     controller.updateGUI();
 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+
                 }
             }
         }

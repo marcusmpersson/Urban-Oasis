@@ -8,6 +8,7 @@ public class Shop {
     public Shop(){
         shopItems = new ArrayList<>();
         //TODO: generate and add shop items!
+        //4 seeds, pots
     }
 
     public ShopItem getShopItem(int index){
