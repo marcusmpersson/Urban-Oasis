@@ -1,5 +1,6 @@
 pub(crate) mod auth;
 pub mod validators;
+pub mod routes;
 
 use rocket::http::Status;
 
