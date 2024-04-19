@@ -16,6 +16,7 @@ use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
 use crate::controllers::validators::{check_valid_login, check_valid_signup};
 
+/*
 #[get("/inventory")]
 pub async fn get_inventory(
     db: &State<DB>,
@@ -23,10 +24,11 @@ pub async fn get_inventory(
 ) -> Response<Json<Vec<Inventory>>> {
     let db: &DB = db as &DB;
 
-    let inventory = db.fetch_inventory().await.unwrap();
+    //let inventory = db.fetch_inventory().await.unwrap();
 
-    Ok(SuccessResponse((Status::Ok, Json(inventory))))
+    //Ok(SuccessResponse((Status::Ok, Json(inventory))))
 }
+*/
 
 #[post("/inventory", data="<req_inventory>")]
 pub async fn add_inventory(
@@ -40,7 +42,7 @@ pub async fn add_inventory(
         _id: ObjectId::new(),
         name: req_inventory.name.clone(),
         quantity: req_inventory.quantity,
-        user_id: user.sub.clone(),
+        user_id: user.id,
     };
 
     db.add_inventory(inventory).await.unwrap();
@@ -67,6 +69,7 @@ pub struct Inventory {
 
 impl DB {
 
+    /*
     pub async fn fetch_inventory(&self) -> mongodb::error::Result<Inventory> {
         let collection = self.database.collection("inventory");
 
@@ -76,18 +79,18 @@ impl DB {
 
         while let Some(result) = cursor.next().await {
             match result {
-                Ok(doc) => {
-                    let i = bson::from_bson(bson::Bson::Document(doc)).unwrap();
-                    inventory.push(i);
-                },
+                Ok(document) => {
+                    inventory.push(bson::from_document(document)?);
+                }
                 Err(e) => {
-                    return Err(e);
+                    return Err(e.into());
                 }
             }
-        }
+        } 
 
         Ok(inventory)
     }
+    */
 
     pub async fn add_inventory(&self, inventory: Inventory) -> mongodb::error::Result<()> {
         let collection = self.database.collection("inventory");
