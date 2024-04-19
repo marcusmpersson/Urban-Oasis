@@ -29,4 +29,9 @@ public class PlacementSlot {
         this.placedItem = placedItem;
         placedItem.setPlacedAt(this);
     }
+
+    public void clear() {
+        placedItem.setPlacedAt(null);
+        this.placedItem = null;
+    }
 }
