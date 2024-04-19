@@ -23,7 +23,7 @@ public class LoginHandler {
     }
     public String login(String email, String password) { // A method that sends user login info to the server and returns JWT token if successful.
         try {
-            HttpPost httpPost1 = new HttpPost("/login");
+            HttpPost httpPost1 = new HttpPost("auth/login");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);
@@ -56,7 +56,7 @@ public class LoginHandler {
     }
     public String register(String email, String userName, String password) { // A method that send user info to the server and returns a string to confirm if registration was successful.
         try {
-            HttpPost httpPost1 = new HttpPost("/register");
+            HttpPost httpPost1 = new HttpPost("auth/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);

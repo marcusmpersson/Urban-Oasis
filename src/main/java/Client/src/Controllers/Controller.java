@@ -50,6 +50,14 @@ public class Controller {
         currentUser.setEmail(newEmail);
     }
 
+    public Boolean checkUserNameAvailability() {
+        return clientConnection.checkUserNameAvailability();
+    }
+
+    public Boolean checkEmailAvailability() {
+        return clientConnection.checkEmailAvailability();
+    }
+
     /** Method called if email change was NOT approved by server */
     public void emailChangeUnsuccessful() {
         // TODO: show error in GUI
