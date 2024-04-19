@@ -1,5 +1,6 @@
 package entities;
 
+import Builders.PlantTopBuilder;
 import enums.Rarity;
 import enums.Species;
 import java.util.Random;
@@ -17,6 +18,7 @@ public class Seed extends ShopItem{
         this.possiblePlants = possibilities;
         this.species = speciesAtRandom();
     }
+
     public Species speciesAtRandom(){
         Random random= new Random();
         int index =  random.nextInt(possiblePlants.size());

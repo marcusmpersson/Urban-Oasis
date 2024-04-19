@@ -9,7 +9,7 @@ public class Shop {
 
     private ArrayList<ShopItem> shopItems;
 
-    /** constructor adds all shopItems to an ArrayList */
+    /** constructor, adds all shopItems to an ArrayList (hardcoded) */
     public Shop() {
         shopItems = new ArrayList<>();
 

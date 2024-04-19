@@ -36,13 +36,15 @@ public class Controller {
     public void loadGame(User user) {
         this.currentUser = user;
         gameHandler = new GameHandler(this, user);
+        gameHandler.updateSinceLast();
+
         //TODO: guiController.startGame(); eller metod med annan namn
+
         widgetHandler.loadWidgets(user.getUsername());
     }
 
-    public void saveGame(User user) {
-        clientConnection.saveUser(user);
-        //TODO: save game (user object "currentUser") in the database --- SHOULD WORK NOW
+    public void saveGame() {
+        clientConnection.saveUser(currentUser);
     }
 
     /** Method called if email change was approved by server */
