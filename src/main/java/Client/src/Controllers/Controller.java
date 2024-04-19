@@ -56,12 +56,18 @@ public class Controller {
     *  methods for GUIController
     *  -------------------------- */
 
-    public void loginAttempt(String email, String password){
-            clientConnection.setJwtToken(loginHandler.login(email,password));
+    public boolean loginAttempt(String email, String password){
+            String jwtToken = loginHandler.login(email, password);
+                if(jwtToken.contains("Invalid Credentials") || jwtToken.contains("Unprocessable Entity")){
+                return false;}
+            clientConnection.setJwtToken(jwtToken);
+            return jwtToken != null;
     }
-    public void registerAccountAttempt(String email, String userName, String password){
-       // loginHandler.register(email, userName, password);
+    public String registerAccountAttempt(String email, String userName, String password){
+        String registerAnswer = loginHandler.register(email, userName, password);
         System.out.println("nice");
+
+        return registerAnswer;
     }
     public void logoutAttempt(){
         clientConnection.logout();

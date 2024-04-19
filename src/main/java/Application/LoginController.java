@@ -67,7 +67,7 @@ public class LoginController implements Initializable {
         createFlyUpAnimation(1400, registerFrame, 0.1);
 
         Controller controller = new Controller();
-        controller.registerAccountAttempt("Test@gmail.com", "Hello", "123456789F");
+        //controller.registerAccountAttempt("Test@gmail.com", "Hello", "123456789F");
 
     }
     private void createFlyUpAnimation(double val, Group group, double seconds) {
