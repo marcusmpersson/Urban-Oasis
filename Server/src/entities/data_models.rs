@@ -26,7 +26,9 @@ pub struct HealthStat {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct 
+pub struct PlantTop {
+    pub imageFilePaths: Vec<String>, 
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Item {
@@ -45,5 +47,22 @@ pub struct Deco {
     pub shopItem: ShopItem,
     
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Enviroment {
+    SHADE,
+    HALF_SHADE,
+    SUNNY,
+    HUMID,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Rarity {
+    COMMOM,
+    RARE,
+    EPIC,
+    LEGENDARY,
+}
+
 
 
