@@ -19,11 +19,11 @@ public class Controller {
     /** Constructor initializes all controller classes connected to this controller. */
     public Controller(MainController guiController) {
         clientConnection = new ClientConnection(this);
-        localFileHandler = new LocalFileHandler(this);
-        widgetHandler = new WidgetHandler(this, localFileHandler);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
         this.guiController = guiController;
+        widgetHandler = new WidgetHandler(guiController);
+
     }
 
     /* --------------------------
