@@ -11,19 +11,22 @@ public class GameHandler {
     private Controller controller;
     private Shop shop;
 
-    /** Constructor, receives reference of the main controller, and reference
-     * for the user that is logged in. */
+    /** Constructor, receives reference of the main controller and the user
+     * that is logged in. */
     public GameHandler(Controller controller, User user) {
         shop = new Shop();
         this.controller = controller;
         this.currentUser = user;
+        updateSinceLast();
     }
 
     public boolean purchaseShopItem(int index) {
+        ShopItem item = shop.getShopItem(index);
+
         // if user can afford it
-        if (currentUser.getShopCurrency() >= shop.getShopItem(index).getPrice()){
-            currentUser.subtractCurrency(shop.getShopItem(index).getPrice());
-            currentUser.getInventory().addItem(shop.getShopItem(index));
+        if (currentUser.getShopCurrency() >= item.getPrice()){
+            currentUser.subtractCurrency(item.getPrice());
+            currentUser.getInventory().addItem(item);
             return true;
         }
         // otherwise if user cannot afford it
@@ -59,7 +62,7 @@ public class GameHandler {
      * Methods for TimeEventHandler
      * --------------------------------- */
 
-    public void autoIncreaseCurrency() {
+    public void increaseCurrency(int multiplier) {
         int amount = 0;
 
         // for every room player has
@@ -80,34 +83,34 @@ public class GameHandler {
                 }
             }
         }
-        currentUser.increaseCurrency(amount);
+        currentUser.increaseCurrency(amount * multiplier);
     }
 
-    public void raiseAges() {
+    public void raiseAges(int multiplier) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().raiseAge(1);
+                    ((PottedPlant)item).getPlantTop().raiseAge(multiplier);
                 }
             }
         }
     }
 
-    public void lowerAllWaterLevels() {
+    public void lowerAllWaterLevels(int multiplier) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().lowerWaterLevel();
+                    ((PottedPlant)item).getPlantTop().lowerWaterLevel(multiplier);
                 }
             }
         }
     }
 
-    public void updateEnvSatisfactions() {
+    public void updateEnvSatisfactions(int multiplier) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction();
+                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction(multiplier);
                 }
             }
         }
@@ -117,13 +120,19 @@ public class GameHandler {
      * Methods for Startup / changes since last time
      * --------------------------------- */
 
-    public void raiseAges(int amount) {
-        for (Room room : currentUser.getRoomsArray()){
-            for (Placeable item : room.getPlacedItems()){
-                if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().raiseAge(amount);
-                }
-            }
-        }
+    /** method compares last saved time for user (since last logout)
+     * and applies passage of time to all affected game components */
+    public void updateSinceLast(){
+        int minutes = 1;
+        //TODO: get and compare time
+
+        // 1 minute pace updates
+        raiseAges(minutes);
+        increaseCurrency(minutes);
+
+        // 1 hour pace updates
+        lowerAllWaterLevels(minutes/60);
+        updateEnvSatisfactions(minutes/60);
     }
+
 }

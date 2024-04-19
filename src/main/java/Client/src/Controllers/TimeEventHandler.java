@@ -50,8 +50,8 @@ public class TimeEventHandler {
             while (threadsAreRunning) {
                 try {
                     Thread.sleep(60000); //sleep thread for 1 min
-                    gameHandler.autoIncreaseCurrency();
-                    gameHandler.raiseAges();
+                    gameHandler.increaseCurrency(1);
+                    gameHandler.raiseAges(1);
 
                     Thread.sleep(2400000); //sleep thread for 4 more mins
                     //controller.saveGame();
@@ -60,8 +60,8 @@ public class TimeEventHandler {
 
                     //TODO: if (its been over an hour)
                     // save new time
-                    gameHandler.lowerAllWaterLevels();
-                    gameHandler.updateEnvSatisfactions();
+                    gameHandler.lowerAllWaterLevels(1);
+                    gameHandler.updateEnvSatisfactions(1);
 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);

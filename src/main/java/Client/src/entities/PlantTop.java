@@ -77,15 +77,15 @@ public class PlantTop {
         }
     }
 
-    public void updateEnvSatisfaction(){
+    public void updateEnvSatisfaction(int amount){
         // if placed at desired environment, raise satisfaction
         if (belongingPottedPlant.getPlacedAt().getEnvironment()
                 == species.getPreferredEnvironment()){
-            healthStat.raiseEnvSatisfaction();
+            healthStat.raiseEnvSatisfaction(amount);
         }
         // otherwise, lower satisfaction
         else {
-            healthStat.lowerEnvSatisfaction();
+            healthStat.lowerEnvSatisfaction(amount);
         }
     }
 
@@ -114,9 +114,10 @@ public class PlantTop {
         }
     }
 
-    public void lowerWaterLevel() {
-        healthStat.lowerWaterLevel(species.getWaterRate());
+    public void lowerWaterLevel(int multiplier) {
+        healthStat.lowerWaterLevel(species.getWaterRate() * multiplier);
         healthStat.establishOverallMood();
         checkHealth();
     }
+
 }

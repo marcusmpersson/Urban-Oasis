@@ -48,6 +48,21 @@ public class ItemBuilder {
         return null;
     }
 
+    public static ArrayList<Pot> buildAllPots(){
+        ArrayList<Pot> pots = new ArrayList<>();
+
+        pots.add(buildPot(PotType.POT_LILAC));
+        pots.add(buildPot(PotType.POT_ORANGE));
+        pots.add(buildPot(PotType.POT_POLKA_PINK));
+        pots.add(buildPot(PotType.POT_STRIPED_BLUE));
+        pots.add(buildPot(PotType.ROUND_POT_CLAY));
+        pots.add(buildPot(PotType.ROUND_POT_GOLDEN));
+        pots.add(buildPot(PotType.ROUND_POT_STRIPED_GREEN));
+        pots.add(buildPot(PotType.ROUND_POT_RED));
+
+        return pots;
+    }
+
     /* ------------------
     * inner private methods
     * ------------------- */
