@@ -140,7 +140,7 @@ pub async fn email(
 }
 
 #[post("/username", data="<req_username>")]
-pub async fn username_verification(
+pub async fn username(
     db: &State<DB>,
     req_username: Json<ReqUsername>,
 ) -> Response<String> {
