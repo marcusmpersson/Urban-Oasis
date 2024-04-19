@@ -139,17 +139,17 @@ pub async fn email(
     };
 }
 
-#[post("/emailverification", data="<email_verification>")]
-pub async fn email_verification(
+#[post("/username", data="<req_username>")]
+pub async fn username_verification(
     db: &State<DB>,
-    email_verification: Json<EmailVerification>,
+    req_username: Json<ReqUsername>,
 ) -> Response<String> {
     let db = db as &DB;
 
-    let filter = doc! { "six_digit_code": email_verification.six_digit_code };
-    let email_verification = db.database.collection("email_verification").find_one(filter, None).await.unwrap().unwrap();
-
-    Ok(SuccessResponse((Status::Ok, "Email verified".to_string())))
+    let u: User = match db.fetch_user(&req_username.username).await.unwrap() {
+        Some(_) => return Err(ErrorResponse((Status::Conflict, "Username already exists".to_string()))),
+        None => return Ok(SuccessResponse((Status::Ok, "Username available".to_string()))),
+    }; 
 }
 
 #[derive(Deserialize)]
@@ -182,14 +182,14 @@ pub struct ResMe {
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
-pub struct ReqEmailVerification {
-    six_digit_code: String,
+pub struct ReqEmail {
+    email: String,
 }
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
-pub struct ReqEmail {
-    email: String,
+pub struct ReqUsername {
+    username: String,
 }
 
 impl DB {
