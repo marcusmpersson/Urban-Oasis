@@ -21,7 +21,6 @@ public class GameHandler {
         shop = new Shop();
         this.controller = controller;
         this.currentUser = user;
-        updateSinceLast();
     }
 
     /* ---------------------------------
@@ -99,28 +98,27 @@ public class GameHandler {
                 placementIndex > 0)) {
 
             Item item = ((Item) currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem());
-            currentUser.getInventory().addItem(item);
 
-            currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
+            if (item != null) {
+                currentUser.getInventory().addItem(item);
+                currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
+            }
         }
     }
 
-    /*** method creates a new PottedPlant Item with given seed and pot, places in room
+    /*** method creates a new PottedPlant Item with given seed and pot, places in inventory
      * @param inventoryPotIndex index of the selected pot in inventory
      * @param inventorySeedIndex index of the selected seed in inventory
-     * @param roomIndex index of the room
-     * @param placementIndex index of the slot in the room
      * */
-    public PottedPlant plantSeed(int inventoryPotIndex, int inventorySeedIndex,
-                                 int roomIndex, int placementIndex){
+    public PottedPlant plantSeed(int inventoryPotIndex, int inventorySeedIndex){
         //generate plant
         Species species = currentUser.getInventory().getSeedAt(inventorySeedIndex).getSpecies();
         PlantTop plantTop = PlantTopBuilder.buildPlantTop(species);
         Pot pot = currentUser.getInventory().getPotAt(inventoryPotIndex);
         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
 
-        //place in given slot
-        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(pottedPlant);
+        //place in inventory
+        currentUser.getInventory().addItem(pottedPlant);
 
         //remove seed and pot item from inventory
         currentUser.getInventory().removeSeedAt(inventorySeedIndex);
@@ -158,15 +156,13 @@ public class GameHandler {
         currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(droppedUponItem);
     }
 
-    /** method sells a PottedPlant that is placed in room. Adds currency to user
-     * @return updated user currency */
-    public int sellPlacedPlant (int roomIndex, int placementIndex){
+    /** method sells a PottedPlant that is placed in room. Adds currency to user */
+    public void sellPlacedPlant (int roomIndex, int placementIndex) {
         Placeable placeable = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
         if (placeable instanceof PottedPlant){
             currentUser.increaseCurrency( ((PottedPlant)placeable).getPrice() );
         }
         currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
-        return currentUser.getShopCurrency();
     }
 
     /** method sells a PottedPlant that is placed in the inventory. Adds currency to user
@@ -287,7 +283,7 @@ public class GameHandler {
     }
 
     /* ---------------------------------
-     * getters for Controller -> GUI
+     * getters for Controller
      * --------------------------------- */
 
     public ArrayList<Placeable> getRoomItems(int index) {

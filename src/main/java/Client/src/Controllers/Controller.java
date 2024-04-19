@@ -10,56 +10,36 @@ public class Controller {
     private GameHandler gameHandler;
     private ClientConnection clientConnection;
     private WidgetHandler widgetHandler;
-    private LocalFileHandler localFileHandler;
     private LoginHandler loginHandler;
     private InformationConverter infoConverter;
     private User currentUser;
     private MainController guiController;
 
     /** Constructor initializes all controller classes connected to this controller. */
-    public Controller(MainController guiController) {
+    public Controller() {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
-        this.guiController = guiController;
+        //this.guiController = guiController;
         widgetHandler = new WidgetHandler(guiController);
-
     }
 
-    /* --------------------------
+    /* ----------------------------------------
      *  methods for ClientConnection, LoginHandler, InformationConverter
-     *  -------------------------- */
+     *  --------------------------------------- */
 
     /** method called after a successful login and user data conversion.
-     * Initiates gameHandler, loads game on GUI, loads widget preferences on device.
+     * Initiates gameHandler, loads game view on GUI, loads widget preferences on device.
      * */
     public void loadGame(User user) {
         this.currentUser = user;
         gameHandler = new GameHandler(this, user);
         gameHandler.updateSinceLast();
 
-        //TODO: guiController.startGame(); eller metod med annan namn
+        //TODO: load GUI game view
 
         widgetHandler.loadWidgets(user.getUsername());
     }
-
-    public void saveGame() {
-        clientConnection.saveUser(currentUser);
-    }
-
-    /** Method called if email change was approved by server */
-    public void emailChangeSuccessful(String newEmail) {
-        currentUser.setEmail(newEmail);
-    }
-
-    /** Method called if email change was NOT approved by server */
-    public void emailChangeUnsuccessful() {
-        // TODO: show error in GUI
-    }
-
-    /* --------------------------
-    *  methods for GUIController
-    *  -------------------------- */
 
     public void loginAttempt(String email, String password) {
         clientConnection.setJwtToken(loginHandler.login(email,password));
@@ -71,6 +51,7 @@ public class Controller {
     }
 
     public void logoutAttempt() {
+        widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.logout();
     }
 
@@ -78,17 +59,121 @@ public class Controller {
         clientConnection.delete();
     }
 
+    /* --------------------------------------------
+     *  methods called by GameHandler/TimeEventHandler
+     *  ------------------------------------------- */
+
+    public void updateGUI() {
+        //TODO: update/repaint GUI
+    }
+
+    public void saveGame() {
+        widgetHandler.updateLocalFile(currentUser.getUsername());
+        clientConnection.saveUser(currentUser);
+    }
+
+    public void popUpMessage(String message) {
+        //TODO: show pop-up message in GUI
+    }
+
+    /* ------------------------------------------------
+     *  event driven game functions - called by GUI Controller
+     *  ----------------------------------------------- */
+
+    /** Method called by GUI controller class when user attempts to purchase
+     * an item from the shop.
+     * @return true if user has enough currency, false if not */
+    public boolean purchaseShopItem(int index) {
+        return gameHandler.purchaseShopItem(index);
+    }
+
+    /** waters plant at given placement slot index */
+    public void waterPlant(int placementIndex){
+        gameHandler.waterPlant(0, placementIndex);
+    }
+
+    /** method places a pottedPlant from the inventory in a room slot,
+     * removes from inventory */
+    public void placePlantInSlot (int inventoryIndex, int placementIndex) {
+        gameHandler.placePlantInSlot(inventoryIndex, 0, placementIndex);
+    }
+
+    /** method places a Pot from the inventory in a room slot,
+     * removes from inventory */
+    public void placePotInSlot (int inventoryIndex, int placementIndex) {
+        gameHandler.placePotInSlot(inventoryIndex, 0, placementIndex);
+    }
+
+    /** places item in PlacementSlot back to inventory */
+    public void removeItemFromSlot(int placementIndex) {
+        gameHandler.removeItemFromSlot(0, placementIndex);
+    }
+
+    /** plants a seed in a pot, creates a PottedPlant, places in inventory */
+    public void plantSeed(int inventoryPotIndex, int inventorySeedIndex) {
+        gameHandler.plantSeed(inventoryPotIndex, inventorySeedIndex);
+    }
+
+    /** disposes item in inventory.
+     * @param item an item of the class being deleted
+     * @param index index of the item in inventory */
+    public void disposeItemFromInventory(Item item, int index) {
+        gameHandler.disposeItemFromInventory(item, index);
+    }
+
+    /** swaps placement of two items in different slots.
+     * swaps even with null value. */
+    public void swapItems(int draggingIndex, int droppingIndex) {
+        gameHandler.swapItems(draggingIndex, droppingIndex, 0);
+    }
+
+    /** method sells a PottedPlant that is placed in room. Adds currency to user
+     * @param placementIndex placementSlot index of the PottedPlant */
+    public void sellPlacedPlant (int placementIndex) {
+        gameHandler.sellPlacedPlant(0, placementIndex);
+    }
+
+    /** method sells a PottedPlant that is in the inventory. Adds currency to user
+     * @param index index of the PottedPlant in inventory */
+    public void sellInventoryPlant (int index) {
+        gameHandler.sellInventoryPlant(index);
+    }
+
+    /* --------------------------------------------
+     *  getters for GUI controller class
+     *  ------------------------------------------- */
+
+    /** Gets current player's currency amount */
+    public int getPlayerCoins() {
+        return currentUser.getShopCurrency();
+    }
+
+    /** Gets current player's username */
+    public String getPlayerUsername() {
+        return currentUser.getUsername();
+    }
+
+    /** Gets current player's email */
+    public String getPlayerEmail() {
+        return currentUser.getEmail();
+    }
+
     /** method returns an ArrayList of String containing filepath to room images,
-     * for daytime (index 0), sunset (index 1), night (index 2), sun-rise (index 3).
-     * @param index the index of chosen room */
-    public ArrayList<String> getRoomImagePaths(int index) {
-        return gameHandler.getRoomImagePaths(index);
+     * for daytime (index 0), sunset (index 1), night (index 2), sun-rise (index 3). */
+    public ArrayList<String> getRoomImagePaths() {
+        return gameHandler.getRoomImagePaths(0);
+    }
+
+    /** Method returns an ArrayList containing all items placed in the room as implementations
+     * of Placeable. */
+    public ArrayList<Placeable> getRoomItems() {
+        return gameHandler.getRoomItems(0);
     }
 
     /** Method returns an ArrayList containing only the PottedPlant items placed in the room */
-    public ArrayList<PottedPlant> getRoomPlants(int index) {
+    public ArrayList<PottedPlant> getRoomPlants() {
         ArrayList<PottedPlant> plants = new ArrayList<PottedPlant>();
-        for (Placeable item : gameHandler.getRoomItems(index)){
+        for (Placeable item : gameHandler.getRoomItems(0)){
             if (item instanceof PottedPlant){
                 plants.add((PottedPlant) item);
             }
@@ -96,11 +181,10 @@ public class Controller {
         return plants;
     }
 
-    /** Method returns an ArrayList containing only the Pot items placed in the room.
-     * @param index the index of chosen room */
-    public ArrayList<Pot> getRoomPots(int index) {
+    /** Method returns an ArrayList containing only the Pot items placed in the room. */
+    public ArrayList<Pot> getRoomPots() {
         ArrayList<Pot> pots = new ArrayList<Pot>();
-        for (Placeable item : gameHandler.getRoomItems(index)){
+        for (Placeable item : gameHandler.getRoomItems(0)){
             if (item instanceof Pot){
                 pots.add((Pot) item);
             }
@@ -108,29 +192,15 @@ public class Controller {
         return pots;
     }
 
-    /** Method returns an ArrayList containing only the Deco items placed in the room.
-     * @param index the index of chosen room */
-    public ArrayList<Deco> getRoomDecos(int index) {
+    /** Method returns an ArrayList containing only the Deco items placed in the room. */
+    public ArrayList<Deco> getRoomDecos() {
         ArrayList<Deco> decos = new ArrayList<Deco>();
-        for (Placeable item : gameHandler.getRoomItems(index)){
+        for (Placeable item : gameHandler.getRoomItems(0)){
             if (item instanceof Deco){
                 decos.add((Deco) item);
             }
         }
         return decos;
-    }
-
-    /** Method returns an ArrayList containing all items placed in the room as implementations
-     * of Placeable.
-     * @param index the index of chosen room*/
-    public ArrayList<Placeable> getRoomItems(int index) {
-        return gameHandler.getRoomItems(index);
-    }
-
-    /** Method returns an ArrayList of PlacementSlots in a room.
-     * @param index the index of chosen room*/
-    public ArrayList<PlacementSlot> getRoomPlacementSlots(int index) {
-        return currentUser.getRoom(index).getSlots();
     }
 
     /** Method returns an ArrayList containing all PottedPlant items in players inventory.*/
@@ -153,39 +223,16 @@ public class Controller {
         return gameHandler.getInventoryDecos();
     }
 
-    /** Gets current player's username */
-    public String getPlayerUsername() {
-        return currentUser.getUsername();
-    }
-
-    /** Gets current player's currency amount */
-    public int getPlayerCoins() {
-        return currentUser.getShopCurrency();
-    }
-
-    /** Gets current player's email */
-    public String getPlayerEmail() {
-        return currentUser.getEmail();
-    }
-
-    /** Method called by GUI when user attempts to change email */
-    public void emailChangeAttempt(String newEmail) {
-        //TODO: skicka till ClientConnection för att kontrollera email change på server
-        // (asynchronous method call)
-    }
-
-    /** Method called by GUI when user attempts to purchase an item from the shop.
-     * @return true if user had enough currency, false if not */
-    public boolean purchaseShopItem(int index) {
-        return gameHandler.purchaseShopItem(index);
-    }
-
     /* --------------------------------------------
-     *  methods for GameHandler + TimeEventHandler
+     *  widget methods
      *  ------------------------------------------- */
 
-    public void updateGUI() {
+    public void addWidget(int index){
+        Placeable item = currentUser.getRoom(0).getSlot(index).getPlacedItem();
 
+        if (item instanceof PottedPlant){
+            widgetHandler.addWidget(item);
+        }
     }
- 
+
 }

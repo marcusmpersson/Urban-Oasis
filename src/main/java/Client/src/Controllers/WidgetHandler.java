@@ -1,5 +1,7 @@
 package Controllers;
 
+import entities.Placeable;
+import entities.PottedPlant;
 import entities.WidgetEntity;
 import main.java.Application.MainController;
 
@@ -18,22 +20,23 @@ public class WidgetHandler {
 
     public void loadWidgets (String username) {
         this.widgets = localFileHandler.readLocalFile(username);
-
         if (widgets != null) {
-            for (WidgetEntity widget : widgets) {
-                //TODO: load widgets on desktop
-            }
+            //TODO: load widgets on desktop via GUI controller
         }
-
-        /*
-        Thread widgetUpdate = new Thread(() -> guiController.reloadWidgets());
-        widgetUpdate.start();
-         */
     }
 
     public void updateLocalFile(String username) {
         localFileHandler.updateLocalFile(widgets, username);
     }
 
+    public void addWidget(Placeable item) {
+        WidgetEntity widget = new WidgetEntity((PottedPlant) item, 200, 200);
+        widgets.add(widget);
 
+        //TODO: load widget via GUI controller
+    }
+
+    public WidgetEntity getWidgetAt(int index){
+        return widgets.get(index);
+    }
 }
