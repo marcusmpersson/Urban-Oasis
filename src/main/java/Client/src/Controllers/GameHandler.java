@@ -3,6 +3,8 @@ package Controllers;
 import entities.*;
 import enums.Rarity;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GameHandler {
@@ -11,22 +13,26 @@ public class GameHandler {
     private Controller controller;
     private Shop shop;
 
-    /** Constructor, receives reference of the main controller, and reference
-     * for the user that is logged in. */
+    /** Constructor, receives reference of the main controller and the user
+     * that is logged in. */
     public GameHandler(Controller controller, User user) {
         shop = new Shop();
         this.controller = controller;
         this.currentUser = user;
+        updateSinceLast();
     }
 
+    /** attempts to purchase a shop item. If affordable, buys and adds item to
+     * user inventory, returns true. If not affordable, returns false.
+     * @param index the index of the shop item */
     public boolean purchaseShopItem(int index) {
-        // if user can afford it
-        if (currentUser.getShopCurrency() >= shop.getShopItem(index).getPrice()){
-            currentUser.subtractCurrency(shop.getShopItem(index).getPrice());
-            currentUser.getInventory().addItem(shop.getShopItem(index));
+        ShopItem item = shop.getShopItem(index);
+
+        if (currentUser.getShopCurrency() >= item.getPrice()){
+            currentUser.subtractCurrency(item.getPrice());
+            currentUser.getInventory().addItem(item);
             return true;
         }
-        // otherwise if user cannot afford it
         else {
             return false;
         }
@@ -59,7 +65,11 @@ public class GameHandler {
      * Methods for TimeEventHandler
      * --------------------------------- */
 
-    public void autoIncreaseCurrency() {
+    /** increases currency of user for every placed plant in every room, depending
+     * on plant rarities. Multiplies by number of minutes passed.
+     * @param multiplier the number of minutes passed
+     * */
+    public void increaseCurrency(int multiplier) {
         int amount = 0;
 
         // for every room player has
@@ -68,46 +78,57 @@ public class GameHandler {
             for (Placeable item : room.getPlacedItems()){
                 // if it's a plant
                 if (item instanceof PottedPlant){
-                    if (((PottedPlant) item).getPlantTop().getRarity() == Rarity.COMMON) {
-                        amount += 1;
-                    } else if (((PottedPlant) item).getPlantTop().getRarity() == Rarity.RARE){
-                        amount += 2;
-                    } else if (((PottedPlant) item).getPlantTop().getRarity() == Rarity.EPIC){
-                        amount += 3;
-                    } else {
-                        amount += 4;
+                    switch (((PottedPlant) item).getPlantTop().getRarity()){
+                        case COMMON:
+                            amount += 1;
+                            break;
+                        case RARE:
+                            amount += 2;
+                            break;
+                        case EPIC:
+                            amount += 3;
+                            break;
+                        case LEGENDARY:
+                            amount += 4;
+                            break;
                     }
                 }
             }
         }
-        currentUser.increaseCurrency(amount);
+        currentUser.increaseCurrency(amount * multiplier);
     }
 
-    public void raiseAges() {
+    /** updates age of all plants in all rooms by given amount
+     * @param multiplier number of minutes passed */
+    public void raiseAges(int multiplier) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().raiseAge(1);
+                    ((PottedPlant)item).getPlantTop().raiseAge(multiplier);
                 }
             }
         }
     }
 
-    public void lowerAllWaterLevels() {
+    /** updates water level of all plants in all rooms by given amount
+     * @param multiplier number of minutes passed */
+    public void lowerAllWaterLevels(int multiplier) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().lowerWaterLevel();
+                    ((PottedPlant)item).getPlantTop().lowerWaterLevel(multiplier);
                 }
             }
         }
     }
 
-    public void updateEnvSatisfactions() {
+    /** updates environment satisfaction of all plants in all rooms by given amount
+     * @param multiplier number of hours passed */
+    public void updateEnvSatisfactions(int multiplier) {
         for (Room room : currentUser.getRoomsArray()){
             for (Placeable item : room.getPlacedItems()){
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction();
+                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction(multiplier);
                 }
             }
         }
@@ -117,13 +138,31 @@ public class GameHandler {
      * Methods for Startup / changes since last time
      * --------------------------------- */
 
-    public void raiseAges(int amount) {
-        for (Room room : currentUser.getRoomsArray()){
-            for (Placeable item : room.getPlacedItems()){
-                if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().raiseAge(amount);
-                }
-            }
+    /** method compares last saved time for user (since last logout)
+     * and applies passage of time to all affected game components */
+    public void updateSinceLast(){
+        try {
+            LocalDateTime now = LocalDateTime.now();
+            long minutes = Duration.between(currentUser.getLastUpdatedTime(), now).toMinutes();
+            long hours = Duration.between(currentUser.getLastUpdatedTime(), now).toHours();
+
+            // 1 minute pace updates
+            raiseAges(Math.toIntExact(minutes));
+            increaseCurrency(Math.toIntExact(minutes));
+
+            // 1 hour pace updates
+            lowerAllWaterLevels(Math.toIntExact(hours));
+            updateEnvSatisfactions(Math.toIntExact(hours));
+
+            updateUserLastUpdatedTime(now);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    /** updates the last updated time of current logged-in user */
+    public void updateUserLastUpdatedTime(LocalDateTime now) {
+        currentUser.setLastUpdatedTime(now);
     }
 }
