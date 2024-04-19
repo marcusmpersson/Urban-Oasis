@@ -1,7 +1,5 @@
 package Controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -21,7 +19,7 @@ public class LoginHandler {
     }
     public String login(String email, String password){ // A method that sends user login info to the server and returns JWT token if successful.
         try{
-            HttpPost httpPost1 = new HttpPost("/login");
+            HttpPost httpPost1 = new HttpPost("serverURL/login");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);
@@ -36,33 +34,19 @@ public class LoginHandler {
         }
         return null;
     }
-    public String register(String email, String userName, String password) { // A method that send user info to the server and returns a string to confirm if registration was successful.
-        try {
-            HttpPost httpPost1 = new HttpPost("/register");
+    public String register(String email, String userName, String password){ // A method that send user info to the server and returns a string to confirm if registration was successful.
+        try{
+            HttpPost httpPost1 = new HttpPost("serverURL/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);
-
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
                 HttpEntity responseEntity = response.getEntity();
                 if(responseEntity != null){
-                    Gson gson = new Gson();
-                    JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
-                    
-                    if(jsonResponse.has("Response")){
-                        return jsonResponse.get("Response").getAsString();
-                    
-                    }
-                    else if (jsonResponse.has("Email already exists")) {
-                        return jsonResponse.get("Email already exists").getAsString();
-
-                    } else if (response.getStatusLine().getStatusCode() == 422) {
-                        String errorMessage;
-                        return errorMessage = "Something went wrong";
-                    }
+                    return EntityUtils.toString(responseEntity);
                 }
             }
-        } catch(IOException e) {
+        }catch(IOException e){
             e.printStackTrace();
         }
         return null;
