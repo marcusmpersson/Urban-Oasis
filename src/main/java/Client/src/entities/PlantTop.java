@@ -148,4 +148,10 @@ public class PlantTop {
         checkHealth();
     }
 
+    /** method waters the plant, re-calculates overall mood and checks health of plant */
+    public void water() {
+        healthStat.water();
+        healthStat.establishOverallMood();
+        checkHealth();
+    }
 }
