@@ -13,9 +13,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1461.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Application.LoginController">
+<AnchorPane fx:id="mainAnchor" maxWidth="1161.0" minHeight="824.0" minWidth="1161.0" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Application.Controllers.LoginController">
    <children>
-      <ImageView id="backgroundImage" cache="true" fitHeight="1024.0" fitWidth="1461.0">
+      <ImageView fx:id="mainBackground" cache="true" fitHeight="853.0" fitWidth="1161.0" preserveRatio="true" AnchorPane.bottomAnchor="-29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../loginbackground.png" />
          </image>
@@ -23,7 +23,7 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
-      <ImageView id="backgroundImage" cache="true" fitHeight="161.0" fitWidth="176.0" layoutX="624.0" layoutY="14.0">
+      <ImageView id="backgroundImage" cache="true" fitHeight="161.0" fitWidth="176.0" layoutX="624.0" layoutY="14.0" AnchorPane.bottomAnchor="849.0">
          <image>
             <Image url="@../URBAN_OASIS_LOGO2.png" />
          </image>
@@ -31,7 +31,7 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
-      <Group fx:id="mainLoginFrame" layoutX="420.0" layoutY="274.0">
+      <Group fx:id="mainLoginFrame" layoutX="295.0" layoutY="168.0" scaleX="0.8" scaleY="0.8" AnchorPane.topAnchor="168.0">
          <children>
             <ImageView fitHeight="488.0" fitWidth="786.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -68,7 +68,8 @@
             <TextField fx:id="email" layoutX="92.0" layoutY="148.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor">
                <font>
                   <Font name="Pixeloid Sans" size="12.0" />
-               </font></TextField>
+               </font>
+            </TextField>
             <PasswordField fx:id="password" layoutX="97.0" layoutY="244.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
             <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="128.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -92,7 +93,7 @@
             </ImageView>
          </children>
       </Group>
-      <Group fx:id="registerFrame" layoutX="420.0" layoutY="169.0">
+      <Group fx:id="registerFrame" layoutX="295.0" layoutY="63.0" opacity="0.0" scaleX="0.8" scaleY="0.8" AnchorPane.topAnchor="63.0">
          <children>
             <ImageView fitHeight="698.0" fitWidth="623.0" pickOnBounds="true">
                <image>

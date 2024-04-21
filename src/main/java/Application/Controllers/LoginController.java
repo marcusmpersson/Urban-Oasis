@@ -1,8 +1,7 @@
-package main.java.Application;
+package main.java.Application.Controllers;
 
 import Controllers.Controller;
 import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,10 +17,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.text.Text;
+import main.java.Application.Animations.Transitions;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,10 +32,6 @@ public class LoginController implements Initializable {
 
     private Controller clientController;
     private Transitions transitions;
-
-    private Stage stage;
-
-    private Scene scene;
 
     private Parent root;
 
@@ -91,11 +88,18 @@ public class LoginController implements Initializable {
     @FXML
     private Text onedigit;
 
+    @FXML
+    private ImageView mainBackground;
+
+    @FXML
+    private AnchorPane mainAnchor;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        createFlyUpAnimation(1400, registerFrame, 0.1);
-        this.clientController = new Controller();
         this.transitions = new Transitions();
+        this.clientController = new Controller();
+        transitions.frameFlyUpTransition(1400, registerFrame, 0.1);
 
         passwordSignup.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -106,7 +110,12 @@ public class LoginController implements Initializable {
                 setTextColor(newValue.length() >= 8, min8chars); // has at least 8 chars
             }
         });
+
+        mainBackground.fitWidthProperty().bind(mainAnchor.widthProperty());
+        mainBackground.fitHeightProperty().bind(mainAnchor.heightProperty());
     }
+
+
 
     public void setTextColor(boolean valid, Text text) {
         if (valid) {
@@ -114,13 +123,6 @@ public class LoginController implements Initializable {
         } else {
             text.setFill(Color.rgb(68,60,151));
         }
-    }
-
-    private void createFlyUpAnimation(double val, Group group, double seconds) {
-        TranslateTransition flyUpAnimation = new TranslateTransition(Duration.seconds(seconds), group);
-        flyUpAnimation.setByY(val);
-        flyUpAnimation.setCycleCount(1);
-        flyUpAnimation.play();
     }
 
 
@@ -136,10 +138,6 @@ public class LoginController implements Initializable {
         new Thread(fadeTask).start();
     }
 
-    public void detectPasswordEligibiltiy() {
-
-    }
-
     public void switchToLoggedInScene(MouseEvent event) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         System.out.println(classLoader);
@@ -150,7 +148,6 @@ public class LoginController implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
     }
 
     public void signIn(MouseEvent mouseEvent) throws InterruptedException, IOException {
@@ -182,22 +179,22 @@ public class LoginController implements Initializable {
     }
 
     public void switchToMainFrame(MouseEvent mouseEvent) throws IOException, InterruptedException {
-        createFlyUpAnimation(1400, registerFrame, 1);
-        createFlyUpAnimation(1500, mainLoginFrame, 1);
+        transitions.frameFlyUpTransition(1400, registerFrame, 1);
+        transitions.frameFlyUpTransition(1500, mainLoginFrame, 1);
     }
 
     public void switchToSignupScene(MouseEvent mouseEvent) throws IOException {
         registerFrame.setOpacity(1);
-        createFlyUpAnimation(-1500, mainLoginFrame, 1);
-        createFlyUpAnimation(-1400, registerFrame, 1);
+        transitions.frameFlyUpTransition(-1500, mainLoginFrame, 1);
+        transitions.frameFlyUpTransition(-1400, registerFrame, 1);
     }
 
     public void handleMouseEntered(MouseEvent mouseEvent) {
-        transitions.handleMouseEntered(mouseEvent);
+        transitions.handleMouseEnteredButtonEffect(mouseEvent);
     }
 
     public void handleMouseExited(MouseEvent mouseEvent) {
-        transitions.handleMouseExited(mouseEvent);
+        transitions.handleMouseExitedButtonEffect(mouseEvent);
     }
 
 }

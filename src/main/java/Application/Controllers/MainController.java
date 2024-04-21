@@ -1,9 +1,5 @@
-package main.java.Application;
+package main.java.Application.Controllers;
 
-import entities.Plant;
-import entities.PlantTop;
-import entities.Pot;
-import entities.PottedPlant;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,49 +9,27 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import main.java.Application.Animations.Transitions;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+
     private Stage stage;
     private Scene scene;
-    private Parent root;
+
+    private boolean isLoggedIn;
     Transitions transitions = new Transitions();
-
-    @FXML
-    private Group mainLoginFrame;
-
-    @FXML
-    private Group registerFrame;
-
-    @FXML
-    private TextField email;
-
-    @FXML
-    private TextField password;
-
-    @FXML
-    private ImageView wrongLogin;
-
-    @FXML
-    private ImageView successfulLogin;
-
     @FXML
     private Group storeView;
 
@@ -70,48 +44,14 @@ public class MainController implements Initializable {
     @FXML
     private TilePane shopPane;
 
-    private ArrayList<Group> plantGroups = new ArrayList<>();
+    @FXML
+    public ImageView returnButton;
 
-    String[][] slots = {
-            {"1", "87", "258", "Shade"},
-            {"2", "87", "429", "Shade"},
-            {"3", "88", "656", "Half Shade"},
-            {"4", "264", "220", "Shade"},
-            {"5", "387", "220", "Shade"},
-            {"6", "265", "568", "Half Shade"},
-            {"7", "386", "568", "Half Shade"},
-            {"8", "265", "744", "Half Shade"},
-            {"9", "386", "744", "Half Shade"},
-            {"10", "265", "923", "Half Shade"},
-            {"11", "570", "246", "Half Shade"},
-            {"12", "705", "246", "Half Shade"},
-            {"13", "570", "439", "Sunny"},
-            {"14", "705", "439", "Sunny"},
-            {"15", "906", "229", "Sunny"},
-            {"16", "1038", "229", "Sunny"},
-            {"17", "1169", "229", "Sunny"},
-            {"18", "906", "435", "Sunny"},
-            {"19", "1038", "435", "Sunny"},
-            {"20", "1169", "435", "Sunny"},
-            {"21", "813", "656", "Sunny"},
-            {"22", "802", "931", "Shade"},
-            {"23", "1020", "756", "Sunny"},
-            {"24", "1200", "660", "Shade"},
-            {"25", "1200", "879", "Shade"}
-    };
 
-    /**
-     * private PlantTop plantTop;
-     *     private Pot pot;
-     *
-     *     double xOffset = 0;
-     *     double yOffset = 0;
-     * @param url
-     * @param resourceBundle
-     */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        isLoggedIn = true;
         switchToRoomView(null);
         startBackgroundTimeChecker();
         /**
@@ -151,6 +91,7 @@ public class MainController implements Initializable {
 
     }
 
+  /*
     private void createPlantGroups() {
         for (int i = 0; i < slots.length; i++) {
             Group plantContainer = new Group();
@@ -202,51 +143,11 @@ public class MainController implements Initializable {
             addHoverEffect(plantContainer, canIcon, infoIcon, circleImageView); // Add hover effect logic
         }
     }
+   */
 
-    public ScaleTransition sizeUpOrDownAnimation(boolean up, Object image) {
-        if (up) {
-            ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), (Node) image);
-            scaleUp.setToX(1.2);
-            scaleUp.setToY(1.2);
-            return scaleUp;
-        } else {
-            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), (Node) image);
-            scaleDown.setToX(1.0);
-            scaleDown.setToY(1.0);
-            return scaleDown;
-        }
+    public void cleanup() {
+        isLoggedIn = false;
     }
-
-    private void addHoverEffect(Group plantContainer, ImageView canIcon, ImageView infoIcon, ImageView circleImage) {
-        plantContainer.setOnMouseEntered(event -> {
-            System.out.println("e");
-            sizeUpOrDownAnimation(true, circleImage).play();
-            sizeUpOrDownAnimation(true, canIcon).play();
-            sizeUpOrDownAnimation(true, infoIcon).play();
-            circleImage.setVisible(true);
-            canIcon.setVisible(true);
-            infoIcon.setVisible(true);
-        });
-
-        plantContainer.setOnMouseExited(event -> {
-            System.out.println("e");
-            sizeUpOrDownAnimation(false, circleImage).play();
-            sizeUpOrDownAnimation(false, canIcon).play();
-            sizeUpOrDownAnimation(false, infoIcon).play();
-            circleImage.setVisible(false);
-            canIcon.setVisible(false);
-            infoIcon.setVisible(false);
-        });
-    }
-
-    public void switchToLoginScene(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
 
 
 
@@ -261,11 +162,12 @@ public class MainController implements Initializable {
     }
 
     public void handleMouseEntered(MouseEvent mouseEvent) {
-        transitions.handleMouseEntered(mouseEvent);
+        System.out.println("hello");
+        transitions.handleMouseEnteredButtonEffect(mouseEvent);
     }
 
     public void handleMouseExited(MouseEvent mouseEvent) {
-        transitions.handleMouseExited(mouseEvent);
+        transitions.handleMouseExitedButtonEffect(mouseEvent);
     }
 
     public void updateRoomBackground(String timeOfDay) {
@@ -287,7 +189,7 @@ public class MainController implements Initializable {
 
     public void startBackgroundTimeChecker() {
         Thread timeCheckerThread = new Thread(() -> {
-            while (true) {
+            while (isLoggedIn) {
                 LocalTime currentTime = LocalTime.now();
 
                 if (isNightTime(currentTime)) {
@@ -311,4 +213,12 @@ public class MainController implements Initializable {
         return (time.isAfter(LocalTime.of(15, 50)) && time.isBefore(LocalTime.of(16,07)));
     }
 
+    public void switchToLoginScene (MouseEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        cleanup();
+    }
 }
