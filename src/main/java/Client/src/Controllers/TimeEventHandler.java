@@ -1,81 +1,87 @@
 package Controllers;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class TimeEventHandler {
 
     private GameHandler gameHandler;
     private boolean threadsAreRunning;
     private GameThread gameThread;
-    private GUIThread guiThread;
+    private AutoSaveThread autoSaveThread;
     private Controller controller;
 
-    public TimeEventHandler(GameHandler gameHandler, Controller controller){
+    public TimeEventHandler(GameHandler gameHandler, Controller controller) {
         this.gameHandler = gameHandler;
         this.controller = controller;
     }
 
-    public void startThreads(){
+    public void startThreads() {
         gameThread = new GameThread();
-        guiThread = new GUIThread();
-
+        autoSaveThread = new AutoSaveThread();
         threadsAreRunning = true;
-
         gameThread.start();
-        guiThread.start();
+        autoSaveThread.start();
     }
 
-    public void stopAllThreads(){
+    public void stopAllThreads() {
         threadsAreRunning = false;
         try {
             gameThread.join();
-            guiThread.join();
-        } catch(InterruptedException e){
+            autoSaveThread.join();
+
+        } catch(InterruptedException e) {
             System.out.println("TimeEventHandler: joining threads was interrupted.");
+
         } finally {
             gameThread = null;
-            guiThread = null;
+            autoSaveThread = null;
         }
     }
 
     public class GameThread extends Thread {
-        public GameThread(){
-            //TODO: save current time as instance variable
-        }
+        LocalDateTime lastCheckedTime;
+
         @Override
         public void run() {
+            lastCheckedTime = LocalDateTime.now();
+
             while (threadsAreRunning) {
                 try {
                     Thread.sleep(60000); //sleep thread for 1 min
-                    gameHandler.autoIncreaseCurrency();
-                    gameHandler.raiseAges();
+                    gameHandler.increaseCurrency(1);
+                    gameHandler.raiseAges(1);
 
-                    Thread.sleep(2400000); //sleep thread for 4 more mins
-                    //controller.saveGame();
-                    //TODO: add lastUpdatedTime instance variable for user.
-                    // here: update lastUpdatedTime for user
+                    LocalDateTime now = LocalDateTime.now();
+                    // if it's been an hour
+                    if (now.isAfter(lastCheckedTime) &&
+                            Duration.between(lastCheckedTime, now).toHours() >= 1) {
 
-                    //TODO: if (its been over an hour)
-                    // save new time
-                    gameHandler.lowerAllWaterLevels();
-                    gameHandler.updateEnvSatisfactions();
+                        gameHandler.lowerAllWaterLevels(1);
+                        gameHandler.updateEnvSatisfactions(1);
+
+                        lastCheckedTime = now;
+                        gameHandler.updateUserLastUpdatedTime(now);
+                    }
 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+
                 }
             }
         }
     }
 
-    public class GUIThread extends Thread {
-        @Override
+    public class AutoSaveThread extends Thread {
+
         public void run() {
             while (threadsAreRunning) {
                 try {
-                    Thread.sleep(1000);
-                    controller.updateGUI();
-
+                    Thread.sleep(300000); //sleep thread for 5 minutes
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                controller.saveGame();
             }
         }
     }

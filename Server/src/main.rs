@@ -36,6 +36,8 @@ async fn rocket() -> _ {
             controllers::auth::login,
             controllers::auth::register, 
             controllers::auth::logout,
-            controllers::auth::me],
+            controllers::auth::me,
+            controllers::auth::username,
+            controllers::auth::email],
         )
 }

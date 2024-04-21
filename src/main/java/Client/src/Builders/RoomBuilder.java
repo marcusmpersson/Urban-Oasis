@@ -10,7 +10,7 @@ public class RoomBuilder {
     //this class is lowkey more Director than Builder so may change name later :)
 
     /** creates and returns the common/default room */
-    public Room buildCommonRoom(){
+    public static Room buildCommonRoom(){
         ArrayList<PlacementSlot> slots = new ArrayList<>();
 
         slots.add(new PlacementSlot(Environment.SHADE, 87, 258)); //index 0
@@ -41,10 +41,10 @@ public class RoomBuilder {
 
         ArrayList<String> imageFilePaths = new ArrayList<>();
 
-        imageFilePaths.add("images/commonRoom/daytime.png"); // daytime (index 0)
-        imageFilePaths.add("images/commonRoom/sunset.png"); // sunset (index 1)
-        imageFilePaths.add("images/commonRoom/night.png"); // night (index 2)
-        imageFilePaths.add("images/commonRoom/sunrise.png"); // sunrise (index 3)
+        imageFilePaths.add("rooms/commonRoom/daytime.png"); // daytime (index 0)
+        imageFilePaths.add("rooms/commonRoom/sunset.png"); // sunset (index 1)
+        imageFilePaths.add("rooms/commonRoom/night.png"); // night (index 2)
+        imageFilePaths.add("rooms/commonRoom/sunrise.png"); // sunrise (index 3)
 
         return new Room(slots, imageFilePaths);
     }

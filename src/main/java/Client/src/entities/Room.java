@@ -20,9 +20,9 @@ public class Room {
         return null;
     }
 
-    /** places the given placeable item at given plcaementslot index, returns the item that was
+    /** places the given placeable item at given placement-slot index, returns the item that was
      * placed in the slot prior, returns null if slot was empty */
-    public Placeable placeItemIn(Placeable placeableItem, int index){
+    public Placeable swapItem (Placeable placeableItem, int index){
         if (index < slots.size()) {
             Placeable swappingItem = slots.get(index).getPlacedItem();
             slots.get(index).setPlacedItem(placeableItem);

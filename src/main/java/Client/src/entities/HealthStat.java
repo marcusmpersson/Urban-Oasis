@@ -32,14 +32,15 @@ public class HealthStat {
     public int getEnvSatisfaction() {
         return envSatisfaction;
     }
-    public void raiseEnvSatisfaction() {
+
+    public void raiseEnvSatisfaction(int amount) {
         if (envSatisfaction < 100) {
-            this.envSatisfaction++;
+            this.envSatisfaction += amount;
         }
     }
-    public void lowerEnvSatisfaction(){
+    public void lowerEnvSatisfaction(int amount){
         if (envSatisfaction > 0) {
-            this.envSatisfaction--;
+            this.envSatisfaction -= amount;
         }
     }
 

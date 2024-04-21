@@ -9,9 +9,9 @@ public class PottedPlant extends Item implements Placeable {
     private PlacementSlot placedAt;
 
     public PottedPlant(Pot pot, PlantTop plant){
+        super(pot.getPrice() + plant.getPrice());
         this.pot = pot;
         this.plant = plant;
-        price = pot.getPrice() + plant.getPrice();
     }
 
     public void setPot(Pot pot) {
@@ -44,4 +44,10 @@ public class PottedPlant extends Item implements Placeable {
         return filePathArray;
     }
 
+    /** method re-calculates the price of PottedPlant and returns it */
+    @Override
+    public int getPrice() {
+        price = plant.getPrice() + pot.getPrice();
+        return price;
+    }
 }
