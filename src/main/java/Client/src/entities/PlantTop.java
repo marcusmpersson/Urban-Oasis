@@ -1,4 +1,7 @@
 package entities;
+import Builders.ItemBuilder;
+import Builders.PlantTopBuilder;
+import enums.PotType;
 import enums.Rarity;
 import enums.Species;
 import enums.Stage;
@@ -65,7 +68,7 @@ public class PlantTop {
             this.stage = Stage.YOUNG;
         }
         // after, the plant would be adult forever (unless it dies):
-        else if (age >= 440){
+        else {
             this.stage = Stage.ADULT;
         }
     }
