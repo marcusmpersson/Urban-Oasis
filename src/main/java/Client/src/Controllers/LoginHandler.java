@@ -71,10 +71,13 @@ public class LoginHandler {
                         Boolean trueOrFalse = true;
                         return jsonResponse.get("Response").getAsString();
                     }
+
                     else if (jsonResponse.has("Email already exists")) {
                         return jsonResponse.get("Email already exists").getAsString();
 
-                    } else if (response.getStatusLine().getStatusCode() == 422) {
+                    }
+
+                    else if (response.getStatusLine().getStatusCode() == 422) {
                         String errorMessage;
                         return errorMessage = "Something went wrong";
                     }

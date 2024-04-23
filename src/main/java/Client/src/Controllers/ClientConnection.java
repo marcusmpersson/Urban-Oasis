@@ -28,10 +28,12 @@ public class ClientConnection {
                                         //This test method handles the return data of a user entity. Server returns a Json file which is parsed into a user class.
         try{httpGet.setURI(new URI("serverURL/getUserData"));
             httpGet.setHeader("Authorization", "Bearer " + jwtToken);
+
             try(CloseableHttpResponse response = httpClient.execute(httpGet)){
                 int statusCode = response.getStatusLine().getStatusCode();
                 System.out.println(statusCode);
                 HttpEntity entity = response.getEntity();
+
                 if(entity!=null){
                     String responseBody = EntityUtils.toString(entity);
                     System.out.println(responseBody);
@@ -52,7 +54,8 @@ public class ClientConnection {
             String json = gson.toJson(user);
             StringEntity entity = new StringEntity(json);
             httpPost1.setEntity(entity);
-            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
                 HttpEntity responseEntity = response.getEntity();
                 if(responseEntity != null){
                     return EntityUtils.toString(responseEntity);
@@ -101,6 +104,7 @@ public class ClientConnection {
     public Boolean checkUserNameAvailability(){
         try {
             HttpGet httpGet1 = new HttpGet("auth/username");
+
             try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
                 HttpEntity responseEntity = response.getEntity();
 

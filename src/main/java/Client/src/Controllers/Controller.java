@@ -37,6 +37,7 @@ public class Controller {
         gameHandler.updateSinceLast();
 
         //TODO: load GUI game view
+    }
 
     public Boolean checkUserNameAvailability() {
         return clientConnection.checkUserNameAvailability();
