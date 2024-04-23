@@ -8,7 +8,7 @@ public class HealthStat {
     public HealthStat() {
         this.waterLevel=50;
         this.envSatisfaction= 50;
-        this.overallMood= establishOverallMood();
+        establishOverallMood();
 
     }
     public void water() {
@@ -32,14 +32,15 @@ public class HealthStat {
     public int getEnvSatisfaction() {
         return envSatisfaction;
     }
-    public void raiseEnvSatisfaction() {
+
+    public void raiseEnvSatisfaction(int amount) {
         if (envSatisfaction < 100) {
-            this.envSatisfaction++;
+            this.envSatisfaction += amount;
         }
     }
-    public void lowerEnvSatisfaction(){
+    public void lowerEnvSatisfaction(int amount){
         if (envSatisfaction > 0) {
-            this.envSatisfaction--;
+            this.envSatisfaction -= amount;
         }
     }
 
@@ -48,15 +49,8 @@ public class HealthStat {
         return overallMood;
     }
 
-    public int establishOverallMood(){
-        return 0;
+    public void establishOverallMood(){
+        overallMood = (envSatisfaction+waterLevel)/2;
     }
-        /*
-        condition1 = envSatisfaction
-        condition2 = waterLevel
-        Both will be conditions to establish the overallMood on a scale.
-        Which scale and the impact of each condition should be discussed further
-        */
-
 
 }
