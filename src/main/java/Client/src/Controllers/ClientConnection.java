@@ -1,4 +1,5 @@
 package Controllers;
+import com.google.gson.JsonObject;
 import entities.User;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -63,8 +64,8 @@ public class ClientConnection {
         return null;
     }
     public String logout(){ // Sends a request to the server with the JWT token in the request to ensure that the server knows who's supposed to log out.
-        try{
-            HttpPost httpPost1 = new HttpPost("serverURL/logout");
+        try {
+            HttpPost httpPost1 = new HttpPost("auth/logout");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
                 HttpEntity responseEntity = response.getEntity();
@@ -72,22 +73,64 @@ public class ClientConnection {
                     return EntityUtils.toString(responseEntity);
                 }
             }
-        }catch(IOException e){
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return null;
     }
+    public Boolean checkEmailAvailability(){
+        try {
+            HttpGet httpGet1 = new HttpGet("auth/email");
+            try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
+                HttpEntity responseEntity = response.getEntity();
+
+                if(responseEntity != null) {
+                    Gson gson = new Gson();
+                    JsonObject jsonObject = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+
+                    if(jsonObject.has("Email available")) {
+                        return true;
+                    }
+                }
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public Boolean checkUserNameAvailability(){
+        try {
+            HttpGet httpGet1 = new HttpGet("auth/username");
+            try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
+                HttpEntity responseEntity = response.getEntity();
+
+                if(responseEntity != null) {
+                    Gson gson = new Gson();
+                    JsonObject jsonObject = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+
+                    if(jsonObject.has("Username available")) {
+                        return true;
+                    }
+                }
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     public String delete(){ // Sends a request to the server with the JWT token in the request body to ensure that the server knows what user is supposed to be deleted.
-        try{
+        try {
             HttpPost httpPost1 = new HttpPost("serverURL/delete");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
+
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
                 HttpEntity responseEntity = response.getEntity();
+
                 if(responseEntity != null){
                     return EntityUtils.toString(responseEntity);
                 }
             }
-        }catch(IOException e){
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return null;

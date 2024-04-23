@@ -38,15 +38,39 @@ public class Controller {
 
         //TODO: load GUI game view
 
+    public Boolean checkUserNameAvailability() {
+        return clientConnection.checkUserNameAvailability();
+    }
+
+    public Boolean checkEmailAvailability() {
+        return clientConnection.checkEmailAvailability();
+    }
+
+    /** Method called if email change was NOT approved by server */
+    public void emailChangeUnsuccessful() {
+        // TODO: show error in GUI
+    }
+
+    /* --------------------------
+    *  methods for GUIController
+    *  -------------------------- */
+
+    public boolean loginAttempt(String email, String password) {
+        String response = loginHandler.login(email, password);
+
+        if(response.contains("token")) {
+            clientConnection.setJwtToken(response);
+            return true;
+        }
+
+        else {
+            return false;
+        }
         widgetHandler.loadWidgets(user.getUsername());
     }
 
-    public void loginAttempt(String email, String password) {
-        clientConnection.setJwtToken(loginHandler.login(email,password));
-    }
-
     public void registerAccountAttempt(String email, String userName, String password){
-       // loginHandler.register(email, userName, password);
+        loginHandler.register(email, userName, password);
         System.out.println("nice");
     }
 
