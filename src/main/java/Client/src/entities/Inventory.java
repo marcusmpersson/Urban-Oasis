@@ -42,6 +42,14 @@ public class Inventory {
         this.decorations = decorations;
     }
 
+    /** constructor 3 */
+    public Inventory(){
+        pottedPlants = new ArrayList<>();
+        pots = new ArrayList<>();
+        seeds = new ArrayList<>();
+        decorations = new ArrayList<>();
+    }
+
     public void addItem(Item item){
         if (item instanceof PottedPlant){
             pottedPlants.add((PottedPlant)item);
