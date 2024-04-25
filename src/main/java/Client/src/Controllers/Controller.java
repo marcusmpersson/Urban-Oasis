@@ -100,13 +100,13 @@ public class Controller {
 
         if(response.contains("token")) {
             clientConnection.setJwtToken(response);
+            widgetHandler.loadWidgets(currentUser.getUsername());
             return true;
         }
 
         else {
             return false;
         }
-        widgetHandler.loadWidgets(user.getUsername());
     }
 
     public void registerAccountAttempt(String email, String userName, String password){

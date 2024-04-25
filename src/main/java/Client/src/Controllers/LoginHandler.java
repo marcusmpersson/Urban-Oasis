@@ -23,12 +23,12 @@ public class LoginHandler {
     }
     public String login(String email, String password) { // A method that sends user login info to the server and returns JWT token if successful.
         try {
-            HttpPost httpPost1 = new HttpPost("auth/login");
+            httpPost = new HttpPost("auth/login");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);
 
-            try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
+            try(CloseableHttpResponse response = httpClient.execute(httpPost)) {
                 HttpEntity responseEntity = response.getEntity();
 
                 if(responseEntity != null) {
@@ -56,12 +56,12 @@ public class LoginHandler {
     }
     public String register(String email, String userName, String password) { // A method that send user info to the server and returns a string to confirm if registration was successful.
         try {
-            HttpPost httpPost1 = new HttpPost("auth/register");
+            httpPost = new HttpPost("auth/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             httpPost.setEntity(entity);
 
-            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+            try(CloseableHttpResponse response = httpClient.execute(httpPost)){
                 HttpEntity responseEntity = response.getEntity();
                 if(responseEntity != null){
                     Gson gson = new Gson();
