@@ -6,8 +6,8 @@ public class HealthStat {
     private int envSatisfaction;
 
     public HealthStat() {
-        this.waterLevel=50;
-        this.envSatisfaction= 50;
+        this.waterLevel = 50;
+        this.envSatisfaction = 50;
         establishOverallMood();
 
     }

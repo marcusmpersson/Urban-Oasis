@@ -1,6 +1,12 @@
 package Controllers;
 
+import Builders.ItemBuilder;
+import Builders.PlantTopBuilder;
+import Builders.RoomBuilder;
 import entities.*;
+import enums.PotType;
+import enums.Rarity;
+import enums.Species;
 import main.java.Application.MainController;
 
 import java.util.ArrayList;
@@ -22,6 +28,39 @@ public class Controller {
         infoConverter = new InformationConverter(this);
         //this.guiController = guiController;
         widgetHandler = new WidgetHandler(guiController);
+    }
+
+    public User generateTestUser(){
+
+        // room
+        ArrayList<Room> rooms = new ArrayList<>();
+        Room room = RoomBuilder.buildCommonRoom();
+        rooms.add(room);
+
+        // inventory items
+        Item pot1 = ItemBuilder.buildPot(PotType.ROUND_POT_CLAY);
+        Item seed1 = ItemBuilder.buildSeed(Rarity.COMMON);
+        Item seed2 = ItemBuilder.buildSeed(Rarity.RARE);
+        Item pot2 = ItemBuilder.buildPot(PotType.POT_LILAC);
+
+        // inventory
+        Inventory inventory = new Inventory();
+        inventory.addItem(pot1);
+        inventory.addItem(pot2);
+        inventory.addItem(seed1);
+        inventory.addItem(seed2);
+
+        // potted plant
+        Pot pot = ItemBuilder.buildPot(PotType.POT_STRIPED_BLUE);
+        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.COFFEE_PLANT);
+        plantTop.raiseAge(440);
+        PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
+
+        // placing potted plant in room
+        room.getSlot(2).setPlacedItem(pottedPlant);
+
+        // user
+        return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
     }
 
     /* ----------------------------------------

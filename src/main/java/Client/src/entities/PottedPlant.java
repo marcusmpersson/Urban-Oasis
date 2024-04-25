@@ -12,6 +12,7 @@ public class PottedPlant extends Item implements Placeable {
         super(pot.getPrice() + plant.getPrice());
         this.pot = pot;
         this.plant = plant;
+
     }
 
     public void setPot(Pot pot) {
