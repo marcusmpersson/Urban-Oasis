@@ -30,8 +30,8 @@ public class Controller {
         widgetHandler = new WidgetHandler(guiController);
     }
 
+    /** method generates a test User with a subset of items */
     public User generateTestUser(){
-
         // room
         ArrayList<Room> rooms = new ArrayList<>();
         Room room = RoomBuilder.buildCommonRoom();
@@ -63,6 +63,35 @@ public class Controller {
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
     }
 
+    /** method initiates a default User item for a newly signed-up account,
+     * adds starter items and values
+     * @param username the username of the signed up account
+     * @param email the email of the signed up account */
+    public User generateDefaultUser(String username, String email){
+
+        // user gets a default room
+        ArrayList<Room> rooms = new ArrayList<>();
+        Room room = RoomBuilder.buildCommonRoom();
+        rooms.add(room);
+
+        // user starts with two common seeds and two basic pots in their inventory
+        Item pot1 = ItemBuilder.buildPot(PotType.ROUND_POT_CLAY);
+        Item pot2 = ItemBuilder.buildPot(PotType.POT_ORANGE);
+
+        Item seed1 = ItemBuilder.buildSeed(Rarity.COMMON);
+        Item seed2 = ItemBuilder.buildSeed(Rarity.COMMON);
+
+        // create inventory and add the items
+        Inventory inventory = new Inventory();
+        inventory.addItem(pot1);
+        inventory.addItem(pot2);
+        inventory.addItem(seed1);
+        inventory.addItem(seed2);
+
+        // user starts with 400 shop currency
+        return new User(username, email, inventory, rooms, 400);
+    }
+
     /* ----------------------------------------
      *  methods for ClientConnection, LoginHandler, InformationConverter
      *  --------------------------------------- */
@@ -72,12 +101,17 @@ public class Controller {
      * */
     public void loadGame(User user) {
         this.currentUser = user;
-        gameHandler = new GameHandler(this, user);
+        gameHandler = new GameHandler(this, currentUser);
         gameHandler.updateSinceLast();
+        widgetHandler.loadWidgets(currentUser.getUsername());
+    }
 
-        //TODO: load GUI game view
-
-        widgetHandler.loadWidgets(user.getUsername());
+    /** method called when user logging in for the first time.
+     * Creates a User with default values, initiates GameHandler, loads game on GUI.
+     * */
+    public void loadGameFirstTime(String username, String email) {
+        this.currentUser = generateDefaultUser(username, email);
+        gameHandler = new GameHandler(this, currentUser);
     }
 
     public void loginAttempt(String email, String password) {
