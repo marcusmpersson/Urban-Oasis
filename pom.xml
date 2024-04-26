@@ -9,8 +9,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>19</javafx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
@@ -47,7 +45,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>Application.Main</mainClass>
+                    <mainClass>main.java.Application.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

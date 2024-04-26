@@ -1,4 +1,4 @@
-package Client.src.entities;
+package entities;
 
 public class HealthStat {
     private int overallMood;
@@ -6,28 +6,25 @@ public class HealthStat {
     private int envSatisfaction;
 
     public HealthStat() {
-        this.waterLevel=5;
-        this.envSatisfaction= 5;
-        this.overallMood= establishOverallMood();
+        this.waterLevel = 50;
+        this.envSatisfaction = 50;
+        establishOverallMood();
 
     }
-    public void water(){
+    public void water() {
+        //if water level is below 100%, watering it should put it to 100%
+        if (waterLevel < 90){
+            waterLevel = 100;
+        }
+        // otherwise, should raise by 20%
+        else if (waterLevel >= 100 ) {
+            waterLevel += 20;
+        }
+    }
+    public void lowerWaterLevel(int multiplicationRate){
+        this.waterLevel -= multiplicationRate;
+    }
 
-        if(waterLevel>=10){
-            this.waterLevel =10;
-        }
-        else{
-            this.waterLevel++;
-        }
-    }
-    public void lowerWaterLevel(){
-        if(waterLevel<=0){
-            this.waterLevel =0;
-        }
-        else{
-            this.waterLevel--;
-        }
-    }
     public int getWaterLevel() {
         return waterLevel;
     }
@@ -35,26 +32,25 @@ public class HealthStat {
     public int getEnvSatisfaction() {
         return envSatisfaction;
     }
-    public void raiseEnvSatisfaction(){
-        this.envSatisfaction++;
+
+    public void raiseEnvSatisfaction(int amount) {
+        if (envSatisfaction < 100) {
+            this.envSatisfaction += amount;
+        }
     }
-    public void lowerEnvSatisfaction(){
-        this.envSatisfaction--;
+    public void lowerEnvSatisfaction(int amount){
+        if (envSatisfaction > 0) {
+            this.envSatisfaction -= amount;
+        }
     }
 
     public int getOverallMood() {
+        establishOverallMood();
         return overallMood;
     }
 
-    public int establishOverallMood(){
-        return 0;
+    public void establishOverallMood(){
+        overallMood = (envSatisfaction+waterLevel)/2;
     }
-        /*
-        condition1 = envSatisfaction
-        condition2 = waterLevel
-        Both will be conditions to establish the overallMood on a scale.
-        Which scale and the impact of each condition should be discussed further
-        */
-
 
 }

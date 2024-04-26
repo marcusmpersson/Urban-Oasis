@@ -1,5 +1,7 @@
-package Application;
+package main.java.Application;
 
+import Controllers.Controller;
+import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,18 +14,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private Controller controller;
+
     Transitions transitions = new Transitions();
 
     @FXML
@@ -55,9 +62,133 @@ public class MainController implements Initializable {
 
     private Image currentBackground;
 
+    @FXML
+    private TilePane shopPane;
+
+    private ArrayList<Group> plantGroups = new ArrayList<>();
+
+    String[][] slots = {
+            {"1", "87", "258", "Shade"},
+            {"2", "87", "429", "Shade"},
+            {"3", "88", "656", "Half Shade"},
+            {"4", "264", "220", "Shade"},
+            {"5", "387", "220", "Shade"},
+            {"6", "265", "568", "Half Shade"},
+            {"7", "386", "568", "Half Shade"},
+            {"8", "265", "744", "Half Shade"},
+            {"9", "386", "744", "Half Shade"},
+            {"10", "265", "923", "Half Shade"},
+            {"11", "570", "246", "Half Shade"},
+            {"12", "705", "246", "Half Shade"},
+            {"13", "570", "439", "Sunny"},
+            {"14", "705", "439", "Sunny"},
+            {"15", "906", "229", "Sunny"},
+            {"16", "1038", "229", "Sunny"},
+            {"17", "1169", "229", "Sunny"},
+            {"18", "906", "435", "Sunny"},
+            {"19", "1038", "435", "Sunny"},
+            {"20", "1169", "435", "Sunny"},
+            {"21", "813", "656", "Sunny"},
+            {"22", "802", "931", "Shade"},
+            {"23", "1020", "756", "Sunny"},
+            {"24", "1200", "660", "Shade"},
+            {"25", "1200", "879", "Shade"}
+    };
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        switchToRoomView(null);
         startBackgroundTimeChecker();
+
+        //createPlantGroups(); // Refactored for clarity
+    }
+
+    private void createPlantGroups() {
+        for (int i = 0; i < slots.length; i++) {
+            Group plantContainer = new Group();
+            plantContainer.setLayoutX(87);
+            plantContainer.setLayoutY(258);
+
+            String imagePath = String.valueOf(getClass().getClassLoader().getResource("plants/plant1.png"));
+            Image plantImage = new Image(imagePath);
+            ImageView imageView = new ImageView(plantImage);
+            imageView.setId("Plant");
+
+            String imagePathCircle = String.valueOf(getClass().getClassLoader().getResource("plants/plantCircle.png"));
+            Image circleImage = new Image(imagePathCircle);
+            ImageView circleImageView = new ImageView(circleImage);
+            circleImageView.setId("Circle");
+            circleImageView.setVisible(false); // Initially hidden
+
+            imageView.setFitHeight(95);
+            imageView.setFitWidth(77);
+
+            circleImageView.setFitWidth(141);
+            circleImageView.setFitHeight(138);
+            circleImageView.setLayoutX(-35);
+            circleImageView.setLayoutY(-21);
+
+            ImageView infoIcon = new ImageView(new Image(String.valueOf(getClass().getClassLoader().getResource("infoIcon.png"))));
+            infoIcon.setFitHeight(25);
+            infoIcon.setFitWidth(25);
+            infoIcon.setLayoutX(-35);
+            infoIcon.setLayoutY(35);
+            infoIcon.setVisible(false);
+
+
+            ImageView canIcon = new ImageView(new Image(String.valueOf(getClass().getClassLoader().getResource("canIcon.png"))));
+            canIcon.setFitHeight(35);
+            canIcon.setFitWidth(30);
+            canIcon.setLayoutX(77);
+            canIcon.setLayoutY(33);
+            canIcon.setVisible(false);
+
+
+            plantContainer.getChildren().addAll(circleImageView, imageView, canIcon, infoIcon);
+            plantContainer.setLayoutX(Double.parseDouble(slots[i][1]));
+            plantContainer.setLayoutY(Double.parseDouble(slots[i][2]));
+
+            roomView.getChildren().add(plantContainer);
+            plantGroups.add(plantContainer);
+
+            addHoverEffect(plantContainer, canIcon, infoIcon, circleImageView); // Add hover effect logic
+        }
+    }
+
+    public ScaleTransition sizeUpOrDownAnimation(boolean up, Object image) {
+        if (up) {
+            ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), (Node) image);
+            scaleUp.setToX(1.2);
+            scaleUp.setToY(1.2);
+            return scaleUp;
+        } else {
+            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), (Node) image);
+            scaleDown.setToX(1.0);
+            scaleDown.setToY(1.0);
+            return scaleDown;
+        }
+    }
+
+    private void addHoverEffect(Group plantContainer, ImageView canIcon, ImageView infoIcon, ImageView circleImage) {
+        plantContainer.setOnMouseEntered(event -> {
+            System.out.println("e");
+            sizeUpOrDownAnimation(true, circleImage).play();
+            sizeUpOrDownAnimation(true, canIcon).play();
+            sizeUpOrDownAnimation(true, infoIcon).play();
+            circleImage.setVisible(true);
+            canIcon.setVisible(true);
+            infoIcon.setVisible(true);
+        });
+
+        plantContainer.setOnMouseExited(event -> {
+            System.out.println("e");
+            sizeUpOrDownAnimation(false, circleImage).play();
+            sizeUpOrDownAnimation(false, canIcon).play();
+            sizeUpOrDownAnimation(false, infoIcon).play();
+            circleImage.setVisible(false);
+            canIcon.setVisible(false);
+            infoIcon.setVisible(false);
+        });
     }
 
     public void switchToLoginScene(ActionEvent event) throws IOException {
@@ -67,6 +198,8 @@ public class MainController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+
 
 
     public void switchToRoomView(MouseEvent mouseEvent) {
@@ -88,6 +221,7 @@ public class MainController implements Initializable {
     }
 
     public void updateRoomBackground(String timeOfDay) {
+        System.out.println(timeOfDay);
         String imagePath;
 
         try {
@@ -97,7 +231,7 @@ public class MainController implements Initializable {
                 imagePath = String.valueOf(getClass().getClassLoader().getResource("rooms/roomNighttime.jpg"));
             }
             currentBackground = new Image(imagePath);
-            roomBackground.setImage(currentBackground);
+            //roomBackground.setImage(currentBackground);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,10 +242,8 @@ public class MainController implements Initializable {
             while (true) {
                 LocalTime currentTime = LocalTime.now();
 
-                System.out.println(isNightTime(currentTime));
-                System.out.println("TIME: " + currentTime);
                 if (isNightTime(currentTime)) {
-                    Platform.runLater(() -> updateRoomBackground("Nighttime"));
+                   // Platform.runLater(() -> updateRoomBackground("Nighttime"));
                 } else {
                     Platform.runLater(() -> updateRoomBackground("Daytime"));
                 }

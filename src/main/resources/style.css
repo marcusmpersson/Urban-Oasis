@@ -7,10 +7,36 @@
                                          #1D2035 100%);
 }
 
-
 .borderColor{
     -fx-background-color: #131528;
     -fx-font-family: 'Pixeloid Sans';
     -fx-font-size: 16;
     -fx-text-fill: white;
+}
+
+.transparent-scrollpane {
+    -fx-background-color: transparent; /* Background transparency */
+}
+
+.transparent-scrollpane .viewport {
+    -fx-background-color: transparent; /* Viewport transparency */
+}
+
+.transparent-scrollpane .thumb {
+    -fx-background-color: rgba(15,17,39); /* Semi-transparent dark grey thumb */
+    -fx-border-color: transparent;
+}
+
+.transparent-scrollpane .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.circular-frame {
+    -fx-background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent white */
+    -fx-border-radius: 100100px; /* Assuming the frame needs a radius of 100px */
+    -fx-border-color: grey;
 }

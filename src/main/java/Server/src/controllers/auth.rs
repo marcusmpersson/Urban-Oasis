@@ -109,6 +109,49 @@ pub async fn delete(
     Ok(SuccessResponse((Status::Ok, "Deleted".to_string())))
 }
 
+#[post("/update", data="<req_sign_up>")]
+pub async fn update(
+    db: &State<DB>,
+    req_sign_up: Json<ReqSignUp>,
+    user: AuthenticatedUser,
+) -> Response<String> {
+    let db = db as &DB;
+
+    match check_valid_signup(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username) {
+        Ok(_) => {
+            db.update_user(user.id, &req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
+            Ok(SuccessResponse((Status::Ok, "Updated".to_string())))
+        },
+        Err(e) => Err(ErrorResponse((Status::UnprocessableEntity, e.to_string()))),
+    }
+}
+
+#[post("/email", data="<req_email>")]
+pub async fn email(
+    db: &State<DB>,
+    req_email: Json<ReqEmail>,
+) -> Response<String> {
+    let db = db as &DB;
+
+    let u: User = match db.fetch_user(&req_email.email).await.unwrap() {
+        Some(_) => return Err(ErrorResponse((Status::Conflict, "Email already exists".to_string()))),
+        None => return Ok(SuccessResponse((Status::Ok, "Email available".to_string()))),
+    };
+}
+
+#[post("/username", data="<req_username>")]
+pub async fn username(
+    db: &State<DB>,
+    req_username: Json<ReqUsername>,
+) -> Response<String> {
+    let db = db as &DB;
+
+    let u: User = match db.fetch_user(&req_username.username).await.unwrap() {
+        Some(_) => return Err(ErrorResponse((Status::Conflict, "Username already exists".to_string()))),
+        None => return Ok(SuccessResponse((Status::Ok, "Username available".to_string()))),
+    }; 
+}
+
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct ReqSignIn {
@@ -137,11 +180,23 @@ pub struct ResMe {
     username: String,
 }
 
+#[derive(Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
+pub struct ReqEmail {
+    email: String,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
+pub struct ReqUsername {
+    username: String,
+}
+
 impl DB {
     async fn fetch_user(&self, email: &str) -> mongodb::error::Result<Option<User>> {
         let collection_user = self.database.collection::<User>("users"); 
 
-        Ok(collection_user.find_one(bson::doc! { "email": email }, None).await?)
+        Ok(collection_user.find_one(bson::doc! { "email": email }, None).await.unwrap())
     }
 
     async fn fetch_user_by_id(&self, id: ObjectId) -> Result<User, String> {
@@ -179,4 +234,13 @@ impl DB {
         Ok(())
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct EmailVerification {
+    pub _id: ObjectId,
+    pub six_digit_code: String,
+}
+
+
+
 

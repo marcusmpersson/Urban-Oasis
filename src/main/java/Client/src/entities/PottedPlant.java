@@ -1,24 +1,18 @@
-package Client.src.entities;
+package entities;
+
+import java.util.ArrayList;
 
 public class PottedPlant extends Item implements Placeable {
 
     private Pot pot;
     private PlantTop plant;
     private PlacementSlot placedAt;
-    private HealthStat healthStat;
 
     public PottedPlant(Pot pot, PlantTop plant){
+        super(pot.getPrice() + plant.getPrice());
         this.pot = pot;
         this.plant = plant;
-        price = pot.getPrice() + plant.getPrice();
-    }
 
-    public HealthStat getHealthStat() {
-        return plant.getHealthStat();
-    }
-
-    public void setHealthStat(HealthStat healthStat) {
-        this.healthStat = healthStat;
     }
 
     public void setPot(Pot pot) {
@@ -43,10 +37,18 @@ public class PottedPlant extends Item implements Placeable {
         this.placedAt = slot;
     }
 
-    @Override
-    public String getImageFilePath(){
-        //TODO: create/return imageFilePath (if used)
-        return "Add return here.";
+    public ArrayList<String> getImagesFilePaths(){
+        ArrayList<String> filePathArray = new ArrayList<>();
+        filePathArray.add(plant.getImageFilePath());
+        filePathArray.add(pot.getImageFilePath());
+
+        return filePathArray;
     }
 
+    /** method re-calculates the price of PottedPlant and returns it */
+    @Override
+    public int getPrice() {
+        price = plant.getPrice() + pot.getPrice();
+        return price;
+    }
 }
