@@ -1,5 +1,7 @@
 package entities;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import enums.Rarity;
 
 import java.time.LocalDateTime;
@@ -7,12 +9,22 @@ import java.util.ArrayList;
 
 public class User {
 
-    private String username;
-    private String email;
-    private Inventory inventory;
-    private ArrayList<Room> rooms;
-    private int shopCurrency;
-    private LocalDateTime lastUpdatedTime;
+    @SerializedName("username")
+    @Expose
+    public String username;
+    @SerializedName("email")
+    @Expose
+    public String email;
+    @SerializedName("inventory")
+    @Expose
+    public Inventory inventory;
+    @SerializedName("room")
+    @Expose
+    public ArrayList<Room> rooms;
+    @SerializedName("shopcurrency")
+    @Expose
+    public int shopCurrency;
+    public LocalDateTime lastUpdatedTime;
 
     /** constructor. assigning pre-made attributes.
      * (purpose: creating new User instance with info received from server) */

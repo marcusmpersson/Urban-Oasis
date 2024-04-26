@@ -1,6 +1,8 @@
 package entities;
 
 import Builders.PlantTopBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import enums.Rarity;
 import enums.Species;
 import java.util.Random;
@@ -8,8 +10,14 @@ import java.util.ArrayList;
 
 public class Seed extends ShopItem{
 
+    @SerializedName("PossiblePlants")
+    @Expose
     private ArrayList<Species> possiblePlants;
+    @SerializedName("Rarity")
+    @Expose
     private Rarity rarity;
+    @SerializedName("Species")
+    @Expose
     private Species species;
 
     public Seed(Rarity rarity, ArrayList<Species> possibilities,String name, String imageFilePath, int price){

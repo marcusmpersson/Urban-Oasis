@@ -28,6 +28,8 @@ public class Controller {
         infoConverter = new InformationConverter(this);
         //this.guiController = guiController;
         widgetHandler = new WidgetHandler(guiController);
+        User user = generateTestUser();
+        clientConnection.saveUser(user);
     }
 
     public User generateTestUser(){
@@ -100,6 +102,7 @@ public class Controller {
 
         if(response.contains("token")) {
             clientConnection.setJwtToken(response);
+            loadGame(currentUser);
             widgetHandler.loadWidgets(currentUser.getUsername());
             return true;
         }
@@ -122,7 +125,9 @@ public class Controller {
     public void deleteAccountAttempt() {
         clientConnection.delete();
     }
-
+    public void setJwtToken(String token){
+        clientConnection.setJwtToken(token);
+    }
     /* --------------------------------------------
      *  methods called by GameHandler/TimeEventHandler
      *  ------------------------------------------- */
