@@ -4,27 +4,31 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import enums.Rarity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
 
     @SerializedName("username")
     @Expose
-    public String username;
+    private String username;
     @SerializedName("email")
     @Expose
-    public String email;
+    private String email;
     @SerializedName("inventory")
     @Expose
-    public Inventory inventory;
-    @SerializedName("room")
+    private Inventory inventory;
+    @SerializedName("rooms")
     @Expose
-    public ArrayList<Room> rooms;
-    @SerializedName("shopcurrency")
+    private ArrayList<Room> rooms;
+    @SerializedName("currency")
     @Expose
-    public int shopCurrency;
-    public LocalDateTime lastUpdatedTime;
+    private int shopCurrency;
+    @SerializedName("lastSave")
+    @Expose
+    private String lastUpdatedTime;
 
     /** constructor. assigning pre-made attributes.
      * (purpose: creating new User instance with info received from server) */
@@ -83,10 +87,13 @@ public class User {
     }
 
     public void setLastUpdatedTime(LocalDateTime now) {
-        lastUpdatedTime = now;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime.now();
+        String formattedDateTime = now.format(formatter);
+        lastUpdatedTime = formattedDateTime;
     }
 
-    public LocalDateTime getLastUpdatedTime() {
+    public String getLastUpdatedTime() {
         return lastUpdatedTime;
     }
 }

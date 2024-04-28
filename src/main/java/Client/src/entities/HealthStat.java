@@ -1,6 +1,8 @@
 package entities;
 
-public class HealthStat {
+import java.io.Serializable;
+
+public class HealthStat implements Serializable {
     private int overallMood;
     private int waterLevel;
     private int envSatisfaction;

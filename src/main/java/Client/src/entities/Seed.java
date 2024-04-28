@@ -5,10 +5,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import enums.Rarity;
 import enums.Species;
+
+import java.io.Serializable;
 import java.util.Random;
 import java.util.ArrayList;
 
-public class Seed extends ShopItem{
+public class Seed extends ShopItem implements Serializable {
 
     @SerializedName("PossiblePlants")
     @Expose

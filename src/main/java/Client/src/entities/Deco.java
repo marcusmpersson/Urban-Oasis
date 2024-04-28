@@ -1,6 +1,8 @@
 package entities;
 
-public class Deco extends ShopItem implements Placeable {
+import java.io.Serializable;
+
+public class Deco extends ShopItem implements Placeable, Serializable {
     public PlacementSlot placedAt;
 
     public Deco(String name, String imageFilePath, int price){

@@ -78,6 +78,7 @@ public class LoginHandler {
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost)){
                 HttpEntity responseEntity = response.getEntity();
+
                 if(responseEntity != null){
                     Gson gson = new Gson();
                     JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);

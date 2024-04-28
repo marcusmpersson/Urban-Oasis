@@ -76,16 +76,18 @@ public class ClientConnection {
             HttpPost httpPost1 = new HttpPost("https://2ceab96d-998c-4d7a-aa8c-7c5ae1e24d2b.mock.pstmn.io/saveuser"); // Sets the "waypoint" to which function
                                                                                                                             //on the server should be called.
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken); // Sets the JwtToken to our request header, if there's no token
-                                                                                    // the server won't accept our requests.
+            user.setLastUpdatedTime(LocalDateTime.now());                                                                        // the server won't accept our requests.
             Gson gson = new GsonBuilder(). // Creates a Gson object that will exclude object variables that are not set with @expose.
                     excludeFieldsWithoutExposeAnnotation()
                     .create();
+
             String json = gson.toJson(user);
             StringEntity entity = new StringEntity(json);
             httpPost1.setEntity(entity);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {  // Executes our request with the user as our payload.
                 HttpEntity responseEntity = response.getEntity();
+
                 if(responseEntity != null){
                     return EntityUtils.toString(responseEntity);
                 }
@@ -102,9 +104,11 @@ public class ClientConnection {
         try {
             HttpPost httpPost1 = new HttpPost("auth/logout");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
-            try(CloseableHttpResponse response = httpClient.execute(httpPost1)){
+
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
                 HttpEntity responseEntity = response.getEntity();
-                if(responseEntity != null){
+
+                if(responseEntity != null) {
                     return EntityUtils.toString(responseEntity);
                 }
             }
