@@ -6,9 +6,10 @@ import enums.Rarity;
 import enums.Species;
 import enums.Stage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlantTop {
+public class PlantTop implements Serializable {
 
     private ArrayList<String> imageFilePaths;
     private Species species;

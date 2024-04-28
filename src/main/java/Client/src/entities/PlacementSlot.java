@@ -2,7 +2,9 @@ package entities;
 
 import enums.Environment;
 
-public class PlacementSlot {
+import java.io.Serializable;
+
+public class PlacementSlot implements Serializable {
 
     private Environment environment;
     private Placeable placedItem;

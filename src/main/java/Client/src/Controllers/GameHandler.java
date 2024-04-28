@@ -7,6 +7,7 @@ import enums.Species;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class GameHandler {
@@ -264,8 +265,10 @@ public class GameHandler {
     public void updateSinceLast(){
         try {
             LocalDateTime now = LocalDateTime.now();
-            long minutes = Duration.between(currentUser.getLastUpdatedTime(), now).toMinutes();
-            long hours = Duration.between(currentUser.getLastUpdatedTime(), now).toHours();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime dateTime = LocalDateTime.parse(currentUser.getLastUpdatedTime(), formatter);
+            long minutes = Duration.between(dateTime, now).toMinutes();
+            long hours = Duration.between(dateTime, now).toHours();
 
             // 1 minute pace updates
             raiseAges(Math.toIntExact(minutes));

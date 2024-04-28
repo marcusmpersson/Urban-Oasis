@@ -28,6 +28,8 @@ public class Controller {
         infoConverter = new InformationConverter(this);
         //this.guiController = guiController;
         widgetHandler = new WidgetHandler(guiController);
+        User user = generateTestUser();
+        clientConnection.saveUser(user);
     }
 
     public User generateTestUser(){
@@ -76,6 +78,7 @@ public class Controller {
         gameHandler.updateSinceLast();
 
         //TODO: load GUI game view
+    }
 
     public Boolean checkUserNameAvailability() {
         return clientConnection.checkUserNameAvailability();
@@ -94,34 +97,52 @@ public class Controller {
     *  methods for GUIController
     *  -------------------------- */
 
+    /**
+     * Method called for making a login attempt.
+     * @param email
+     * @param password
+     * @return boolean
+     */
     public boolean loginAttempt(String email, String password) {
-        String response = loginHandler.login(email, password);
+        String response = loginHandler.login(email, password); // String gets the value of server response.
 
-        if(response.contains("token")) {
+        if(response.contains("token")) { // If the response the server games us contains a JWT token, we know that
+                                        //our login was successful and we load the game/widget.
             clientConnection.setJwtToken(response);
+            loadGame(currentUser);
+            widgetHandler.loadWidgets(currentUser.getUsername());
             return true;
         }
 
         else {
-            return false;
+            return false; // The response from the server was negative and we couldn't log in.
         }
-        widgetHandler.loadWidgets(user.getUsername());
     }
 
-    public void registerAccountAttempt(String email, String userName, String password){
+    public void registerAccountAttempt(String email, String userName, String password) {
         loginHandler.register(email, userName, password);
         System.out.println("nice");
     }
 
+    /**
+     * Method called when trying to log out. The widgets position on the desktop is saved, the current user information
+     * is saved and then finally we try to log out.
+     */
     public void logoutAttempt() {
         widgetHandler.updateLocalFile(currentUser.getUsername());
+        clientConnection.saveUser(currentUser);
         clientConnection.logout();
     }
 
+    /**
+     * Method called for trying to delete the currently used user account.
+     */
     public void deleteAccountAttempt() {
         clientConnection.delete();
     }
-
+    public void setJwtToken(String token){
+        clientConnection.setJwtToken(token);
+    }
     /* --------------------------------------------
      *  methods called by GameHandler/TimeEventHandler
      *  ------------------------------------------- */

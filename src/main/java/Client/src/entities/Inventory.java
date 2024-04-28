@@ -1,12 +1,24 @@
 package entities;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Inventory {
+public class Inventory implements Serializable {
 
+    @SerializedName("pottedplant")
+    @Expose
     private ArrayList<PottedPlant> pottedPlants;
+    @SerializedName("pots")
+    @Expose
     private ArrayList<Pot> pots;
+    @SerializedName("seeds")
+    @Expose
     private ArrayList<Seed> seeds;
+    @SerializedName("Decorations")
+    @Expose
     private ArrayList<Deco> decorations;
 
     /** constructor1 receives all items in one array and places them in correct categories */

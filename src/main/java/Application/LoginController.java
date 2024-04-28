@@ -91,7 +91,6 @@ public class LoginController implements Initializable {
         return false;
     }
 
-
     public void displayMessage(ImageView image) {
         Task<Void> fadeTask = new Task<Void>() {
             @Override
