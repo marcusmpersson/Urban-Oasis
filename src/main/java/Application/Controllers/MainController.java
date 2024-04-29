@@ -1,6 +1,5 @@
 package main.java.Application.Controllers;
 
-import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import main.java.Application.Animations.Transitions;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
@@ -29,7 +26,8 @@ public class MainController implements Initializable {
     private Scene scene;
 
     private boolean isLoggedIn;
-    Transitions transitions = new Transitions();
+    private Transitions transitions = new Transitions();
+    private WidgetController widgetHandler;
     @FXML
     private Group storeView;
 
@@ -48,12 +46,16 @@ public class MainController implements Initializable {
     public ImageView returnButton;
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isLoggedIn = true;
         switchToRoomView(null);
         startBackgroundTimeChecker();
+        new RoomController(roomView);
+      //  new WidgetController(roomView);
+
+
+
         /**
          *   ArrayList<String> imageArraysPlants = new ArrayList<>();
          *         imageArraysPlants.add(String.valueOf(getClass().getClassLoader().getResource("plants/plantTop2.png")));

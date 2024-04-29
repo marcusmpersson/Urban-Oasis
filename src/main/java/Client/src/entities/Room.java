@@ -20,6 +20,15 @@ public class Room {
         return null;
     }
 
+    public PlacementSlot getNextAvailableSlot() {
+        for (int i = 0; i < slots.size(); i++) {
+            if (!slots.get(i).checkSlotTaken()) {
+                return slots.get(i);
+            }
+        }
+        return null;
+    }
+
     /** places the given placeable item at given placement-slot index, returns the item that was
      * placed in the slot prior, returns null if slot was empty */
     public Placeable swapItem (Placeable placeableItem, int index){

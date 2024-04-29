@@ -2,109 +2,154 @@ package main.java.Application.Controllers;
 
 import Builders.ItemBuilder;
 import Builders.PlantTopBuilder;
-import Controllers.WidgetHandler;
-import entities.PlantTop;
-import entities.Pot;
-import entities.PottedPlant;
-import entities.WidgetEntity;
+import Controllers.LocalFileHandler;
+import entities.*;
 import enums.PotType;
-import enums.Rarity;
 import enums.Species;
-import enums.Stage;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.StageStyle;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class WidgetController {
     
-    private WidgetHandler widgetHandler;
-    private ArrayList<WidgetEntity> activeWidgets;
+    private ArrayList<WidgetEntity> widgets;
+    private LocalFileHandler localFileHandler;
 
-    private Group roomView;
+    private Map<String, StageData> stages;
 
+    public WidgetController() {
+        this.widgets = new ArrayList<WidgetEntity>();
+        this.localFileHandler = new LocalFileHandler();
+        this.stages = new HashMap<>();
 
-    public void createTestWidget() {
-
-        Pot pot = ItemBuilder.buildPot(PotType.POT_STRIPED_BLUE);
-        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.CACTUS);
-        PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
-
-        WidgetEntity widget = new WidgetEntity(pottedPlant, 87, 258);
-        activeWidgets.add(widget);
-
-        displayWidgets();
     }
 
-    public void displayWidgets() {
-        for (int i = 0; i < activeWidgets.size(); i++) {
+    public void setWidget(Image plantImage, Image potImage, String stageId) {
+        Stage stage = new Stage(StageStyle.TRANSPARENT);
 
-            int posX = activeWidgets.get(i).getX();
-            int posY = activeWidgets.get(i).getY();
-            String plantFilePath = activeWidgets.get(i).getPlantFilePath();
-            String potFilePath = activeWidgets.get(i).getPotFilePath();
+        ImageView plantImageView = new ImageView(plantImage);
+        ImageView potImageView = new ImageView(potImage);
 
+        plantImageView.setFitHeight(100);
+        plantImageView.setPreserveRatio(true);
+        potImageView.setFitHeight(60);
+        potImageView.setPreserveRatio(true);
 
-            Group plantContainer = new Group();
-            plantContainer.setLayoutX(87);
-            plantContainer.setLayoutY(258);
+        VBox layout = new VBox(5);
+        layout.getChildren().addAll(plantImageView, potImageView);
+        layout.setAlignment(Pos.CENTER);
 
-            String imagePath = String.valueOf(getClass().getClassLoader().getResource(plantFilePath));
-            Image plantImage = new Image(imagePath);
-            ImageView imageView = new ImageView(plantImage);
-            imageView.setId("Plant");
+        HBox menuBar = new HBox(10);
+        Button btnWater = new Button("Water");
+        menuBar.getChildren().addAll(btnWater);
+        menuBar.setAlignment(Pos.CENTER);
 
-            /*
-            String imagePathCircle = String.valueOf(getClass().getClassLoader().getResource("plants/plantCircle.png"));
-            Image circleImage = new Image(imagePathCircle);
-            ImageView circleImageView = new ImageView(circleImage);
-            circleImageView.setId("Circle");
-            circleImageView.setVisible(false); // Initially hidden
-             */
+        layout.getChildren().add(menuBar); // add the menu bar to the VBox
 
-            imageView.setFitHeight(95);
-            imageView.setFitWidth(77);
+        Rectangle roundedRectangle = new Rectangle();
+        roundedRectangle.setFill(Color.BLACK);
+        roundedRectangle.setStroke(Color.BLACK);
+        roundedRectangle.setStrokeWidth(2);
+        roundedRectangle.setArcWidth(20);
+        roundedRectangle.setArcHeight(20);
+        roundedRectangle.widthProperty().bind(layout.widthProperty().add(20));
+        roundedRectangle.heightProperty().bind(layout.heightProperty().add(20));
+        roundedRectangle.setVisible(false);
+        menuBar.setVisible(false);
 
-            /*
-            circleImageView.setFitWidth(141);
-            circleImageView.setFitHeight(138);
-            circleImageView.setLayoutX(-35);
-            circleImageView.setLayoutY(-21);
+        StackPane root = new StackPane(roundedRectangle, layout);
+        root.setPadding(new Insets(10)); // padding to ensure the rectangle does not clip content
+        root.setStyle("-fx-background-color: transparent;"); // make root transparent
 
-            ImageView infoIcon = new ImageView(new Image(String.valueOf(getClass().getClassLoader().getResource("infoIcon.png"))));
-            infoIcon.setFitHeight(25);
-            infoIcon.setFitWidth(25);
-            infoIcon.setLayoutX(-35);
-            infoIcon.setLayoutY(35);
-            infoIcon.setVisible(false);
+        root.setOnMouseEntered(event -> {
+            roundedRectangle.setVisible(true);
+            menuBar.setVisible(true);
+        });
+        root.setOnMouseExited(event -> {
+            roundedRectangle.setVisible(false);
+            menuBar.setVisible(false);
+        });
 
+        StageData data = new StageData(stage);
+        stages.put(stageId, data);
 
-            ImageView canIcon = new ImageView(new Image(String.valueOf(getClass().getClassLoader().getResource("canIcon.png"))));
-            canIcon.setFitHeight(35);
-            canIcon.setFitWidth(30);
-            canIcon.setLayoutX(77);
-            canIcon.setLayoutY(33);
-            canIcon.setVisible(false);
-             */
+        root.setOnMousePressed(event -> {
+            data.xOffset = stage.getX() - event.getScreenX();
+            data.yOffset = stage.getY() - event.getScreenY();
+        });
 
+        root.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() + data.xOffset);
+            stage.setY(event.getScreenY() + data.yOffset);
+        });
 
-            plantContainer.getChildren().addAll(imageView);
-            plantContainer.setLayoutX(posX);
-            plantContainer.setLayoutY(posY);
+        Scene scene = new Scene(root, 220, 250); // Adjusted size to fit the rounded rectangle
+        scene.setFill(null); // Make scene transparent
 
-            roomView.getChildren().add(plantContainer);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-            //addHoverEffect(plantContainer, canIcon, infoIcon, circleImageView); // Add hover effect logic
+    public void removeWidget(String stageId) {
+        for (Map.Entry<String, StageData> entry : stages.entrySet()) {
+            if (entry.getKey().equals(stageId)) {
+                StageData data = entry.getValue();
+                Stage stage = data.stage;
+                stage.close();
+            }
         }
     }
-    
-    
-    public WidgetController(Group roomView) {
-        this.widgetHandler = new WidgetHandler(this);
-        this.roomView = roomView;
-        this.activeWidgets = new ArrayList<WidgetEntity>();
-        createTestWidget();
+
+
+
+    public void loadWidgets (String username) {
+        this.widgets = localFileHandler.readLocalFile(username);
+        if (widgets != null) {
+            //TODO: load widgets on desktop via GUI controller
+        }
+    }
+
+    public void updateLocalFile(String username) {
+        localFileHandler.updateLocalFile(widgets, username);
+    }
+
+    public void addWidget(Placeable item) {
+        WidgetEntity widget = new WidgetEntity((PottedPlant) item, 200, 200);
+        widgets.add(widget);
+
+        //TODO: load widget via GUI controller
+    }
+
+    public WidgetEntity getWidgetAt(int index){
+        return widgets.get(index);
+    }
+
+    static class StageData {
+        Stage stage;
+        double xOffset = 0;
+        double yOffset = 0;
+
+        public StageData(Stage stage) {
+            this.stage = stage;
+        }
     }
     
 }

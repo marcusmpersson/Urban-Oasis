@@ -174,8 +174,9 @@ public class LoginController implements Initializable {
     }
 
     public void registerAccount(MouseEvent mouseEvent) {
-        String response = clientController.registerAccountAttempt(emailSignup.getText(), usernameSignup.getText(), passwordSignup.getText());
-        System.out.println(response);
+        //String response = clientController.registerAccountAttempt(emailSignup.getText(), usernameSignup.getText(),
+          //      passwordSignup.getText());
+   //     System.out.println(response);
     }
 
     public void switchToMainFrame(MouseEvent mouseEvent) throws IOException, InterruptedException {

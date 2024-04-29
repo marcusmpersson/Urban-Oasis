@@ -6,11 +6,11 @@ public class HealthStat {
     private int envSatisfaction;
 
     public HealthStat() {
-        this.waterLevel=50;
-        this.envSatisfaction= 50;
-        this.overallMood= establishOverallMood();
-
+        this.waterLevel = 50;
+        this.envSatisfaction = 50;
+        establishOverallMood();
     }
+
     public void water() {
         //if water level is below 100%, watering it should put it to 100%
         if (waterLevel < 90){
@@ -49,8 +49,8 @@ public class HealthStat {
         return overallMood;
     }
 
-    public int establishOverallMood(){
-        return 0;
+    public void establishOverallMood(){
+        overallMood = (envSatisfaction+waterLevel)/2;
     }
         /*
         condition1 = envSatisfaction

@@ -1,7 +1,8 @@
 package Controllers;
 
 import entities.*;
-import main.java.Application.MainController;
+import main.java.Application.Controllers.MainController;
+import main.java.Application.Controllers.WidgetController;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class Controller {
 
     private GameHandler gameHandler;
     private ClientConnection clientConnection;
-    private WidgetHandler widgetHandler;
+    private WidgetController widgetHandler;
     private LoginHandler loginHandler;
     private InformationConverter infoConverter;
     private User currentUser;
@@ -21,7 +22,7 @@ public class Controller {
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
         //this.guiController = guiController;
-        widgetHandler = new WidgetHandler(guiController);
+        //widgetHandler = new WidgetHandler(guiController);
     }
 
     /* ----------------------------------------
