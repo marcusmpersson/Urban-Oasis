@@ -157,4 +157,9 @@ public class PlantTop {
         healthStat.establishOverallMood();
         checkHealth();
     }
+
+    /** returns the scientific name of the plant */
+    public String getScientificName(){
+        return species.getScientificName();
+    }
 }
