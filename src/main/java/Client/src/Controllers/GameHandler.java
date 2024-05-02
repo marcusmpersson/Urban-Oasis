@@ -155,6 +155,7 @@ public class GameHandler {
         // swap items
         currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(draggedItem);
         currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(droppedUponItem);
+        System.out.println("Successfully swapped items.");
     }
 
     /** method sells a PottedPlant that is placed in room. Adds currency to user */

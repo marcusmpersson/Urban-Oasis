@@ -1,5 +1,4 @@
 package Controllers;
-import Builders.LocalDateTimeTypeAdapter;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import entities.User;
@@ -14,7 +13,6 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.google.gson.Gson;
 

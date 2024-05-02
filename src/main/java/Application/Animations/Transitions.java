@@ -1,9 +1,10 @@
-package main.java.Application;
+package main.java.Application.Animations;
 
 import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -12,9 +13,7 @@ import javafx.util.Duration;
 
 
 public class Transitions {
-
     private DropShadow borderGlow;
-
     @FXML
     public void initialize() {
         borderGlow = new DropShadow();
@@ -41,7 +40,7 @@ public class Transitions {
     }
 
     @FXML
-    public void handleMouseEntered(MouseEvent event) {
+    public void handleMouseEnteredButtonEffect(MouseEvent event) {
         initialize();
         ImageView imageview = (ImageView) event.getSource();
         borderGlow.setColor(getColorFromButton(imageview));
@@ -54,7 +53,7 @@ public class Transitions {
     }
 
     @FXML
-    public void handleMouseExited(MouseEvent event) {
+    public void handleMouseExitedButtonEffect (MouseEvent event) {
         ImageView imageview  = (ImageView) event.getSource();
         borderGlow.setColor(getColorFromButton(imageview));
         Timeline timeline = new Timeline(
@@ -63,5 +62,46 @@ public class Transitions {
         );
         timeline.play();
         timeline.setOnFinished(e -> imageview.setEffect(null));
+    }
+
+    public ScaleTransition sizeUpOrDownAnimation(boolean up, Object image) {
+        if (up) {
+            ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), (Node) image);
+            scaleUp.setToX(1.2);
+            scaleUp.setToY(1.2);
+            return scaleUp;
+        } else {
+            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), (Node) image);
+            scaleDown.setToX(1.0);
+            scaleDown.setToY(1.0);
+            return scaleDown;
+        }
+    }
+
+    private void addHoverEffect(Group plantContainer, ImageView canIcon, ImageView infoIcon, ImageView circleImage) {
+        plantContainer.setOnMouseEntered(event -> {
+            sizeUpOrDownAnimation(true, circleImage).play();
+            sizeUpOrDownAnimation(true, canIcon).play();
+            sizeUpOrDownAnimation(true, infoIcon).play();
+            circleImage.setVisible(true);
+            canIcon.setVisible(true);
+            infoIcon.setVisible(true);
+        });
+
+        plantContainer.setOnMouseExited(event -> {
+            sizeUpOrDownAnimation(false, circleImage).play();
+            sizeUpOrDownAnimation(false, canIcon).play();
+            sizeUpOrDownAnimation(false, infoIcon).play();
+            circleImage.setVisible(false);
+            canIcon.setVisible(false);
+            infoIcon.setVisible(false);
+        });
+    }
+
+    public void frameFlyUpTransition(double val, Group group, double seconds) {
+        TranslateTransition flyUpAnimation = new TranslateTransition(Duration.seconds(seconds), group);
+        flyUpAnimation.setByY(val);
+        flyUpAnimation.setCycleCount(1);
+        flyUpAnimation.play();
     }
 }
