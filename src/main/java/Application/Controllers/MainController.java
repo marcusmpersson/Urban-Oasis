@@ -1,5 +1,13 @@
 package main.java.Application.Controllers;
 
+import Builders.ItemBuilder;
+import Builders.PlantTopBuilder;
+import Builders.RoomBuilder;
+import Controllers.Controller;
+import entities.*;
+import enums.PotType;
+import enums.Rarity;
+import enums.Species;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +26,7 @@ import main.java.Application.Animations.Transitions;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -27,7 +36,7 @@ public class MainController implements Initializable {
 
     private boolean isLoggedIn;
     private Transitions transitions = new Transitions();
-    private WidgetController widgetHandler;
+    private WidgetHandler widgetHandler;
     @FXML
     private Group storeView;
 
@@ -45,15 +54,18 @@ public class MainController implements Initializable {
     @FXML
     public ImageView returnButton;
 
+    private Controller clientController;
+
+    private User testUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isLoggedIn = true;
         switchToRoomView(null);
         startBackgroundTimeChecker();
-        new RoomController(roomView);
-      //  new WidgetController(roomView);
-
+        clientController = Controller.getInstance();
+        testUser = clientController.getTestUser();
+        new RoomController(roomView, testUser);
 
 
         /**
@@ -164,7 +176,6 @@ public class MainController implements Initializable {
     }
 
     public void handleMouseEntered(MouseEvent mouseEvent) {
-        System.out.println("hello");
         transitions.handleMouseEnteredButtonEffect(mouseEvent);
     }
 

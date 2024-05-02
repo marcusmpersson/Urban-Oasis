@@ -98,7 +98,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.transitions = new Transitions();
-        this.clientController = new Controller();
+        this.clientController = Controller.getInstance();
         transitions.frameFlyUpTransition(1400, registerFrame, 0.1);
 
         passwordSignup.textProperty().addListener(new ChangeListener<String>() {

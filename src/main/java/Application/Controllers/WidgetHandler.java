@@ -1,18 +1,12 @@
 package main.java.Application.Controllers;
 
-import Builders.ItemBuilder;
-import Builders.PlantTopBuilder;
 import Controllers.LocalFileHandler;
 import entities.*;
-import enums.PotType;
-import enums.Species;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,20 +16,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.StageStyle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-public class WidgetController {
+public class WidgetHandler {
     
     private ArrayList<WidgetEntity> widgets;
     private LocalFileHandler localFileHandler;
 
     private Map<String, StageData> stages;
 
-    public WidgetController() {
+    public WidgetHandler () {
         this.widgets = new ArrayList<WidgetEntity>();
         this.localFileHandler = new LocalFileHandler();
         this.stages = new HashMap<>();

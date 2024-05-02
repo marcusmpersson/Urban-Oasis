@@ -3,159 +3,161 @@ package main.java.Application.Controllers;
 import Builders.ItemBuilder;
 import Builders.PlantTopBuilder;
 import Builders.RoomBuilder;
+import Controllers.Controller;
 import entities.*;
 import enums.PotType;
 import enums.Species;
 import enums.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import main.java.Application.View.RoomPlants;
 
-import java.awt.event.MouseEvent;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class RoomController {
-
-    private ArrayList<PlacementSlot> roomPlants;
+    private ArrayList<Group> roomPlants;
     private Group roomView;
     private Room room;
-    private WidgetController widgetController;
+    private WidgetHandler widgetController;
     private Map<Group, Boolean> widgetStatus;
-
-    public RoomController(Group roomView) {
+    private User user;
+    private RoomPlants roomPlantsGuiGenerating;
+    public RoomController(Group roomView, User user) {
         this.roomView = roomView;
+        this.user = user;
         this.roomPlants = new ArrayList<>();
-        this.room = new RoomBuilder().buildCommonRoom();
-        this.widgetController = new WidgetController();
+        this.room = user.getRoom(0);
+        this.widgetController = new WidgetHandler();
         this.widgetStatus = new HashMap<>();
-        createTestWidget();
+        this.roomPlantsGuiGenerating = new RoomPlants(roomView);
+
+        getUserPottedPlants();
     }
 
-    public void createTestWidget() {
+    private void getUserPottedPlants() {
+        List<PlacementSlot> slots = user.getRoom(0).getSlots();
 
-        for (int i = 25; i > 0; i--) {
-            PlacementSlot nextAvailableSlot = room.getNextAvailableSlot();
-            if (nextAvailableSlot != null) {
-                Pot pot = ItemBuilder.buildPot(PotType.POT_POLKA_PINK);
-                PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.COFFEE_PLANT);
-                PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
+        for (int i = 0; i < slots.size(); i++) {
+            if (slots.get(i).checkSlotTaken()) {
+                PottedPlant pottedPlant = (PottedPlant) slots.get(i).getPlacedItem();
+                int posX = slots.get(i).getX();
+                int posY = slots.get(i).getY();
+                String plantFilePath = pottedPlant.getPlantTop().getImageFilePath();
+                String potFilePath = pottedPlant.getPot().getImageFilePath();
+                String stageId = UUID.randomUUID().toString();
 
-                plantTop.setStage(Stage.ADULT);
-                plantTop.raiseAge(440);
+                Group plantContainer = roomPlantsGuiGenerating.generateRoomPlants(plantFilePath, potFilePath, posX,
+                        posY);
 
-                nextAvailableSlot.setPlacedItem(pottedPlant);
+                plantContainer.setId("ActivePlant");
+                plantContainer.getProperties().put("Slot", slots.get(i));
+                plantContainer.getProperties().put("SlotIndex", i);
 
-                roomPlants.add(nextAvailableSlot);
+                roomPlants.add(plantContainer);
+
+                setupDraggableSlot(plantContainer);
+
+               /*
+                plantContainer.setOnMouseClicked(event -> {
+                    if (!"isWidget".equals(plantContainer.getId())) {
+                        plantContainer.setId("isWidget");
+                        plantContainer.getStyleClass().add("glow");
+                      //  widgetController.setWidget(plantImage, potImage, stageId);
+                    } else {
+                        plantContainer.setId("");
+                        plantContainer.getStyleClass().remove("glow");
+                        //widgetController.removeWidget(stageId);
+                    }
+                });
+                */
             }
         }
-
-        //displayWidgets();
-        initiateRoom();
     }
 
-    public void initiateRoom() {
-        for (int i = 0; i < roomPlants.size(); i++) {
+    private void updateAllSlots(boolean reset) {
+        if (reset) {
+            roomPlants = new ArrayList<>();
 
-            Scene scene = roomView.getScene();
-            if (scene != null) {
-                scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+            roomView.getChildren().removeIf(node -> !(node instanceof ImageView));
+            getUserPottedPlants();
+        } else {
+            for (int i = 0; i < roomPlants.size(); i++) {
+                Group plant = roomPlants.get(i);
+                PlacementSlot slot = (PlacementSlot) plant.getProperties().get("Slot");
+
+                plant.setTranslateX(0);
+                plant.setTranslateY(0);
+
+                plant.setLayoutX(slot.getX());
+                plant.setLayoutY(slot.getY());
             }
+        }
+    }
 
-            int posX = roomPlants.get(i).getX();
-            int posY = roomPlants.get(i).getY();
-            String stageId = UUID.randomUUID().toString();
 
-            PottedPlant pottedPlant = (PottedPlant) roomPlants.get(i).getPlacedItem();
-            String plantFilePath = pottedPlant.getPlantTop().getImageFilePath();
-            String potFilePath = pottedPlant.getPot().getImageFilePath();
+    private void setupDraggableSlot(Group group) {
+        final double[] initialX = new double[1];
+        final double[] initialY = new double[1];
 
-            Group plantContainer = new Group();
+        group.setOnMousePressed(event -> {
 
-            Image plantImage = new Image(getClass().getClassLoader().getResource(plantFilePath).toString());
-            ImageView plantImageView = new ImageView(plantImage);
-            plantImageView.setId("PlantImage");
+            initialX[0] = group.getTranslateX() - event.getScreenX();
+            initialY[0] = group.getTranslateY() - event.getScreenY();
+        });
 
-            Image potImage = new Image(getClass().getClassLoader().getResource(potFilePath).toString());
-            ImageView potImageView = new ImageView(potImage);
-            potImageView.setId("PotImage");
+        group.setOnMouseDragged(event -> {
+            if (!group.getStyleClass().contains("glow")) {
+                group.getStyleClass().add("glow");
+            }
+            group.setTranslateX(event.getScreenX() + initialX[0]);
+            group.setTranslateY(event.getScreenY() + initialY[0]);
 
-            plantImageView.setFitHeight(100);
-            plantImageView.setFitWidth(100);
-            potImageView.setFitHeight(60);
-            potImageView.setFitWidth(100);
-
-            potImageView.toBack();
-            plantImageView.toFront();
-
-            plantContainer.getChildren().addAll(potImageView, plantImageView);
-
-            plantImageView.setLayoutY(potImageView.getLayoutY() - plantImageView.getFitHeight());
-
-            plantContainer.setLayoutX(posX);
-            plantContainer.setLayoutY(posY);
-
-            System.out.println(plantContainer.getLayoutX() + ", " + plantContainer.getLayoutY());
-
-            roomView.getChildren().add(plantContainer);
-
-            plantContainer.setOnMouseClicked(event -> {
-                if (!"isWidget".equals(plantContainer.getId())) {
-                    plantContainer.setId("isWidget");
-                    plantContainer.getStyleClass().add("glow");
-                    widgetController.setWidget(plantImage, potImage, stageId);
-                } else {
-                    plantContainer.setId("");
-                    plantContainer.getStyleClass().remove("glow");
-                    widgetController.removeWidget(stageId);
+            for (int i = 0; i < roomPlants.size(); i++) {
+                Group plant = roomPlants.get(i);
+                if (!plant.equals(group)) {
+                    if (group.getBoundsInParent().intersects(plant.getBoundsInParent())) {
+                        if (!plant.getStyleClass().contains("glow")) {
+                            plant.getStyleClass().add("glow");
+                            plant.setId("Overlapped");
+                        }
+                    } else {
+                        plant.getStyleClass().remove("glow");
+                        plant.setId("");
+                    }
                 }
-            });
-        }
+            }
+        });
+
+        group.setOnMouseReleased(event -> {
+            System.out.println("Released.");
+            group.getStyleClass().remove("glow");
+
+            for (int i = 0; i < roomPlants.size(); i++) {
+                Group plant = roomPlants.get(i);
+                if (plant.getStyleClass().contains("glow")) {
+                    plant.getStyleClass().remove("glow");
+                }
+                if (plant.getId() != null && plant.getId().equals("Overlapped")) {
+                    System.out.println("Overlapped.");
+
+
+                    int draggingIndex = (int) group.getProperties().get("SlotIndex");
+                    int droppingIndex = (int) plant.getProperties().get("SlotIndex");
+
+                    System.out.println(draggingIndex);
+                    System.out.println(droppingIndex);
+
+                    Controller clientController = Controller.getInstance();
+                    clientController.swapItems(draggingIndex, droppingIndex);
+                    updateAllSlots(true);
+                }
+            }
+            updateAllSlots(false);
+
+
+
+        });
     }
-
-    /*
-    public void displayWidgets() {
-        for (int i = 0; i < roomPlants.size(); i++) {
-
-            int posX = roomPlants.get(i).getX();
-            int posY = roomPlants.get(i).getY();
-
-            String plantFilePath = roomPlants.get(i).getPlantFilePath();
-            String potFilePath = roomPlants.get(i).getPotFilePath();
-
-            Group plantContainer = new Group();
-
-            Image plantImage = new Image(getClass().getClassLoader().getResource(plantFilePath).toString());
-            ImageView plantImageView = new ImageView(plantImage);
-            plantImageView.setId("PlantImage");
-
-            Image potImage = new Image(getClass().getClassLoader().getResource(potFilePath).toString());
-            ImageView potImageView = new ImageView(potImage);
-            potImageView.setId("PotImage");
-
-            plantImageView.setFitHeight(100);
-            plantImageView.setFitWidth(100);
-            potImageView.setFitHeight(60);
-            potImageView.setFitWidth(100);
-
-            potImageView.toBack();
-            plantImageView.toFront();
-
-            plantContainer.getChildren().addAll(potImageView, plantImageView);
-
-            plantImageView.setLayoutY(potImageView.getLayoutY() - plantImageView.getFitHeight());
-
-            plantContainer.setLayoutX(posX);
-            plantContainer.setLayoutY(posY);
-
-            roomView.getChildren().add(plantContainer);
-        }
-    }
-     */
-
 }
