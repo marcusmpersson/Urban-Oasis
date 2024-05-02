@@ -7,7 +7,8 @@ import entities.*;
 import enums.PotType;
 import enums.Rarity;
 import enums.Species;
-import main.java.Application.MainController;
+import main.java.Application.Controllers.MainController;
+import main.java.Application.Controllers.WidgetHandler;
 
 import java.util.ArrayList;
 
@@ -20,16 +21,24 @@ public class Controller {
     private InformationConverter infoConverter;
     private User currentUser;
     private MainController guiController;
+    private static Controller instance;
 
     /** Constructor initializes all controller classes connected to this controller. */
-    public Controller() {
+    private Controller() {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
-        //this.guiController = guiController;
-        widgetHandler = new WidgetHandler(guiController);
-        User user = generateTestUser();
-        clientConnection.saveUser(user);
+        widgetHandler = new WidgetHandler();
+        currentUser = generateTestUser();
+        gameHandler = new GameHandler(this, currentUser);
+        clientConnection.saveUser(currentUser);
+    }
+
+    public static synchronized Controller getInstance() {
+        if (instance == null) {
+            instance = new Controller();
+        }
+        return instance;
     }
 
     public User generateTestUser(){
@@ -58,11 +67,21 @@ public class Controller {
         plantTop.raiseAge(440);
         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
 
+        Pot pot3 = ItemBuilder.buildPot(PotType.POT_LILAC);
+        PlantTop plantTop2 = PlantTopBuilder.buildPlantTop(Species.COFFEE_PLANT);
+        plantTop2.raiseAge(440);
+        PottedPlant pottedPlant2 = new PottedPlant(pot3, plantTop2);
+
         // placing potted plant in room
         room.getSlot(2).setPlacedItem(pottedPlant);
+        room.getSlot(9).setPlacedItem(pottedPlant2);
 
         // user
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
+    }
+
+    public User getTestUser() {
+        return currentUser;
     }
 
     /* ----------------------------------------

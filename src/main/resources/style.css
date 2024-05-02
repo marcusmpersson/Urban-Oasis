@@ -6,7 +6,6 @@
                                          #151A2F 75%,
                                          #1D2035 100%);
 }
-
 .borderColor{
     -fx-background-color: #131528;
     -fx-font-family: 'Pixeloid Sans';
@@ -14,16 +13,20 @@
     -fx-text-fill: white;
 }
 
+.textFont{
+    -fx-font-family: 'Pixeloid Sans';
+}
+
 .transparent-scrollpane {
-    -fx-background-color: transparent; /* Background transparency */
+    -fx-background-color: transparent;
 }
 
 .transparent-scrollpane .viewport {
-    -fx-background-color: transparent; /* Viewport transparency */
+    -fx-background-color: transparent;
 }
 
 .transparent-scrollpane .thumb {
-    -fx-background-color: rgba(15,17,39); /* Semi-transparent dark grey thumb */
+    -fx-background-color: rgba(15,17,39);
     -fx-border-color: transparent;
 }
 
@@ -36,7 +39,11 @@
 }
 
 .circular-frame {
-    -fx-background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent white */
-    -fx-border-radius: 100100px; /* Assuming the frame needs a radius of 100px */
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-border-radius: 100100px;
     -fx-border-color: grey;
+}
+
+.glow {
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 0, 0.8), 10, 0.5, 0, 0);
 }

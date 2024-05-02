@@ -84,8 +84,7 @@ public class PlantTop implements Serializable {
      * If yes, sets stage to DEAD, sets price to 0. */
     public void checkHealth(){
         // if water level 0 or below, overall health 0 or below, or water level 200 or above
-        if (healthStat.getWaterLevel() <= 0 || healthStat.getOverallMood() <= 0
-        || healthStat.getWaterLevel() >= 200){
+        if (healthStat.getWaterLevel() <= 0 || healthStat.getOverallMood() <= 0 || healthStat.getWaterLevel() >= 200){
 
             this.stage = Stage.DEAD;
             basePrice = 0;
