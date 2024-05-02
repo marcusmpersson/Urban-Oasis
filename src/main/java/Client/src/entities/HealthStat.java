@@ -1,6 +1,8 @@
 package entities;
 
-public class HealthStat {
+import java.io.Serializable;
+
+public class HealthStat implements Serializable {
     private int overallMood;
     private int waterLevel;
     private int envSatisfaction;
@@ -9,8 +11,8 @@ public class HealthStat {
         this.waterLevel = 50;
         this.envSatisfaction = 50;
         establishOverallMood();
-    }
 
+    }
     public void water() {
         //if water level is below 100%, watering it should put it to 100%
         if (waterLevel < 90){
@@ -52,12 +54,5 @@ public class HealthStat {
     public void establishOverallMood(){
         overallMood = (envSatisfaction+waterLevel)/2;
     }
-        /*
-        condition1 = envSatisfaction
-        condition2 = waterLevel
-        Both will be conditions to establish the overallMood on a scale.
-        Which scale and the impact of each condition should be discussed further
-        */
-
 
 }

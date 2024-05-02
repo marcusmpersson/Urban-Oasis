@@ -1,11 +1,15 @@
 package entities;
+import Builders.ItemBuilder;
+import Builders.PlantTopBuilder;
+import enums.PotType;
 import enums.Rarity;
 import enums.Species;
 import enums.Stage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlantTop {
+public class PlantTop implements Serializable {
 
     private ArrayList<String> imageFilePaths;
     private Species species;
@@ -65,7 +69,7 @@ public class PlantTop {
             this.stage = Stage.YOUNG;
         }
         // after, the plant would be adult forever (unless it dies):
-        else if (age >= 440){
+        else {
             this.stage = Stage.ADULT;
         }
     }

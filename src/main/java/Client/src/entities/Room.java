@@ -1,11 +1,12 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //import javafx.scene.image.Image;
 
 
-public class Room {
+public class Room implements Serializable {
     private ArrayList<PlacementSlot> slots;
     public ArrayList<String> imageFilePaths;
 

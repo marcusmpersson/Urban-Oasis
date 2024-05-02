@@ -1,8 +1,9 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PottedPlant extends Item implements Placeable {
+public class PottedPlant extends Item implements Placeable, Serializable {
 
     private Pot pot;
     private PlantTop plant;
@@ -12,6 +13,7 @@ public class PottedPlant extends Item implements Placeable {
         super(pot.getPrice() + plant.getPrice());
         this.pot = pot;
         this.plant = plant;
+
     }
 
     public void setPot(Pot pot) {

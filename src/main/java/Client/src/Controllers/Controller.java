@@ -1,8 +1,13 @@
 package Controllers;
 
+import Builders.ItemBuilder;
+import Builders.PlantTopBuilder;
+import Builders.RoomBuilder;
 import entities.*;
-import main.java.Application.Controllers.MainController;
-import main.java.Application.Controllers.WidgetController;
+import enums.PotType;
+import enums.Rarity;
+import enums.Species;
+import main.java.Application.MainController;
 
 import java.util.ArrayList;
 
@@ -10,7 +15,7 @@ public class Controller {
 
     private GameHandler gameHandler;
     private ClientConnection clientConnection;
-    private WidgetController widgetHandler;
+    private WidgetHandler widgetHandler;
     private LoginHandler loginHandler;
     private InformationConverter infoConverter;
     private User currentUser;
@@ -22,7 +27,42 @@ public class Controller {
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
         //this.guiController = guiController;
-        //widgetHandler = new WidgetHandler(guiController);
+        widgetHandler = new WidgetHandler(guiController);
+        User user = generateTestUser();
+        clientConnection.saveUser(user);
+    }
+
+    public User generateTestUser(){
+
+        // room
+        ArrayList<Room> rooms = new ArrayList<>();
+        Room room = RoomBuilder.buildCommonRoom();
+        rooms.add(room);
+
+        // inventory items
+        Item pot1 = ItemBuilder.buildPot(PotType.ROUND_POT_CLAY);
+        Item seed1 = ItemBuilder.buildSeed(Rarity.COMMON);
+        Item seed2 = ItemBuilder.buildSeed(Rarity.RARE);
+        Item pot2 = ItemBuilder.buildPot(PotType.POT_LILAC);
+
+        // inventory
+        Inventory inventory = new Inventory();
+        inventory.addItem(pot1);
+        inventory.addItem(pot2);
+        inventory.addItem(seed1);
+        inventory.addItem(seed2);
+
+        // potted plant
+        Pot pot = ItemBuilder.buildPot(PotType.POT_STRIPED_BLUE);
+        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.COFFEE_PLANT);
+        plantTop.raiseAge(440);
+        PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
+
+        // placing potted plant in room
+        room.getSlot(2).setPlacedItem(pottedPlant);
+
+        // user
+        return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
     }
 
     /* ----------------------------------------
@@ -38,28 +78,71 @@ public class Controller {
         gameHandler.updateSinceLast();
 
         //TODO: load GUI game view
-
-        widgetHandler.loadWidgets(user.getUsername());
     }
 
-    public void loginAttempt(String email, String password) {
-        clientConnection.setJwtToken(loginHandler.login(email,password));
+    public Boolean checkUserNameAvailability() {
+        return clientConnection.checkUserNameAvailability();
     }
 
-    public void registerAccountAttempt(String email, String userName, String password){
-       // loginHandler.register(email, userName, password);
+    public Boolean checkEmailAvailability() {
+        return clientConnection.checkEmailAvailability();
+    }
+
+    /** Method called if email change was NOT approved by server */
+    public void emailChangeUnsuccessful() {
+        // TODO: show error in GUI
+    }
+
+    /* --------------------------
+    *  methods for GUIController
+    *  -------------------------- */
+
+    /**
+     * Method called for making a login attempt.
+     * @param email
+     * @param password
+     * @return boolean
+     */
+    public boolean loginAttempt(String email, String password) {
+        String response = loginHandler.login(email, password); // String gets the value of server response.
+
+        if(response.contains("token")) { // If the response the server games us contains a JWT token, we know that
+                                        //our login was successful and we load the game/widget.
+            clientConnection.setJwtToken(response);
+            loadGame(currentUser);
+            widgetHandler.loadWidgets(currentUser.getUsername());
+            return true;
+        }
+
+        else {
+            return false; // The response from the server was negative and we couldn't log in.
+        }
+    }
+
+    public void registerAccountAttempt(String email, String userName, String password) {
+        loginHandler.register(email, userName, password);
         System.out.println("nice");
     }
 
+    /**
+     * Method called when trying to log out. The widgets position on the desktop is saved, the current user information
+     * is saved and then finally we try to log out.
+     */
     public void logoutAttempt() {
         widgetHandler.updateLocalFile(currentUser.getUsername());
+        clientConnection.saveUser(currentUser);
         clientConnection.logout();
     }
 
+    /**
+     * Method called for trying to delete the currently used user account.
+     */
     public void deleteAccountAttempt() {
         clientConnection.delete();
     }
-
+    public void setJwtToken(String token){
+        clientConnection.setJwtToken(token);
+    }
     /* --------------------------------------------
      *  methods called by GameHandler/TimeEventHandler
      *  ------------------------------------------- */
