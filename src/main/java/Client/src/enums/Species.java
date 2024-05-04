@@ -18,14 +18,15 @@ public enum Species {
     ORCHID(Environment.HUMID, "Orchidaceae", 5),
 
     //------------ legendary ------------
-    VENUS_FLYTRAP(Environment.SUNNY, "Dionaea Muscipula", 6),
+    CHILI_PEPPER(Environment.SUNNY, "Chili Capsicum", 8),
     BEGONIA_POLKA_PLANT(Environment.HALF_SHADE, "Begonia", 6),
-    LACELEAF(Environment.HALF_SHADE, "Anthurium", 5);
+    ROSE_PLANT(Environment.HALF_SHADE, "Rosa", 5);
 
 
     private final Environment preferredEnvironment;
     private final String scientificName;
     private final int waterRate; //number affecting the water levels of the species
+
     private Species(Environment preferredEnvironment, String scientificName, int waterRate){
         this.preferredEnvironment = preferredEnvironment;
         this.scientificName = scientificName;
