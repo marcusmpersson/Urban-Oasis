@@ -18,9 +18,9 @@ public class GameHandler {
 
     /** Constructor, receives reference of the main controller and the user
      * that is logged in. */
-    public GameHandler(Controller controller, User user) {
+    public GameHandler(User user) {
         shop = new Shop();
-        this.controller = controller;
+        this.controller = Controller.getInstance();
         this.currentUser = user;
     }
 

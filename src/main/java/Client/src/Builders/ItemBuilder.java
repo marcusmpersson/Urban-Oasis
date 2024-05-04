@@ -99,9 +99,9 @@ public class ItemBuilder {
 
     private static Seed legendarySeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
-        possibleSpecies.add(Species.VENUS_FLYTRAP);
+        possibleSpecies.add(Species.CHILI_PEPPER);
         possibleSpecies.add(Species.BEGONIA_POLKA_PLANT);
-        possibleSpecies.add(Species.LACELEAF);
+        possibleSpecies.add(Species.ROSE_PLANT);
 
         return new Seed(Rarity.LEGENDARY, possibleSpecies, "Legendary Seed",
                 "seeds/legendary_seeds.png", 250);

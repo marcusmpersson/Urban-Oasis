@@ -1,8 +1,6 @@
 package Builders;
 
 import entities.PlantTop;
-import entities.Pot;
-import entities.Seed;
 import enums.Rarity;
 import enums.Species;
 
@@ -18,16 +16,16 @@ public class PlantTopBuilder {
                 return buildOrchid();
             case CRASSULA:
                 return buildCrassula();
-            case LACELEAF:
-                return buildLaceLeaf();
+            case ROSE_PLANT:
+                return buildRose();
             case SWORD_FERN:
                 return buildSwordFern();
             case PARLOR_PALM:
                 return buildPalm();
             case COFFEE_PLANT:
                 return buildCoffeePlant();
-            case VENUS_FLYTRAP:
-                return buildVenusTrap();
+            case CHILI_PEPPER:
+                return buildChiliPepper();
             case PAINTED_NETTLE:
                 return buildPaintedNettle();
             case ARROWHEAD_PLANT:
@@ -140,15 +138,15 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.ORCHID, 500, Rarity.EPIC);
     }
 
-    private static PlantTop buildVenusTrap() {
+    private static PlantTop buildChiliPepper() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/venusTrap_baby.png");
-        imageFilePaths.add("plants/venusTrap_young.png");
-        imageFilePaths.add("plants/venusTrap_adult.png");
+        imageFilePaths.add("plants/pepper_baby.png");
+        imageFilePaths.add("plants/pepper_young.png");
+        imageFilePaths.add("plants/pepper_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.VENUS_FLYTRAP, 600, Rarity.LEGENDARY);
+        return new PlantTop(imageFilePaths, Species.CHILI_PEPPER, 600, Rarity.LEGENDARY);
     }
 
     private static PlantTop buildPolkaPlant() {
@@ -162,15 +160,15 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.BEGONIA_POLKA_PLANT, 650, Rarity.LEGENDARY);
     }
 
-    private static PlantTop buildLaceLeaf() {
+    private static PlantTop buildRose() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/laceLeaf_baby.png");
-        imageFilePaths.add("plants/laceLeaf_young.png");
-        imageFilePaths.add("plants/laceLeaf_adult.png");
+        imageFilePaths.add("plants/rose_baby.png");
+        imageFilePaths.add("plants/rose_young.png");
+        imageFilePaths.add("plants/rose_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.LACELEAF, 650, Rarity.LEGENDARY);
+        return new PlantTop(imageFilePaths, Species.ROSE_PLANT, 650, Rarity.LEGENDARY);
     }
 
 }

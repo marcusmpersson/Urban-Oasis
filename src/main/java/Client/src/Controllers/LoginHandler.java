@@ -21,8 +21,8 @@ public class LoginHandler {
     private HttpPost httpPost;
     private Controller controller;
 
-    public LoginHandler(Controller controller){
-        this.controller = controller;
+    public LoginHandler(){
+        this.controller = Controller.getInstance();
         this.httpClient = HttpClients.createDefault();
     }
 
