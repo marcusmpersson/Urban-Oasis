@@ -19,14 +19,16 @@ public class PlantTop implements Serializable {
     private int basePrice;
     private int age;
     private PottedPlant belongingPottedPlant;
+    private String descriptionText;
 
     /** Constructor, sets instance variables. Initiates age to 0, updates plant stage. */
-    public PlantTop(ArrayList<String> imageFilePaths, Species species, int price, Rarity rarity){
+    public PlantTop(ArrayList<String> imageFilePaths, Species species, int price, Rarity rarity, String descriptionText){
         this.imageFilePaths = imageFilePaths;
         this.species= species;
         this.healthStat= new HealthStat();
         this.basePrice = price;
         this.rarity = rarity;
+        this.descriptionText = descriptionText;
         age = 0;
         updateStage();
     }
@@ -156,5 +158,9 @@ public class PlantTop implements Serializable {
         healthStat.water();
         healthStat.establishOverallMood();
         checkHealth();
+    }
+
+    public String getDescriptionText() {
+        return descriptionText;
     }
 }

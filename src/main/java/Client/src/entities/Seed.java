@@ -22,8 +22,8 @@ public class Seed extends ShopItem implements Serializable {
     @Expose
     private Species species;
 
-    public Seed(Rarity rarity, ArrayList<Species> possibilities,String name, String imageFilePath, int price){
-        super(imageFilePath, name, price);
+    public Seed(Rarity rarity, ArrayList<Species> possibilities,String name, String imageFilePath, int price, String descriptionText){
+        super(imageFilePath, name, price, descriptionText);
         this.rarity = rarity;
         this.possiblePlants = possibilities;
         this.species = speciesAtRandom();

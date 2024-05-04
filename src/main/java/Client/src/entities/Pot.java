@@ -12,8 +12,8 @@ public class Pot extends Deco implements Serializable {
     @Expose
     private PotType type;
 
-    public Pot(String name, String imageFilePath, int price, PotType type){
-        super(name, imageFilePath, price);
+    public Pot(String name, String imageFilePath, int price, PotType type, String descriptionText){
+        super(name, imageFilePath, price, descriptionText);
         this.type = type;
     }
 
