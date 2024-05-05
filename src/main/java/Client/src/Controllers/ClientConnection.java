@@ -27,8 +27,8 @@ public class ClientConnection {
     private Controller controller;
     private String jwtToken = "";
 
-    public ClientConnection(Controller controller){
-        this.controller = controller;
+    public ClientConnection(){
+        this.controller = Controller.getInstance();
         this.httpClient = HttpClients.createDefault();
         this.httpGet = new HttpGet("serverURL");
     }
