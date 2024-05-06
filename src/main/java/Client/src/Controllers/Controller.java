@@ -18,6 +18,7 @@ public class Controller {
     private ClientConnection clientConnection;
     private WidgetHandler widgetHandler;
     private LoginHandler loginHandler;
+    private WeatherUpdater weatherUpdater;
     private InformationConverter infoConverter;
     private User currentUser;
     private MainController guiController;
@@ -25,8 +26,9 @@ public class Controller {
 
     /** Constructor initializes all controller classes connected to this controller. */
     private Controller() {
-        clientConnection = new ClientConnection();
-        loginHandler = new LoginHandler();
+        clientConnection = new ClientConnection(this);
+        loginHandler = new LoginHandler(this);
+        weatherUpdater = new WeatherUpdater(this);
         widgetHandler = new WidgetHandler();
         currentUser = generateTestUser();
         clientConnection.saveUser(currentUser);
@@ -213,7 +215,9 @@ public class Controller {
         widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
     }
-
+    public String getCurrentWeather(){
+        return weatherUpdater.getCurrentWeather();
+    }
     public void popUpMessage(String message) {
         //TODO: show pop-up message in GUI
     }
