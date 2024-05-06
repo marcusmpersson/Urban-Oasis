@@ -10,7 +10,7 @@ public class PottedPlant extends Item implements Placeable, Serializable {
     private PlacementSlot placedAt;
 
     public PottedPlant(Pot pot, PlantTop plant){
-        super(pot.getPrice() + plant.getPrice());
+        super(pot.getPrice() + plant.getPrice(), plant.getDescriptionText());
         this.pot = pot;
         this.plant = plant;
 
@@ -52,4 +52,15 @@ public class PottedPlant extends Item implements Placeable, Serializable {
         price = plant.getPrice() + pot.getPrice();
         return price;
     }
+
+    @Override
+    public String getDescriptionText() {
+        updateDescriptionText();
+        return descriptionText;
+    }
+
+    public void updateDescriptionText() {
+        descriptionText = plant.getDescriptionText();
+    }
+
 }

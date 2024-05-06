@@ -14,13 +14,13 @@ public enum Species {
 
     //------------ epic ------------
     CRASSULA(Environment.SUNNY, "Crassula Orbicularis", 1),
-    PINEAPPLE_PLANT(Environment.HALF_SHADE, "Ananas Comosus", 3),
-    ORCHID(Environment.HUMID, "Orchidaceae", 5),
+    PINEAPPLE_PLANT(Environment.HALF_SHADE, "Ananas Comosus", 4),
+    ORCHID(Environment.HUMID, "Orchidaceae", 7),
 
     //------------ legendary ------------
-    CHILI_PEPPER(Environment.SUNNY, "Chili Capsicum", 8),
-    BEGONIA_POLKA_PLANT(Environment.HALF_SHADE, "Begonia", 6),
-    ROSE_PLANT(Environment.HALF_SHADE, "Rosa", 5);
+    CHILI_PEPPER(Environment.SUNNY, "Chili Capsicum", 7),
+    BEGONIA_POLKA_PLANT(Environment.SHADE, "Begonia", 6),
+    ROSE_PLANT(Environment.SUNNY, "Rosa", 9);
 
 
     private final Environment preferredEnvironment;
