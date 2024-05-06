@@ -125,6 +125,7 @@ public class Controller {
         this.currentUser = user;
         gameHandler = new GameHandler(currentUser);
         gameHandler.updateSinceLast();
+        gameHandler.startTimer();
         widgetHandler.loadWidgets(currentUser.getUsername());
     }
 
@@ -186,6 +187,8 @@ public class Controller {
      * is saved and then finally we try to log out.
      */
     public void logoutAttempt() {
+        gameHandler.stopTimer();
+        gameHandler = null;
         widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
         clientConnection.logout();
@@ -310,6 +313,11 @@ public class Controller {
      * @param index index of the PottedPlant in inventory */
     public void sellInventoryPlant (int index) {
         gameHandler.sellInventoryPlant(index);
+    }
+
+    /** method places an item back in the inventory. Clears the slot. */
+    public void placeItemBackInInventory(int placementIndex) {
+        gameHandler.placeItemBackInInventory(0, placementIndex);
     }
 
     /* --------------------------------------------

@@ -14,6 +14,7 @@ public class GameHandler {
     private User currentUser;
     private Controller controller;
     private Shop shop;
+    private TimeEventHandler timeEventHandler;
 
     /** Constructor, receives reference of the logged-in user. */
     public GameHandler(User user) {
@@ -234,7 +235,7 @@ public class GameHandler {
     /** method places an item back in the inventory. Clears the slot.
      * @param roomIndex index of the room
      * @param placementIndex index of the slot */
-    public void PlaceItemBackInInventory(int roomIndex, int placementIndex) {
+    public void placeItemBackInInventory(int roomIndex, int placementIndex) {
         Placeable placedItem = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
 
         currentUser.getInventory().addItem((Item)placedItem);
@@ -329,8 +330,19 @@ public class GameHandler {
     }
 
     /* ---------------------------------
-     * Methods for Startup
+     * Methods for Startup and closing
      * --------------------------------- */
+
+    /** method initiates TimeEventHandler and starts tracking time-based game events. */
+    public void startTimer(){
+        this.timeEventHandler = new TimeEventHandler(this);
+        timeEventHandler.startThreads();
+    }
+
+    /** method stops all time tracking threads */
+    public void stopTimer(){
+        timeEventHandler.stopAllThreads();
+    }
 
     /** method compares last saved time for user (since last logout)
      * and applies passage of time to all affected game components */
