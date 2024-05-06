@@ -2,7 +2,6 @@ package Controllers;
 
 import Builders.PlantTopBuilder;
 import entities.*;
-import enums.Rarity;
 import enums.Species;
 
 import java.time.Duration;
@@ -16,8 +15,7 @@ public class GameHandler {
     private Controller controller;
     private Shop shop;
 
-    /** Constructor, receives reference of the main controller and the user
-     * that is logged in. */
+    /** Constructor, receives reference of the logged-in user. */
     public GameHandler(User user) {
         shop = new Shop();
         this.controller = Controller.getInstance();
@@ -28,21 +26,48 @@ public class GameHandler {
      * Event driven game events
      * --------------------------------- */
 
-    /** attempts to purchase a shop item. If affordable, buys and adds item to
-     * user inventory, returns true. If not affordable, returns false.
-     * @param index the index of the shop item */
-    public boolean purchaseShopItem(int index) {
-        ShopItem item = shop.getShopItem(index);
-
+    /** private method attempts to purchase an item.
+     * If affordable, buys and adds item to user inventory, returns true.
+     * otherwise returns false. */
+    private boolean purchase (ShopItem item){
+        // if sufficient funds
         if (currentUser.getShopCurrency() >= item.getPrice()) {
-
+            //subtract currency
             currentUser.subtractCurrency(item.getPrice());
+            //add to inventory
             currentUser.getInventory().addItem(item);
             return true;
         }
         else {
             return false;
         }
+    }
+
+    /** attempts to purchase a pot from the shop. returns false if insufficient funds.
+     * @param index the index of the pot */
+    public boolean purchasePot(int index) {
+        if (index < shop.getPotsSize()) {
+            return purchase(shop.getPot(index));
+        }
+        return false;
+    }
+
+    /** attempts to purchase a seed from the shop. returns false if insufficient funds.
+     * @param index the index of the seed */
+    public boolean purchaseSeed(int index) {
+        if (index < shop.getSeedsSize()) {
+            return purchase(shop.getSeed(index));
+        }
+        return false;
+    }
+
+    /** attempts to purchase a deco from the shop. returns false if insufficient funds.
+     * @param index the index of the deco */
+    public boolean purchaseDeco(int index) {
+        if (index < shop.getDecosSize()) {
+            return purchase(shop.getDeco(index));
+        }
+        return false;
     }
 
     /** method waters the PottedPlant item placed at given index at given room
@@ -52,9 +77,9 @@ public class GameHandler {
     public void waterPlant(int roomIndex, int placementIndex) {
 
         // if valid index for both
-        if ((roomIndex < currentUser.getRoomsArray().size() && roomIndex > 0)
+        if ((roomIndex < currentUser.getRoomsArray().size() && roomIndex >= 0)
         && (placementIndex < currentUser.getRoom(roomIndex).getSlots().size() &&
-                placementIndex > 0)){
+                placementIndex >= 0)){
 
             Placeable itemPlaced = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
 
@@ -66,11 +91,11 @@ public class GameHandler {
 
     /** method places a pottedPlant from the inventory in a room slot.
     /* The PottedPlant is then removed from the inventory. */
-    public void placePlantInSlot(int inventoryIndex, int roomindex, int placementIndex) {
+    public void placeInventoryPlantInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
 
         // place item
         Placeable placeableItem = currentUser.getInventory().getPottedPlantAt(inventoryIndex);
-        currentUser.getRoom(roomindex).getSlot(placementIndex).setPlacedItem(placeableItem);
+        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(placeableItem);
 
         // remove from inventory
         currentUser.getInventory().removePottedPlantAt(inventoryIndex);
@@ -78,14 +103,26 @@ public class GameHandler {
 
     /** method places a Pot from the inventory in a room slot.
      /* The Pot is then removed from the inventory. */
-    public void placePotInSlot(int inventoryIndex, int roomindex, int placementIndex) {
+    public void placeInventoryPotInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
 
         // place item
         Placeable placeableItem = currentUser.getInventory().getPotAt(inventoryIndex);
-        currentUser.getRoom(roomindex).getSlot(placementIndex).setPlacedItem(placeableItem);
+        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(placeableItem);
 
         // remove from inventory
         currentUser.getInventory().removePotAt(inventoryIndex);
+    }
+
+    /** method places a Deco from the inventory in a room slot.
+     /* The Deco is then removed from the inventory. */
+    public void placeInventoryDecoInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
+
+        // place item
+        Placeable placeableItem = currentUser.getInventory().getDecorationAt(inventoryIndex);
+        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(placeableItem);
+
+        // remove from inventory
+        currentUser.getInventory().removeDecorationAt(inventoryIndex);
     }
 
     /** removes Placeable item from given slot at given room,
@@ -94,9 +131,9 @@ public class GameHandler {
     public void removeItemFromSlot(int roomIndex, int placementIndex) {
 
         // if valid index for both
-        if ((roomIndex < currentUser.getRoomsArray().size() && roomIndex > 0)
+        if ((roomIndex < currentUser.getRoomsArray().size() && roomIndex >= 0)
                 && (placementIndex < currentUser.getRoom(roomIndex).getSlots().size() &&
-                placementIndex > 0)) {
+                placementIndex >= 0)) {
 
             Item item = ((Item) currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem());
 
@@ -107,11 +144,11 @@ public class GameHandler {
         }
     }
 
-    /*** method creates a new PottedPlant Item with given seed and pot, places in inventory
+    /*** method creates a new PottedPlant Item with selected seed and pot, places in inventory
      * @param inventoryPotIndex index of the selected pot in inventory
      * @param inventorySeedIndex index of the selected seed in inventory
      * */
-    public PottedPlant plantSeed(int inventoryPotIndex, int inventorySeedIndex){
+    public void plantSeed(int inventoryPotIndex, int inventorySeedIndex) {
         //generate plant
         Species species = currentUser.getInventory().getSeedAt(inventorySeedIndex).getSpecies();
         PlantTop plantTop = PlantTopBuilder.buildPlantTop(species);
@@ -124,23 +161,36 @@ public class GameHandler {
         //remove seed and pot item from inventory
         currentUser.getInventory().removeSeedAt(inventorySeedIndex);
         currentUser.getInventory().removePotAt(inventoryPotIndex);
-
-        return pottedPlant;
     }
 
-    /** method removes the selected Item from the inventory's corresponding list */
-    public void disposeItemFromInventory(Item item, int index){
-
-        if (item instanceof PottedPlant){
+    /** method removes the selected Plant from the inventory */
+    public void disposePlantFromInventory(int index) {
+        if (index < currentUser.getInventory().getPottedPlants().size()
+        && index >= 0) {
             currentUser.getInventory().removePottedPlantAt(index);
         }
-        else if (item instanceof Pot){
+    }
+
+    /** method removes the selected Pot from the inventory */
+    public void disposePotFromInventory(int index) {
+        if (index < currentUser.getInventory().getPots().size()
+                && index >= 0) {
             currentUser.getInventory().removePotAt(index);
         }
-        else if (item instanceof Seed){
+    }
+
+    /** method removes the selected Seed from the inventory */
+    public void disposeSeedFromInventory(int index) {
+        if (index < currentUser.getInventory().getSeeds().size()
+                && index >= 0) {
             currentUser.getInventory().removeSeedAt(index);
         }
-        else if (item instanceof Deco){
+    }
+
+    /** method removes the selected Deco from the inventory */
+    public void disposeDecoFromInventory(int index) {
+        if (index < currentUser.getInventory().getDecorations().size()
+                && index >= 0) {
             currentUser.getInventory().removeDecorationAt(index);
         }
     }
@@ -148,35 +198,47 @@ public class GameHandler {
     /** method called when a Placeable item in the room is dragged to another slot.
      * swaps placements if both slots taken. If empty, swaps with null */
     public void swapItems(int draggingIndex, int droppingIndex, int roomIndex){
-        // save items
-        Placeable draggedItem = currentUser.getRoom(roomIndex).getSlot(draggingIndex).getPlacedItem();
-        Placeable droppedUponItem = currentUser.getRoom(roomIndex).getSlot(droppingIndex).getPlacedItem();
+
+        // save reference to both items placed at the two slots
+        Placeable slot1Item = currentUser.getRoom(roomIndex).getSlot(draggingIndex).getPlacedItem();
+        Placeable slot2Item = currentUser.getRoom(roomIndex).getSlot(droppingIndex).getPlacedItem();
 
         // swap items
-        currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(draggedItem);
-        currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(droppedUponItem);
+        currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(slot1Item);
+        currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(slot2Item);
+
         System.out.println("Successfully swapped items.");
     }
 
     /** method sells a PottedPlant that is placed in room. Adds currency to user */
     public void sellPlacedPlant (int roomIndex, int placementIndex) {
         Placeable placeable = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
-        if (placeable instanceof PottedPlant){
+        if (placeable instanceof PottedPlant) {
             currentUser.increaseCurrency( ((PottedPlant)placeable).getPrice() );
+            currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
         }
-        currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
     }
 
     /** method sells a PottedPlant that is placed in the inventory. Adds currency to user
-     * @param index index of the PottedPlant item in the inventory
-     * @return updated user currency */
-    public int sellInventoryPlant (int index){
-        Placeable placeable = currentUser.getInventory().getPottedPlantAt(index);
-        if (placeable != null){
-            currentUser.increaseCurrency( ((PottedPlant)placeable).getPrice() );
+     * @param index index of the PottedPlant item in the inventory */
+    public void sellInventoryPlant (int index) {
+        if (index < currentUser.getInventory().getPottedPlants().size()) {
+
+            PottedPlant pottedPlant = currentUser.getInventory().getPottedPlantAt(index);
+            currentUser.increaseCurrency(pottedPlant.getPrice());
+
+            currentUser.getInventory().removePottedPlantAt(index);
         }
-        currentUser.getInventory().removePottedPlantAt(index);
-        return currentUser.getShopCurrency();
+    }
+
+    /** method places an item back in the inventory. Clears the slot.
+     * @param roomIndex index of the room
+     * @param placementIndex index of the slot */
+    public void PlaceItemBackInInventory(int roomIndex, int placementIndex) {
+        Placeable placedItem = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
+
+        currentUser.getInventory().addItem((Item)placedItem);
+        currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
     }
 
     /* ---------------------------------
@@ -185,9 +247,9 @@ public class GameHandler {
 
     /** increases currency of user for every placed plant in every room, depending
      * on plant rarities. Multiplies by number of minutes passed.
-     * @param multiplier the number of minutes passed
+     * @param minutes the number of minutes passed
      * */
-    public void increaseCurrency(int multiplier) {
+    public void increaseCurrency(int minutes) {
         int amount = 0;
 
         // for every room player has
@@ -213,40 +275,49 @@ public class GameHandler {
                 }
             }
         }
-        currentUser.increaseCurrency(amount * multiplier);
+        currentUser.increaseCurrency(amount * minutes);
     }
 
     /** updates age of all plants in all rooms by given amount
-     * @param multiplier number of minutes passed */
-    public void raiseAges(int multiplier) {
-        for (Room room : currentUser.getRoomsArray()){
-            for (Placeable item : room.getPlacedItems()){
+     * @param minutes number of minutes passed */
+    public void raiseAges(int minutes) {
+        // for every room
+        for (Room room : currentUser.getRoomsArray()) {
+            // for every placed item
+            for (Placeable item : room.getPlacedItems()) {
+                // if it's a plant, raise age
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().raiseAge(multiplier);
+                    ((PottedPlant)item).getPlantTop().raiseAge(minutes);
                 }
             }
         }
     }
 
     /** updates water level of all plants in all rooms by given amount
-     * @param multiplier number of minutes passed */
-    public void lowerAllWaterLevels(int multiplier) {
+     * @param hours number of hours passed */
+    public void lowerAllWaterLevels(int hours) {
+        // for every room
         for (Room room : currentUser.getRoomsArray()){
+            // for every placed item
             for (Placeable item : room.getPlacedItems()){
+                // if it's a plant, lower water level
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().lowerWaterLevel(multiplier);
+                    ((PottedPlant)item).getPlantTop().lowerWaterLevel(hours);
                 }
             }
         }
     }
 
     /** updates environment satisfaction of all plants in all rooms by given amount
-     * @param multiplier number of hours passed */
-    public void updateEnvSatisfactions(int multiplier) {
+     * @param hours number of hours passed */
+    public void updateEnvSatisfactions(int hours) {
+        // for every room
         for (Room room : currentUser.getRoomsArray()){
+            // for every placed item
             for (Placeable item : room.getPlacedItems()){
+                // if it's a plant, update environment satisfaction
                 if (item instanceof PottedPlant){
-                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction(multiplier);
+                    ((PottedPlant)item).getPlantTop().updateEnvSatisfaction(hours);
                 }
             }
         }
@@ -265,11 +336,18 @@ public class GameHandler {
      * and applies passage of time to all affected game components */
     public void updateSinceLast(){
         try {
+            // get current time
             LocalDateTime now = LocalDateTime.now();
+
+            // create formatter ?
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            // get last saved time
             LocalDateTime dateTime = LocalDateTime.parse(currentUser.getLastUpdatedTime(), formatter);
-            long minutes = Duration.between(dateTime, now).toMinutes();
-            long hours = Duration.between(dateTime, now).toHours();
+
+            // compare and calculate amount of time passed
+            long minutes = Duration.between(dateTime, now).toMinutes(); // minutes passed since last
+            long hours = Duration.between(dateTime, now).toHours(); // hours passed since last
 
             // 1 minute pace updates
             raiseAges(Math.toIntExact(minutes));
@@ -279,6 +357,7 @@ public class GameHandler {
             lowerAllWaterLevels(Math.toIntExact(hours));
             updateEnvSatisfactions(Math.toIntExact(hours));
 
+            // update user last updated time
             updateUserLastUpdatedTime(now);
 
         } catch (Exception e) {
@@ -287,7 +366,7 @@ public class GameHandler {
     }
 
     /* ---------------------------------
-     * getters for Controller
+     * getters for Controller - might be deleted in the end
      * --------------------------------- */
 
     public ArrayList<Placeable> getRoomItems(int index) {
