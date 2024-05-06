@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class Deco extends ShopItem implements Placeable, Serializable {
     public PlacementSlot placedAt;
 
-    public Deco(String name, String imageFilePath, int price){
-        super(imageFilePath, name, price);
+    public Deco(String name, String imageFilePath, int price, String descriptionText){
+        super(imageFilePath, name, price, descriptionText);
     }
     @Override
     public PlacementSlot getPlacedAt() {
