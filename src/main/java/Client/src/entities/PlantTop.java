@@ -1,7 +1,4 @@
 package entities;
-import Builders.ItemBuilder;
-import Builders.PlantTopBuilder;
-import enums.PotType;
 import enums.Rarity;
 import enums.Species;
 import enums.Stage;
@@ -21,8 +18,10 @@ public class PlantTop implements Serializable {
     private PottedPlant belongingPottedPlant;
     private String descriptionText;
 
-    /** Constructor, sets instance variables. Initiates age to 0, updates plant stage. */
-    public PlantTop(ArrayList<String> imageFilePaths, Species species, int price, Rarity rarity, String descriptionText){
+    /** Constructor, sets instance variables.
+     * Initiates age to 0, updates plant stage. */
+    public PlantTop (ArrayList<String> imageFilePaths, Species species, int price,
+                     Rarity rarity, String descriptionText){
         this.imageFilePaths = imageFilePaths;
         this.species= species;
         this.healthStat= new HealthStat();
@@ -33,31 +32,13 @@ public class PlantTop implements Serializable {
         updateStage();
     }
 
-    /** saves a reference to the belonging PottedPlant */
-    public void setBelongingPottedPlant (PottedPlant belongingPottedPlant){
-        this.belongingPottedPlant = belongingPottedPlant;
-    }
+    // ------------------------------------------
+    // ENTITY LOGIC
+    // ------------------------------------------
 
-    /** returns species of plant */
-    public Species getSpecies() {
-        return species;
-    }
+    /** checks age of plant, updates STAGE if needed. Checks if plant has died */
+    public synchronized void updateStage(){
 
-    /** returns the level of rarity of plant */
-    public Rarity getRarity() {
-        return rarity;
-    }
-
-    /** checks age and health, then returns current stage */
-    public Stage getStage() {
-        updateStage();
-        checkHealth();
-        return stage;
-    }
-
-    /** checks age of plant, updates STAGE if needed */
-    public void updateStage(){
-        // every minute the age is auto raised by +1
         // the plant would be "planted" for 20 minutes:
         if (age < 20){
             this.stage = Stage.PLANTED;
@@ -74,19 +55,24 @@ public class PlantTop implements Serializable {
         else {
             this.stage = Stage.ADULT;
         }
+        checkHealth();
     }
 
-    /** raises age of plant by given amount, updates stage */
+    /** if plant isn't dead, raises age of plant by given amount, updates stage */
     public void raiseAge(int amount){
-        age += amount;
-        updateStage();
+        if (this.stage != Stage.DEAD) {
+            age += amount;
+            updateStage();
+        }
     }
 
     /** checks health of PlantTop and if plant has died.
-     * If yes, sets stage to DEAD, sets price to 0. */
+     * If yes, sets stage to DEAD, sets PlantTop's price to 0. */
     public void checkHealth(){
-        // if water level 0 or below, overall health 0 or below, or water level 200 or above
-        if (healthStat.getWaterLevel() <= 0 || healthStat.getOverallMood() <= 0 || healthStat.getWaterLevel() >= 200){
+        // if water level 0 or below, overall health 0 or below, water level 200 or above,
+        // or environment satisfaction 0 or below
+        if (healthStat.getWaterLevel() <= 0 || healthStat.getOverallMood() <= 0
+                || healthStat.getWaterLevel() >= 200 || healthStat.getEnvSatisfaction() <= 0){
 
             this.stage = Stage.DEAD;
             basePrice = 0;
@@ -95,8 +81,8 @@ public class PlantTop implements Serializable {
 
     /** updates the environment satisfaction of plant by given amount
      * @param amount the number of hours passed, used for bigger
-     *               updates at application startup*/
-    public void updateEnvSatisfaction(int amount){
+     *               updates at application startup. Otherwise 1 */
+    public void updateEnvSatisfaction(int amount) {
         // if placed at desired environment, raise satisfaction
         if (belongingPottedPlant.getPlacedAt().getEnvironment()
                 == species.getPreferredEnvironment()){
@@ -108,17 +94,26 @@ public class PlantTop implements Serializable {
         }
     }
 
-    /** returns the HealthStat instance of this PlantTop*/
-    public HealthStat getHealthStat(){return healthStat;}
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    /** lowers the water level of plant by the water rate of its species
+     * @param amount the number of minutes passed, used for bigger
+     *                   updates at application startup. Otherwise 1*/
+    public void lowerWaterLevel(int amount) {
+        healthStat.lowerWaterLevel(species.getWaterRate() * amount);
+        checkHealth();
     }
 
-    /** re-calculates the price of plant based on age,
-     * returns the price of the plantTop */
-    public int getPrice() {
-        return basePrice + (age / 2);
+    /** method waters the plant and checks health of plant */
+    public void water() {
+        healthStat.water();
+        checkHealth();
+    }
+
+    // ------------------------------------------
+    // GETTERS
+    // ------------------------------------------
+
+    public String getDescriptionText() {
+        return descriptionText;
     }
 
     /** returns the current image for the plant-top */
@@ -144,23 +139,45 @@ public class PlantTop implements Serializable {
         return null;
     }
 
-    /** lowers the water level of plant by the water rate of its species
-     * @param multiplier the number of minutes passed, used for bigger
-     *                   updates at application startup*/
-    public void lowerWaterLevel(int multiplier) {
-        healthStat.lowerWaterLevel(species.getWaterRate() * multiplier);
-        healthStat.establishOverallMood();
-        checkHealth();
+    /** re-calculates the price of the plantTop based on age,
+     * returns the price of the plantTop */
+    public int getPrice() {
+        return ( basePrice + (age/2) );
     }
 
-    /** method waters the plant, re-calculates overall mood and checks health of plant */
-    public void water() {
-        healthStat.water();
-        healthStat.establishOverallMood();
-        checkHealth();
+    /** returns the HealthStat instance of this PlantTop*/
+    public HealthStat getHealthStat() {
+        return healthStat;
     }
 
-    public String getDescriptionText() {
-        return descriptionText;
+    /** returns the level of rarity of plant */
+    public Rarity getRarity() {
+        return rarity;
     }
+
+    /** returns species of plant */
+    public Species getSpecies() {
+        return species;
+    }
+
+    /** checks age and health, then returns current stage */
+    public Stage getStage() {
+        updateStage();
+        return stage;
+    }
+
+    // ------------------------------------------
+    // SETTERS - mainly for test purposes
+    // ------------------------------------------
+
+    /** saves a reference to the belonging PottedPlant */
+    public void setBelongingPottedPlant (PottedPlant belongingPottedPlant){
+        this.belongingPottedPlant = belongingPottedPlant;
+    }
+
+    /** sets the current stage of plant */
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
 }
