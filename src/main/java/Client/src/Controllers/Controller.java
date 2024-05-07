@@ -18,6 +18,7 @@ public class Controller {
     private ClientConnection clientConnection;
     private WidgetHandler widgetHandler;
     private LoginHandler loginHandler;
+    private WeatherUpdater weatherUpdater;
     private InformationConverter infoConverter;
     private User currentUser;
     private MainController guiController;
@@ -25,13 +26,13 @@ public class Controller {
 
     /** Constructor initializes all controller classes connected to this controller. */
     private Controller() {
-        clientConnection = new ClientConnection();
-        loginHandler = new LoginHandler();
+        clientConnection = new ClientConnection(this);
+        loginHandler = new LoginHandler(this);
+        weatherUpdater = new WeatherUpdater(this);
         widgetHandler = new WidgetHandler();
 
         // test
         currentUser = generateTestUser();
-        clientConnection.saveUser(currentUser);
     }
 
     /** returns singleton instance of controller */
@@ -162,24 +163,11 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        String response = loginHandler.login(email, password); // String gets the value of server response.
-
-        if (response.contains("token")) { // If the response the server games us contains a JWT token, we know that
-                                        //our login was successful, and we load the game/widget.
-            clientConnection.setJwtToken(response);
-            loadGame(currentUser);
-            widgetHandler.loadWidgets(currentUser.getUsername());
-            return true;
-        }
-
-        else {
-            return false; // The response from the server was negative and we couldn't log in.
-        }
+        return loginHandler.login(email, password);
     }
 
-    public void registerAccountAttempt(String email, String userName, String password) {
-        loginHandler.register(email, userName, password);
-        System.out.println("nice");
+    public Boolean registerAccountAttempt(String email, String userName, String password) {
+        return loginHandler.register(email, userName, password);
     }
 
     /**
@@ -213,7 +201,9 @@ public class Controller {
         widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
     }
-
+    public String getCurrentWeather(){
+        return weatherUpdater.getCurrentWeather();
+    }
     public void popUpMessage(String message) {
         //TODO: show pop-up message in GUI
     }

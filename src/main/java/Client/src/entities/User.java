@@ -96,7 +96,6 @@ public class User implements Serializable {
 
     public void setLastUpdatedTime(LocalDateTime now) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime.now(); //TODO: why is this here?
         String formattedDateTime = now.format(formatter);
         lastUpdatedTime = formattedDateTime;
     }

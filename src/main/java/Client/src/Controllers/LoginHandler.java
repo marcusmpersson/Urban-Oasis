@@ -2,7 +2,9 @@ package Controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -17,12 +19,13 @@ import java.sql.Timestamp;
  * and functions that can be accessed before logging in.
  */
 public class LoginHandler {
+    private static final String server_url = "http://129.151.219.155:3000/";
     private CloseableHttpClient httpClient;
     private HttpPost httpPost;
     private Controller controller;
 
-    public LoginHandler(){
-        this.controller = Controller.getInstance();
+    public LoginHandler(Controller controller){
+        this.controller =controller;
         this.httpClient = HttpClients.createDefault();
     }
 
@@ -33,72 +36,65 @@ public class LoginHandler {
      * @param password
      * @return
      */
-    public String login(String email, String password) {
+    public Boolean login(String email, String password) {
         try {
-            httpPost = new HttpPost("auth/login");  // Defines what function we're trying to reach from the server.
+            httpPost = new HttpPost(server_url + "auth/login");  // Defines what function we're trying to reach from the server.
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}"; // Structures the way we'll send the information to the server.
             StringEntity entity = new StringEntity(requestBody);
+            entity.setContentType("application/json");
             httpPost.setEntity(entity);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost)) { // Executes the request to the server with the function
-                                                                                    // we defined earlier.
-                HttpEntity responseEntity = response.getEntity(); // Handles the response we get from the server and makes it into an HTTP entity.
+                int statusCode = response.getStatusLine().getStatusCode();
 
-                if(responseEntity != null) { // If there is something in the response we'll make a Gson object and fill the object with
-                                            // the requested data.
-                    Gson gson = new Gson();
-                    JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+                if(statusCode == HttpStatus.SC_OK){
+                    HttpEntity responseEntity = response.getEntity(); // Handles the response we get from the server and makes it into an HTTP entity.
+                    System.out.println(response.toString());
 
-                    if(jsonResponse.has("token")){ // If the response contained a JwtToken we set the token and return.
-                        String token = jsonResponse.get("token").getAsString();
-                        controller.setJwtToken(token);
-                        return "Login was successful";
+
+
+                    if(responseEntity != null) { // If there is something in the response we'll make a Gson object and fill the object with
+                                                // the requested data.
+                        Gson gson = new Gson();
+                        JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+
+                        if(jsonResponse.has("token")){ // If the response contained a JwtToken we set the token and return.
+                            String token = jsonResponse.get("token").getAsString();
+                            controller.setJwtToken(token);
+                            return true;
+                        }
                     }
 
-                    else if(jsonResponse.has("Invalid credentials")){
-                        return "Invalid Credentials";
-                    }
-
-                    else if (response.getStatusLine().getStatusCode() == 422) {
-                        return "Something went wrong";
+                    else {
+                        return false;
                     }
                 }
             }
-        } catch(IOException e) {
+        } catch(IOException | JsonSyntaxException e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
-    public String register(String email, String userName, String password) {
+    public Boolean register(String email, String userName, String password) {
         try {
-            httpPost = new HttpPost("auth/register");
+            httpPost = new HttpPost(server_url + "auth/register");
             String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
             StringEntity entity = new StringEntity(requestBody);
+            entity.setContentType("application/json");
             httpPost.setEntity(entity);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost)){
                 HttpEntity responseEntity = response.getEntity();
 
-                if(responseEntity != null){
-                    Gson gson = new Gson();
-                    JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
-                    
-                    if(jsonResponse.has("Response")){
-                        Boolean trueOrFalse = true;
-                        return jsonResponse.get("Response").getAsString();
-                    }
+                String responseString = EntityUtils.toString(responseEntity);
 
-                    else if (jsonResponse.has("Email already exists")) {
-                        return jsonResponse.get("Email already exists").getAsString();
-
-                    }
-
-                    else if (response.getStatusLine().getStatusCode() == 422) {
-                        String errorMessage;
-                        return errorMessage = "Something went wrong";
-                    }
+                if (responseString.equals("Registered")) {
+                    return true;
+                } else {
+                    return false;
                 }
             }
+
         } catch(IOException e) {
             e.printStackTrace();
         }
