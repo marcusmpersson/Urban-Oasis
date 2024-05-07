@@ -179,6 +179,7 @@ public class Controller {
 
     public void registerAccountAttempt(String email, String userName, String password) {
         loginHandler.register(email, userName, password);
+        this.currentUser = generateDefaultUser(userName, email);
         System.out.println("nice");
     }
 

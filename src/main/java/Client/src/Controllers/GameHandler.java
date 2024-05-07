@@ -351,7 +351,7 @@ public class GameHandler {
             // get current time
             LocalDateTime now = LocalDateTime.now();
 
-            // create formatter ?
+            // create formatter
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
             // get last saved time
