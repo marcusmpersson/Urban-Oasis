@@ -2,19 +2,12 @@ package main.java.Application.Controllers;
 
 import Controllers.LocalFileHandler;
 import entities.*;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.StageStyle;
+import main.java.Application.View.WidgetView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,63 +17,31 @@ public class WidgetHandler {
     
     private ArrayList<WidgetEntity> widgets;
     private LocalFileHandler localFileHandler;
-
     private Map<String, StageData> stages;
+    private RoomController roomController;
+    private ArrayList<Stage> uiWidgets;
 
-    public WidgetHandler () {
+    public WidgetHandler (RoomController roomController) {
         this.widgets = new ArrayList<WidgetEntity>();
         this.localFileHandler = new LocalFileHandler();
         this.stages = new HashMap<>();
-
+        this.uiWidgets = new ArrayList<>();
+        this.roomController = roomController;
     }
 
-    public void setWidget(Image plantImage, Image potImage, String stageId) {
-        Stage stage = new Stage(StageStyle.TRANSPARENT);
+    public void setWidget(PottedPlant pottedPlant, String stageId) {
 
-        ImageView plantImageView = new ImageView(plantImage);
-        ImageView potImageView = new ImageView(potImage);
+        String plantImage = pottedPlant.getPlantTop().getImageFilePath();
+        String potImage = pottedPlant.getPot().getImageFilePath();
 
-        plantImageView.setFitHeight(100);
-        plantImageView.setPreserveRatio(true);
-        potImageView.setFitHeight(60);
-        potImageView.setPreserveRatio(true);
+        WidgetView widgetView = new WidgetView(this);
+        StackPane root = widgetView.setWidget(new Image(plantImage),new Image(potImage),stageId);
+        Stage stage = widgetView.getStage();
 
-        VBox layout = new VBox(5);
-        layout.getChildren().addAll(plantImageView, potImageView);
-        layout.setAlignment(Pos.CENTER);
+        stage.getProperties().put("PottedPlant", pottedPlant);
+        widgetView.mouseEnteredAndExitedEvents();
 
-        HBox menuBar = new HBox(10);
-        Button btnWater = new Button("Water");
-        menuBar.getChildren().addAll(btnWater);
-        menuBar.setAlignment(Pos.CENTER);
-
-        layout.getChildren().add(menuBar); // add the menu bar to the VBox
-
-        Rectangle roundedRectangle = new Rectangle();
-        roundedRectangle.setFill(Color.BLACK);
-        roundedRectangle.setStroke(Color.BLACK);
-        roundedRectangle.setStrokeWidth(2);
-        roundedRectangle.setArcWidth(20);
-        roundedRectangle.setArcHeight(20);
-        roundedRectangle.widthProperty().bind(layout.widthProperty().add(20));
-        roundedRectangle.heightProperty().bind(layout.heightProperty().add(20));
-        roundedRectangle.setVisible(false);
-        menuBar.setVisible(false);
-
-        StackPane root = new StackPane(roundedRectangle, layout);
-        root.setPadding(new Insets(10)); // padding to ensure the rectangle does not clip content
-        root.setStyle("-fx-background-color: transparent;"); // make root transparent
-
-        root.setOnMouseEntered(event -> {
-            roundedRectangle.setVisible(true);
-            menuBar.setVisible(true);
-        });
-        root.setOnMouseExited(event -> {
-            roundedRectangle.setVisible(false);
-            menuBar.setVisible(false);
-        });
-
-        StageData data = new StageData(stage);
+        WidgetHandler.StageData data = new WidgetHandler.StageData(stage);
         stages.put(stageId, data);
 
         root.setOnMousePressed(event -> {
@@ -93,11 +54,51 @@ public class WidgetHandler {
             stage.setY(event.getScreenY() + data.yOffset);
         });
 
-        Scene scene = new Scene(root, 220, 250); // Adjusted size to fit the rounded rectangle
-        scene.setFill(null); // Make scene transparent
+        uiWidgets.add(stage);
+    }
 
-        stage.setScene(scene);
-        stage.show();
+    public void updatePlantImage(PottedPlant pottedPlant) {
+        for (int i = 0; i < uiWidgets.size(); i++) {
+            Stage stage = uiWidgets.get(i);
+            if (stage != null) {
+                PottedPlant foundPottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
+
+                if (foundPottedPlant != null) {
+                    if (foundPottedPlant == pottedPlant) {
+
+
+                        Image newImage = new Image(pottedPlant.getPlantTop().getImageFilePath());
+                        ImageView plantImageView = (ImageView) stage.getProperties().get("PlantImageView");
+                        plantImageView.setImage(newImage);
+                        Text waterText = (Text) stage.getProperties().get("WaterText");
+                        waterText.setText("Water Level: " + String.valueOf(pottedPlant.getPlantTop().getHealthStat().getWaterLevel()) + "/200");
+                    }
+                }
+            }
+        }
+    }
+
+    public void removeWidget(Stage stage) {
+        stage.close();
+        PottedPlant pottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
+        roomController.removeWidget(pottedPlant);
+    }
+
+    public String water(Stage stage, ImageView imageView) {
+        PottedPlant selectedPottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
+
+        selectedPottedPlant.getPlantTop().water();
+        int waterLevel = selectedPottedPlant.getPlantTop().getHealthStat().getWaterLevel();
+        String currentWaterLevel = String.valueOf(waterLevel);
+
+        if (imageView != null) {
+            Image newImage = new Image(selectedPottedPlant.getPlantTop().getImageFilePath());
+            imageView.setImage(newImage);
+        }
+        if (waterLevel >= 200) {
+            roomController.setPottedPlantToDead(selectedPottedPlant);
+        }
+        return currentWaterLevel;
     }
 
     public void removeWidget(String stageId) {
@@ -123,10 +124,10 @@ public class WidgetHandler {
         localFileHandler.updateLocalFile(widgets, username);
     }
 
-    public void addWidget(Placeable item) {
+    public void addWidget(Placeable item, String stageId) {
         WidgetEntity widget = new WidgetEntity((PottedPlant) item, 200, 200);
         widgets.add(widget);
-
+        setWidget((PottedPlant) item, stageId);
         //TODO: load widget via GUI controller
     }
 

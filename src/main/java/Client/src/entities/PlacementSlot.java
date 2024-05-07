@@ -37,8 +37,12 @@ public class PlacementSlot implements Serializable {
 
     public void setPlacedItem(Placeable placedItem) {
         this.placedItem = placedItem;
-        this.taken = true;
-        placedItem.setPlacedAt(this);
+        if (placedItem != null) {
+            this.taken = true;
+            placedItem.setPlacedAt(this);
+        } else {
+            this.taken = false;
+        }
     }
 
     public void clear() {

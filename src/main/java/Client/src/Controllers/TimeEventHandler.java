@@ -81,7 +81,7 @@ public class TimeEventHandler {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                controller.saveGame();
+               // controller.saveGame();
             }
         }
     }

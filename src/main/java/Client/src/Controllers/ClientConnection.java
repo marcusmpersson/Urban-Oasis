@@ -71,7 +71,7 @@ public class ClientConnection {
     public String saveUser(User user){
 
         try{
-            HttpPost httpPost1 = new HttpPost("https://2ceab96d-998c-4d7a-aa8c-7c5ae1e24d2b.mock.pstmn.io/saveuser"); // Sets the "waypoint" to which function
+            HttpPost httpPost1 = new HttpPost("http://129.151.219.155:3000/saveuser"); // Sets the "waypoint" to which function
                                                                                                                             //on the server should be called.
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken); // Sets the JwtToken to our request header, if there's no token
             user.setLastUpdatedTime(LocalDateTime.now());                                                                        // the server won't accept our requests.
@@ -100,7 +100,7 @@ public class ClientConnection {
      */
     public String logout(){
         try {
-            HttpPost httpPost1 = new HttpPost("auth/logout");
+            HttpPost httpPost1 = new HttpPost("http://129.151.219.155:3000/logout");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
@@ -122,7 +122,7 @@ public class ClientConnection {
      */
     public Boolean checkEmailAvailability(){
         try {
-            HttpGet httpGet1 = new HttpGet("auth/email");
+            HttpGet httpGet1 = new HttpGet("http://129.151.219.155:3000/auth/email");
             try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
                 HttpEntity responseEntity = response.getEntity();
 
@@ -148,7 +148,7 @@ public class ClientConnection {
      */
     public Boolean checkUserNameAvailability(){
         try {
-            HttpGet httpGet1 = new HttpGet("auth/username");
+            HttpGet httpGet1 = new HttpGet("http://129.151.219.155:3000/auth/username");
 
             try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
                 HttpEntity responseEntity = response.getEntity();
