@@ -1,31 +1,36 @@
 package entities;
 
+import enums.DecoType;
+import enums.PotType;
+
 import java.io.Serializable;
 
 public class Deco extends ShopItem implements Placeable, Serializable {
-    public PlacementSlot placedAt;
+    private PlacementSlot placedAt;
+    private DecoType type;
 
-    public Deco(String name, String imageFilePath, int price, String descriptionText){
+    /** constructor assigns all instance variables */
+    public Deco(String name, String imageFilePath, int price, String descriptionText, DecoType type) {
         super(imageFilePath, name, price, descriptionText);
+        this.type = type;
     }
+
+    /** returns the DecoType of this deco. */
+    public DecoType getDecoType(){
+        return type;
+    }
+
+    /** returns the placementSlot of this deco.
+     * If not placed anywhere, returns null */
     @Override
     public PlacementSlot getPlacedAt() {
         return placedAt;
     }
+
+    /** sets the PlacementSlot of this deco. */
     @Override
     public void setPlacedAt(PlacementSlot slot) {
         this.placedAt = slot;
     }
-    public void setPrice(int price) {
-        this.price = price;
-    }
-    public void setName(String name){
-        this.name = name;
-    }
-    public String getName(){
-        return this.name;
-    }
-
-
 
 }

@@ -1,7 +1,9 @@
 package Builders;
 
+import entities.Deco;
 import entities.Pot;
 import entities.Seed;
+import enums.DecoType;
 import enums.PotType;
 import enums.Rarity;
 import enums.Species;
@@ -71,9 +73,25 @@ public class ItemBuilder {
         return pots;
     }
 
+    public static Deco buildDeco(DecoType type){
+        switch (type){
+            case TERRARIUM:
+                return buildTerrarium();
+            default:
+                return null;
+        }
+    }
+
     /* ------------------
     * inner private methods
     * ------------------- */
+
+    private static Deco buildTerrarium() {
+        String desc = "This is a self sustaining moss terrarium that requires no maintenance! " +
+                "Place it anywhere and it will thrive. ";
+        String filepath = "plants/terrarium.png";
+        return new Deco("Terrarium", filepath, 1000, desc, DecoType.TERRARIUM);
+    }
 
     private static Seed commonSeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
