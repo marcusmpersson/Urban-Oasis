@@ -205,10 +205,8 @@ public class GameHandler {
         Placeable slot2Item = currentUser.getRoom(roomIndex).getSlot(droppingIndex).getPlacedItem();
 
         // swap items
-        currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(slot1Item);
-        currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(slot2Item);
-
-        System.out.println("Successfully swapped items.");
+        currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(draggedItem);
+        currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(droppedUponItem);
     }
 
     /** method sells a PottedPlant that is placed in room. Adds currency to user */

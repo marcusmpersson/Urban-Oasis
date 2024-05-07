@@ -1,13 +1,7 @@
 package main.java.Application.Controllers;
 
-import Builders.ItemBuilder;
-import Builders.PlantTopBuilder;
-import Builders.RoomBuilder;
 import Controllers.Controller;
 import entities.*;
-import enums.PotType;
-import enums.Rarity;
-import enums.Species;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -184,7 +178,6 @@ public class MainController implements Initializable {
     }
 
     public void updateRoomBackground(String timeOfDay) {
-        System.out.println(timeOfDay);
         String imagePath;
 
         try {

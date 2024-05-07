@@ -28,10 +28,11 @@ public class Controller {
     private Controller() {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
+        infoConverter = new InformationConverter(this);
+        //widgetHandler = new WidgetHandler();
         weatherUpdater = new WeatherUpdater(this);
         widgetHandler = new WidgetHandler();
 
-        // test
         currentUser = generateTestUser();
     }
 
@@ -380,7 +381,7 @@ public class Controller {
         Placeable item = currentUser.getRoom(0).getSlot(index).getPlacedItem();
 
         if (item instanceof PottedPlant){
-            widgetHandler.addWidget(item);
+            widgetHandler.addWidget(item, null);
         }
     }
 

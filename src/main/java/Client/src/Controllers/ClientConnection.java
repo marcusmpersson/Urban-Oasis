@@ -73,7 +73,7 @@ public class ClientConnection {
 
         try{
             HttpPost httpPost1 = new HttpPost(server_url + "saveuser"); // Sets the "waypoint" to which function
-                                                                                                                            //on the server should be called.
+          //on the server should be called.
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken); // Sets the JwtToken to our request header, if there's no token
             user.setLastUpdatedTime(LocalDateTime.now());                                                                        // the server won't accept our requests.
             Gson gson = new GsonBuilder(). // Creates a Gson object that will exclude object variables that are not set with @expose.
@@ -151,7 +151,7 @@ public class ClientConnection {
     public Boolean checkUserNameAvailability(){
         try {
             HttpGet httpGet1 = new HttpGet(server_url + "auth/username");
-
+          
             try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
                 HttpEntity responseEntity = response.getEntity();
 
