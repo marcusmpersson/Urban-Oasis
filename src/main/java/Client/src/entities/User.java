@@ -31,8 +31,9 @@ public class User implements Serializable {
     private String lastUpdatedTime;
 
     /** constructor. assigning pre-made attributes.
-     * (purpose: creating new User instance with info received from server) */
-    public User(String username, String email, Inventory inventory,
+     * purpose: creating new User instance with info received from server,
+     * or creating a new default user */
+    public User (String username, String email, Inventory inventory,
                 ArrayList<Room> rooms, int shopCurrency){
         this.username = username;
         this.email = email;
@@ -41,10 +42,23 @@ public class User implements Serializable {
         this.shopCurrency = shopCurrency;
     }
 
+    // ------------------------------------------
+    // ACCOUNT DETAILS
+    // ------------------------------------------
+
     /** returns username of user*/
     public String getUsername(){
         return username;
     }
+
+    /** returns the email of user */
+    public String getEmail(){
+        return email;
+    }
+
+    // ------------------------------------------
+    // GAME ASSETS
+    // ------------------------------------------
 
     /** returns reference to the user inventory */
     public Inventory getInventory() {
@@ -56,24 +70,14 @@ public class User implements Serializable {
         return rooms;
     }
 
-    /** returns the currency of user */
-    public int getShopCurrency() {
-        return shopCurrency;
-    }
-
-    /** sets the email of user (in current session) */
-    public void setEmail (String email){
-        this.email = email;
-    }
-
-    /** returns the email of user */
-    public String getEmail(){
-        return email;
-    }
-
     /** returns player room at certain index */
     public Room getRoom(int index) {
         return rooms.get(index);
+    }
+
+    /** returns the currency of user */
+    public int getShopCurrency() {
+        return shopCurrency;
     }
 
     /** subtracts given amount from the user currency */
@@ -86,9 +90,12 @@ public class User implements Serializable {
         shopCurrency += amount;
     }
 
+    // ------------------------------------------
+    // LAST UPDATED TIME
+    // ------------------------------------------
+
     public void setLastUpdatedTime(LocalDateTime now) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime.now();
         String formattedDateTime = now.format(formatter);
         lastUpdatedTime = formattedDateTime;
     }

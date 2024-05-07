@@ -1,8 +1,6 @@
 package Builders;
 
 import entities.PlantTop;
-import entities.Pot;
-import entities.Seed;
 import enums.Rarity;
 import enums.Species;
 
@@ -18,16 +16,16 @@ public class PlantTopBuilder {
                 return buildOrchid();
             case CRASSULA:
                 return buildCrassula();
-            case LACELEAF:
-                return buildLaceLeaf();
+            case ROSE_PLANT:
+                return buildRose();
             case SWORD_FERN:
                 return buildSwordFern();
             case PARLOR_PALM:
                 return buildPalm();
             case COFFEE_PLANT:
                 return buildCoffeePlant();
-            case VENUS_FLYTRAP:
-                return buildVenusTrap();
+            case CHILI_PEPPER:
+                return buildChiliPepper();
             case PAINTED_NETTLE:
                 return buildPaintedNettle();
             case ARROWHEAD_PLANT:
@@ -49,7 +47,11 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/cactus_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.CACTUS, 250, Rarity.COMMON);
+        String desc = "This is a low maintenance flowering cactus from South America. " +
+                "Place it in a sunny spot and water it once a blue moon for optimal health. " +
+                "Be careful not to overwater it!";
+
+        return new PlantTop(imageFilePaths, Species.CACTUS, 250, Rarity.COMMON, desc);
     }
 
     private static PlantTop buildPalm() {
@@ -60,7 +62,10 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/palm_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.PARLOR_PALM, 250, Rarity.COMMON);
+        String desc = "Turn your room into the rainforests from southeastern Mexico with this parlor palm." +
+                "Indoor palms thrive in half shade environments and less frequently require water.";
+
+        return new PlantTop(imageFilePaths, Species.PARLOR_PALM, 250, Rarity.COMMON, desc);
     }
 
     private static PlantTop buildArrowheadPlant() {
@@ -71,7 +76,10 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/arrowhead_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.ARROWHEAD_PLANT, 300, Rarity.COMMON);
+        String desc = "This variant of the arrowhead plant originated from Hawaii." +
+                "To thrive indoors it has to be placed in a humid environment and watered moderately.";
+
+        return new PlantTop(imageFilePaths, Species.ARROWHEAD_PLANT, 300, Rarity.COMMON, desc);
     }
 
     private static PlantTop buildSwordFern() {
@@ -82,7 +90,10 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/swordFern_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.SWORD_FERN, 350, Rarity.RARE);
+        String desc = "Sword ferns are common in moist coniferous forests in the southern regions of British Columbia." +
+                "To replicate this environment in your room, place the plant in a shady spot and water it often. ";
+
+        return new PlantTop(imageFilePaths, Species.SWORD_FERN, 350, Rarity.RARE, desc);
     }
 
     private static PlantTop buildPaintedNettle() {
@@ -93,7 +104,9 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/paintedNettle_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.PAINTED_NETTLE, 350, Rarity.RARE);
+        String desc = "";
+
+        return new PlantTop(imageFilePaths, Species.PAINTED_NETTLE, 350, Rarity.RARE, desc);
     }
 
     private static PlantTop buildCoffeePlant() {
@@ -104,7 +117,11 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/coffee_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.COFFEE_PLANT, 400, Rarity.RARE);
+        String desc = "The beloved, globally brewed coffee plant is native to Ethiopia, " +
+                "and requires frequent watering and a moist environment indoors. " +
+                "Place it in a greenhouse or a terrarium for optimal health and it may flower!";
+
+        return new PlantTop(imageFilePaths, Species.COFFEE_PLANT, 400, Rarity.RARE, desc);
     }
 
     private static PlantTop buildCrassula() {
@@ -115,7 +132,11 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/crassula_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.CRASSULA, 450, Rarity.EPIC);
+        String desc = "Crassula, also known as the jade plant, is a popular succulent that originated from South Africa. " +
+                "To take care of it, simply place it in a sunny spot. " +
+                "This plant is very easy to overwater.";
+
+        return new PlantTop(imageFilePaths, Species.CRASSULA, 450, Rarity.EPIC, desc);
     }
 
     private static PlantTop buildPineapple() {
@@ -126,7 +147,11 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/pineapple_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.PINEAPPLE_PLANT, 450, Rarity.EPIC);
+        String desc = "This variant of pineapple originated from Brazil. " +
+                "If properly taken care of, it will grow into a full sized pineapple! " +
+                "Luckily, it only requires a half shade environment and moderate watering.";
+
+        return new PlantTop(imageFilePaths, Species.PINEAPPLE_PLANT, 450, Rarity.EPIC, desc);
     }
 
     private static PlantTop buildOrchid() {
@@ -137,18 +162,25 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/orchid_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.ORCHID, 500, Rarity.EPIC);
+        String desc = "Orchids are beautiful natives of Japan and China and have been used in medication for thousands of years. " +
+                "These flowers are delicate and require a moist and humid environment with lots of water.";
+
+        return new PlantTop(imageFilePaths, Species.ORCHID, 500, Rarity.EPIC, desc);
     }
 
-    private static PlantTop buildVenusTrap() {
+    private static PlantTop buildChiliPepper() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/venusTrap_baby.png");
-        imageFilePaths.add("plants/venusTrap_young.png");
-        imageFilePaths.add("plants/venusTrap_adult.png");
+        imageFilePaths.add("plants/pepper_baby.png");
+        imageFilePaths.add("plants/pepper_young.png");
+        imageFilePaths.add("plants/pepper_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.VENUS_FLYTRAP, 600, Rarity.LEGENDARY);
+        String desc = "Chili peppers are not just fun to eat but also fascinating to look at. " +
+                "These chili plants will transition from white blossoms into colorful chili peppers. " +
+                "Give it lots of sun and water for optimal health. ";
+
+        return new PlantTop(imageFilePaths, Species.CHILI_PEPPER, 600, Rarity.LEGENDARY, desc);
     }
 
     private static PlantTop buildPolkaPlant() {
@@ -159,18 +191,26 @@ public class PlantTopBuilder {
         imageFilePaths.add("plants/polka_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.BEGONIA_POLKA_PLANT, 650, Rarity.LEGENDARY);
+        String desc = "Polka patterned Begonias are popular for their fun and unique appearance. " +
+                "Their leaves range from dark green to bright shades of orange. " +
+                "Although rare, it can thrive in the shade with moderate water. ";
+
+        return new PlantTop(imageFilePaths, Species.BEGONIA_POLKA_PLANT, 650, Rarity.LEGENDARY, desc);
     }
 
-    private static PlantTop buildLaceLeaf() {
+    private static PlantTop buildRose() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/laceLeaf_baby.png");
-        imageFilePaths.add("plants/laceLeaf_young.png");
-        imageFilePaths.add("plants/laceLeaf_adult.png");
+        imageFilePaths.add("plants/rose_baby.png");
+        imageFilePaths.add("plants/rose_young.png");
+        imageFilePaths.add("plants/rose_adult.png");
         imageFilePaths.add("plants/tombstone.png");
 
-        return new PlantTop(imageFilePaths, Species.LACELEAF, 650, Rarity.LEGENDARY);
+        String desc = "Originated in central Asia, roses are among the most popular flowers worldwide. " +
+                "Roses are high maintenance and require lots of water and direct sunlight exposure. " +
+                "If you take proper care of it, this rose plant will bloom all year around.";
+
+        return new PlantTop(imageFilePaths, Species.ROSE_PLANT, 650, Rarity.LEGENDARY, desc);
     }
 
 }

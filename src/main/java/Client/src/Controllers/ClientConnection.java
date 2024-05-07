@@ -25,6 +25,7 @@ public class ClientConnection {
     private HttpGet httpGet;
     private HttpPost httpPost;
     private Controller controller;
+    private static final String server_url = "http://129.151.219.155:3000/";
     private String jwtToken = "";
 
     public ClientConnection(Controller controller){
@@ -38,7 +39,7 @@ public class ClientConnection {
      * WARNING -- SUBJECT TO CHANGE.
      */
     public User getUserInfo(){
-        try{httpGet.setURI(new URI("serverURL/getUserData"));
+        try{httpGet.setURI(new URI(server_url + "auth/getUserData"));
             httpGet.setHeader("Authorization", "Bearer " + jwtToken);
 
             try(CloseableHttpResponse response = httpClient.execute(httpGet)){
@@ -71,8 +72,8 @@ public class ClientConnection {
     public String saveUser(User user){
 
         try{
-            HttpPost httpPost1 = new HttpPost("http://129.151.219.155:3000/saveuser"); // Sets the "waypoint" to which function
-                                                                                                                            //on the server should be called.
+            HttpPost httpPost1 = new HttpPost(server_url + "saveuser"); // Sets the "waypoint" to which function
+          //on the server should be called.
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken); // Sets the JwtToken to our request header, if there's no token
             user.setLastUpdatedTime(LocalDateTime.now());                                                                        // the server won't accept our requests.
             Gson gson = new GsonBuilder(). // Creates a Gson object that will exclude object variables that are not set with @expose.
@@ -81,6 +82,7 @@ public class ClientConnection {
 
             String json = gson.toJson(user);
             StringEntity entity = new StringEntity(json);
+            entity.setContentType("application/json");
             httpPost1.setEntity(entity);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {  // Executes our request with the user as our payload.
@@ -100,7 +102,7 @@ public class ClientConnection {
      */
     public String logout(){
         try {
-            HttpPost httpPost1 = new HttpPost("http://129.151.219.155:3000/logout");
+            HttpPost httpPost1 = new HttpPost(server_url + "auth/logout");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
@@ -122,7 +124,7 @@ public class ClientConnection {
      */
     public Boolean checkEmailAvailability(){
         try {
-            HttpGet httpGet1 = new HttpGet("http://129.151.219.155:3000/auth/email");
+            HttpGet httpGet1 = new HttpGet(server_url + "auth/email");
             try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
                 HttpEntity responseEntity = response.getEntity();
 
@@ -148,8 +150,8 @@ public class ClientConnection {
      */
     public Boolean checkUserNameAvailability(){
         try {
-            HttpGet httpGet1 = new HttpGet("http://129.151.219.155:3000/auth/username");
-
+            HttpGet httpGet1 = new HttpGet(server_url + "auth/username");
+          
             try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
                 HttpEntity responseEntity = response.getEntity();
 
@@ -175,7 +177,7 @@ public class ClientConnection {
      */
     public String delete(){
         try {
-            HttpPost httpPost1 = new HttpPost("serverURL/delete");
+            HttpPost httpPost1 = new HttpPost(server_url + "auth/delete");
             httpPost1.setHeader("Authorization", "Bearer " + jwtToken);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost1)){

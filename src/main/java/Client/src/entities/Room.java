@@ -3,17 +3,18 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-//import javafx.scene.image.Image;
-
-
 public class Room implements Serializable {
     private ArrayList<PlacementSlot> slots;
     public ArrayList<String> imageFilePaths;
 
+    /** constructor creates a room with given PlacementSlots and given image file-paths. */
     public Room(ArrayList<PlacementSlot> slots, ArrayList<String> imageFilePaths){
         this.slots = slots;
         this.imageFilePaths = imageFilePaths;
     }
+
+    /** returns the placement slot at given index.
+     * returns null if index is out of bounds. */
     public PlacementSlot getSlot(int index){
         if (index < slots.size()) {
             return slots.get(index);
@@ -21,6 +22,8 @@ public class Room implements Serializable {
         return null;
     }
 
+    /** method iterates the PlacementSlots of room and returns the first non-taken slot.
+     * returns null if all slots are taken. */
     public PlacementSlot getNextAvailableSlot() {
         for (int i = 0; i < slots.size(); i++) {
             if (!slots.get(i).checkSlotTaken()) {
@@ -30,17 +33,42 @@ public class Room implements Serializable {
         return null;
     }
 
-    /** places the given placeable item at given placement-slot index, returns the item that was
-     * placed in the slot prior, returns null if slot was empty */
-    public Placeable swapItem (Placeable placeableItem, int index){
-        if (index < slots.size()) {
-            Placeable swappingItem = slots.get(index).getPlacedItem();
-            slots.get(index).setPlacedItem(placeableItem);
-            return swappingItem;
-        }
-        return null;
+    /** method swaps the contents of two slots in the room
+     * (even if they're empty). */
+    public void swapTwoItems (int index1, int index2){
+        Placeable item1 = slots.get(index1).getPlacedItem();
+        Placeable item2 = slots.get(index2).getPlacedItem();
+
+        slots.get(index1).setPlacedItem(item2);
+        slots.get(index2).setPlacedItem(item1);
     }
 
+    /** returns a reference to the arraylist containing all PlacementSlots in the room */
+    public ArrayList<PlacementSlot> getSlots() {
+        return slots;
+    }
+
+    /** returns filepath to room's daytime image */
+    public String getDaytimeFilepath (){
+        return imageFilePaths.get(0);
+    }
+
+    /** returns filepath to room's sunset image */
+    public String getSunsetFilepath (){
+        return imageFilePaths.get(1);
+    }
+
+    /** returns filepath to room's night image */
+    public String getNightFilepath (){
+        return imageFilePaths.get(2);
+    }
+
+    /** returns filepath to room's sunrise image */
+    public String getSunriseFilepath (){
+        return imageFilePaths.get(3);
+    }
+
+    /** method returns an ArrayList of all placed items in the room */
     public ArrayList<Placeable> getPlacedItems() {
         ArrayList<Placeable> placedItems = new ArrayList<>();
         for (PlacementSlot slot : slots){
@@ -48,8 +76,12 @@ public class Room implements Serializable {
         }
         return placedItems;
     }
-    public ArrayList<PlacementSlot> getSlots(){return slots;}
 
+    // ------------------------------------------
+    // MOST LIKELY NOT USED
+    // ------------------------------------------
+
+    /** returns a reference to the arraylist containing all image file-paths of the room */
     public ArrayList<String> getImageFilePaths() {
         return imageFilePaths;
     }

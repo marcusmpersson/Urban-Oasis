@@ -151,7 +151,6 @@ public class LoginController implements Initializable {
 
     public void signIn(MouseEvent mouseEvent) throws InterruptedException, IOException {
         boolean loginAttemptSuccessful = clientController.loginAttempt(email.getText(), password.getText());
-       // boolean loginAttemptSuccessful = true;
 
         if (!loginAttemptSuccessful) {
             wrongLogin.setOpacity(1);
