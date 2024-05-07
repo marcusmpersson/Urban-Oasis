@@ -33,7 +33,6 @@ public class Controller {
 
         // test
         currentUser = generateTestUser();
-        clientConnection.saveUser(currentUser);
     }
 
     /** returns singleton instance of controller */

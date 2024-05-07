@@ -2,7 +2,9 @@ package Controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -43,18 +45,24 @@ public class LoginHandler {
             httpPost.setEntity(entity);
 
             try(CloseableHttpResponse response = httpClient.execute(httpPost)) { // Executes the request to the server with the function
-                                                                                    // we defined earlier.
-                HttpEntity responseEntity = response.getEntity(); // Handles the response we get from the server and makes it into an HTTP entity.
+                int statusCode = response.getStatusLine().getStatusCode();
 
-                if(responseEntity != null) { // If there is something in the response we'll make a Gson object and fill the object with
-                                            // the requested data.
-                    Gson gson = new Gson();
-                    JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+                if(statusCode == HttpStatus.SC_OK){
+                    HttpEntity responseEntity = response.getEntity(); // Handles the response we get from the server and makes it into an HTTP entity.
+                    System.out.println(response.toString());
 
-                    if(jsonResponse.has("token")){ // If the response contained a JwtToken we set the token and return.
-                        String token = jsonResponse.get("token").getAsString();
-                        controller.setJwtToken(token);
-                        return true;
+
+
+                    if(responseEntity != null) { // If there is something in the response we'll make a Gson object and fill the object with
+                                                // the requested data.
+                        Gson gson = new Gson();
+                        JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+
+                        if(jsonResponse.has("token")){ // If the response contained a JwtToken we set the token and return.
+                            String token = jsonResponse.get("token").getAsString();
+                            controller.setJwtToken(token);
+                            return true;
+                        }
                     }
 
                     else {
@@ -62,10 +70,10 @@ public class LoginHandler {
                     }
                 }
             }
-        } catch(IOException e) {
+        } catch(IOException | JsonSyntaxException e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
     public Boolean register(String email, String userName, String password) {
         try {
