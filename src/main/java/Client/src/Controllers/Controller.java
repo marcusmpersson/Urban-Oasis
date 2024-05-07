@@ -164,24 +164,11 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        String response = loginHandler.login(email, password); // String gets the value of server response.
-
-        if (response.contains("token")) { // If the response the server games us contains a JWT token, we know that
-                                        //our login was successful, and we load the game/widget.
-            clientConnection.setJwtToken(response);
-            loadGame(currentUser);
-            widgetHandler.loadWidgets(currentUser.getUsername());
-            return true;
-        }
-
-        else {
-            return false; // The response from the server was negative and we couldn't log in.
-        }
+        return loginHandler.login(email, password);
     }
 
-    public void registerAccountAttempt(String email, String userName, String password) {
-        loginHandler.register(email, userName, password);
-        System.out.println("nice");
+    public Boolean registerAccountAttempt(String email, String userName, String password) {
+        return loginHandler.register(email, userName, password);
     }
 
     /**
