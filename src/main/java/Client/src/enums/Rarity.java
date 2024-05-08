@@ -1,4 +1,4 @@
-package Client.src.enums;
+package enums;
 
 public enum Rarity {
     COMMON,
