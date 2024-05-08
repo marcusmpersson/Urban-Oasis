@@ -7,7 +7,8 @@ import entities.*;
 import enums.PotType;
 import enums.Rarity;
 import enums.Species;
-import main.java.Application.MainController;
+import main.java.Application.Controllers.MainController;
+import main.java.Application.Controllers.WidgetHandler;
 
 import java.util.ArrayList;
 
@@ -17,17 +18,30 @@ public class Controller {
     private ClientConnection clientConnection;
     private WidgetHandler widgetHandler;
     private LoginHandler loginHandler;
+    private WeatherUpdater weatherUpdater;
     private InformationConverter infoConverter;
     private User currentUser;
     private MainController guiController;
+    private static Controller instance;
 
     /** Constructor initializes all controller classes connected to this controller. */
-    public Controller() {
+    private Controller() {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
-        //this.guiController = guiController;
-        widgetHandler = new WidgetHandler(guiController);
+        //widgetHandler = new WidgetHandler();
+        weatherUpdater = new WeatherUpdater(this);
+        widgetHandler = new WidgetHandler();
+
+        currentUser = generateTestUser();
+    }
+
+    /** returns singleton instance of controller */
+    public static synchronized Controller getInstance() {
+        if (instance == null) {
+            instance = new Controller();
+        }
+        return instance;
     }
 
     public User generateTestUser(){
@@ -56,11 +70,50 @@ public class Controller {
         plantTop.raiseAge(440);
         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
 
+        Pot pot3 = ItemBuilder.buildPot(PotType.POT_LILAC);
+        PlantTop plantTop2 = PlantTopBuilder.buildPlantTop(Species.COFFEE_PLANT);
+        plantTop2.raiseAge(440);
+        PottedPlant pottedPlant2 = new PottedPlant(pot3, plantTop2);
+
         // placing potted plant in room
         room.getSlot(2).setPlacedItem(pottedPlant);
+        room.getSlot(9).setPlacedItem(pottedPlant2);
 
         // user
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
+    }
+
+    public User getTestUser() {
+        return currentUser;
+    }
+
+    /** method initiates a default User item for a newly signed-up account,
+     * adds starter items and values
+     * @param username the username of the signed up account
+     * @param email the email of the signed up account */
+    public User generateDefaultUser(String username, String email){
+
+        // user gets a default room
+        ArrayList<Room> rooms = new ArrayList<>();
+        Room room = RoomBuilder.buildCommonRoom();
+        rooms.add(room);
+
+        // user starts with two common seeds and two basic pots in their inventory
+        Item pot1 = ItemBuilder.buildPot(PotType.ROUND_POT_CLAY);
+        Item pot2 = ItemBuilder.buildPot(PotType.POT_ORANGE);
+
+        Item seed1 = ItemBuilder.buildSeed(Rarity.COMMON);
+        Item seed2 = ItemBuilder.buildSeed(Rarity.COMMON);
+
+        // create inventory and add the items
+        Inventory inventory = new Inventory();
+        inventory.addItem(pot1);
+        inventory.addItem(pot2);
+        inventory.addItem(seed1);
+        inventory.addItem(seed2);
+
+        // user starts with 400 shop currency
+        return new User(username, email, inventory, rooms, 400);
     }
 
     /* ----------------------------------------
@@ -68,14 +121,24 @@ public class Controller {
      *  --------------------------------------- */
 
     /** method called after a successful login and user data conversion.
-     * Initiates gameHandler, loads game view on GUI, loads widget preferences on device.
+     * Initiates gameHandler, loads widget preferences on device.
      * */
     public void loadGame(User user) {
         this.currentUser = user;
-        gameHandler = new GameHandler(this, user);
+        gameHandler = new GameHandler(currentUser);
         gameHandler.updateSinceLast();
+        gameHandler.startTimer();
+        widgetHandler.loadWidgets(currentUser.getUsername());
+    }
 
-        //TODO: load GUI game view
+    /** MIGHT BE DELETED
+     * method called when user logging in for the first time.
+     * Creates a User with default values, initiates GameHandler, loads game on GUI.
+     * */
+    public void loadGameFirstTime(String username, String email) {
+        this.currentUser = generateDefaultUser(username, email);
+        gameHandler = new GameHandler(currentUser);
+    }
 
     public Boolean checkUserNameAvailability() {
         return clientConnection.checkUserNameAvailability();
@@ -94,47 +157,54 @@ public class Controller {
     *  methods for GUIController
     *  -------------------------- */
 
+    /**
+     * Method called for making a login attempt.
+     * @param email
+     * @param password
+     * @return boolean
+     */
     public boolean loginAttempt(String email, String password) {
-        String response = loginHandler.login(email, password);
-
-        if(response.contains("token")) {
-            clientConnection.setJwtToken(response);
-            return true;
-        }
-
-        else {
-            return false;
-        }
-        widgetHandler.loadWidgets(user.getUsername());
+        return loginHandler.login(email, password);
     }
 
-    public void registerAccountAttempt(String email, String userName, String password){
-        loginHandler.register(email, userName, password);
-        System.out.println("nice");
+    public Boolean registerAccountAttempt(String email, String userName, String password) {
+        return loginHandler.register(email, userName, password);
     }
 
+    /**
+     * Method called when trying to log out. The widgets position on the desktop is saved, the current user information
+     * is saved and then finally we try to log out.
+     */
     public void logoutAttempt() {
+        gameHandler.stopTimer();
+        gameHandler = null;
         widgetHandler.updateLocalFile(currentUser.getUsername());
+        clientConnection.saveUser(currentUser);
         clientConnection.logout();
     }
 
+    /**
+     * Method called for trying to delete the currently used user account.
+     */
     public void deleteAccountAttempt() {
         clientConnection.delete();
+    }
+
+    public void setJwtToken(String token){
+        clientConnection.setJwtToken(token);
     }
 
     /* --------------------------------------------
      *  methods called by GameHandler/TimeEventHandler
      *  ------------------------------------------- */
 
-    public void updateGUI() {
-        //TODO: update/repaint GUI
-    }
-
     public void saveGame() {
         widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
     }
-
+    public String getCurrentWeather(){
+        return weatherUpdater.getCurrentWeather();
+    }
     public void popUpMessage(String message) {
         //TODO: show pop-up message in GUI
     }
@@ -143,11 +213,22 @@ public class Controller {
      *  event driven game functions - called by GUI Controller
      *  ----------------------------------------------- */
 
-    /** Method called by GUI controller class when user attempts to purchase
-     * an item from the shop.
+    /** Method called by GUI controller when user attempts to purchase a pot.
      * @return true if user has enough currency, false if not */
-    public boolean purchaseShopItem(int index) {
-        return gameHandler.purchaseShopItem(index);
+    public boolean purchasePot(int index) {
+        return gameHandler.purchasePot(index);
+    }
+
+    /** Method called by GUI controller when user attempts to purchase a seed.
+     * @return true if user has enough currency, false if not */
+    public boolean purchaseSeed(int index) {
+        return gameHandler.purchaseSeed(index);
+    }
+
+    /** Method called by GUI controller when user attempts to purchase a deco.
+     * @return true if user has enough currency, false if not */
+    public boolean purchaseDeco(int index) {
+        return gameHandler.purchaseDeco(index);
     }
 
     /** waters plant at given placement slot index */
@@ -158,13 +239,19 @@ public class Controller {
     /** method places a pottedPlant from the inventory in a room slot,
      * removes from inventory */
     public void placePlantInSlot (int inventoryIndex, int placementIndex) {
-        gameHandler.placePlantInSlot(inventoryIndex, 0, placementIndex);
+        gameHandler.placeInventoryPlantInSlot(inventoryIndex, 0, placementIndex);
     }
 
     /** method places a Pot from the inventory in a room slot,
      * removes from inventory */
     public void placePotInSlot (int inventoryIndex, int placementIndex) {
-        gameHandler.placePotInSlot(inventoryIndex, 0, placementIndex);
+        gameHandler.placeInventoryPotInSlot(inventoryIndex, 0, placementIndex);
+    }
+
+    /** method places a Deco from the inventory in a room slot,
+     * removes from inventory */
+    public void placeDecoInSlot (int inventoryIndex, int placementIndex) {
+        gameHandler.placeInventoryDecoInSlot(inventoryIndex, 0, placementIndex);
     }
 
     /** places item in PlacementSlot back to inventory */
@@ -177,11 +264,28 @@ public class Controller {
         gameHandler.plantSeed(inventoryPotIndex, inventorySeedIndex);
     }
 
-    /** disposes item in inventory.
-     * @param item an item of the class being deleted
+    /** disposes Pot from inventory.
      * @param index index of the item in inventory */
-    public void disposeItemFromInventory(Item item, int index) {
-        gameHandler.disposeItemFromInventory(item, index);
+    public void disposePotFromInventory(int index) {
+        gameHandler.disposePotFromInventory(index);
+    }
+
+    /** disposes Plant from inventory.
+     * @param index index of the item in inventory */
+    public void disposePlantFromInventory(int index) {
+        gameHandler.disposePlantFromInventory(index);
+    }
+
+    /** disposes Deco from inventory.
+     * @param index index of the item in inventory */
+    public void disposeDecoFromInventory(int index) {
+        gameHandler.disposeDecoFromInventory(index);
+    }
+
+    /** disposes Seed from inventory.
+     * @param index index of the item in inventory */
+    public void disposeSeedFromInventory(int index) {
+        gameHandler.disposeSeedFromInventory(index);
     }
 
     /** swaps placement of two items in different slots.
@@ -200,6 +304,11 @@ public class Controller {
      * @param index index of the PottedPlant in inventory */
     public void sellInventoryPlant (int index) {
         gameHandler.sellInventoryPlant(index);
+    }
+
+    /** method places an item back in the inventory. Clears the slot. */
+    public void placeItemBackInInventory(int placementIndex) {
+        gameHandler.placeItemBackInInventory(0, placementIndex);
     }
 
     /* --------------------------------------------
@@ -244,28 +353,6 @@ public class Controller {
         return plants;
     }
 
-    /** Method returns an ArrayList containing only the Pot items placed in the room. */
-    public ArrayList<Pot> getRoomPots() {
-        ArrayList<Pot> pots = new ArrayList<Pot>();
-        for (Placeable item : gameHandler.getRoomItems(0)){
-            if (item instanceof Pot){
-                pots.add((Pot) item);
-            }
-        }
-        return pots;
-    }
-
-    /** Method returns an ArrayList containing only the Deco items placed in the room. */
-    public ArrayList<Deco> getRoomDecos() {
-        ArrayList<Deco> decos = new ArrayList<Deco>();
-        for (Placeable item : gameHandler.getRoomItems(0)){
-            if (item instanceof Deco){
-                decos.add((Deco) item);
-            }
-        }
-        return decos;
-    }
-
     /** Method returns an ArrayList containing all PottedPlant items in players inventory.*/
     public ArrayList<PottedPlant> getInventoryPlants() {
         return gameHandler.getInventoryPlants();
@@ -294,7 +381,7 @@ public class Controller {
         Placeable item = currentUser.getRoom(0).getSlot(index).getPlacedItem();
 
         if (item instanceof PottedPlant){
-            widgetHandler.addWidget(item);
+            widgetHandler.addWidget(item, null);
         }
     }
 

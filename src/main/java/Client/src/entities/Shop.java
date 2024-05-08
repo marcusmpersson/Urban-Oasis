@@ -1,43 +1,63 @@
 package entities;
 
 import Builders.ItemBuilder;
+import enums.DecoType;
 import enums.Rarity;
 
 import java.util.ArrayList;
 
 public class Shop {
 
-    private ArrayList<ShopItem> shopItems;
+    private ArrayList<Pot> pots;
+    private ArrayList<Seed> seeds;
+    private ArrayList<Deco> decos;
 
-    /** constructor, adds all shopItems to an ArrayList (hardcoded) */
+    /** constructor, adds all shopItems to different lists based off category (hardcoded) */
     public Shop() {
-        shopItems = new ArrayList<>();
+        pots = new ArrayList<>();
+        seeds = new ArrayList<>();
+        decos = new ArrayList<>();
 
         // add seeds to shop
-        shopItems.add(ItemBuilder.buildSeed(Rarity.COMMON));
-        shopItems.add(ItemBuilder.buildSeed(Rarity.RARE));
-        shopItems.add(ItemBuilder.buildSeed(Rarity.EPIC));
-        shopItems.add(ItemBuilder.buildSeed(Rarity.LEGENDARY));
+        seeds.add(ItemBuilder.buildSeed(Rarity.COMMON));
+        seeds.add(ItemBuilder.buildSeed(Rarity.RARE));
+        seeds.add(ItemBuilder.buildSeed(Rarity.EPIC));
+        seeds.add(ItemBuilder.buildSeed(Rarity.LEGENDARY));
 
         // add pots to shop
-        shopItems.addAll(ItemBuilder.buildAllPots());
+        pots.addAll(ItemBuilder.buildAllPots());
+
+        // add decorations to shop
+        decos.add(ItemBuilder.buildDeco(DecoType.TERRARIUM));
     }
 
-    /** Method creates new identical instance of the selected shop item and returns it.
-     * This is because, ideally, the same reference of the shop item shouldn't be returned.
-     * */
-    public ShopItem getShopItem(int index) {
+    /** Method creates new instance of the selected Seed type and returns it. */
+    public Seed getSeed(int index) {
+        return ItemBuilder.buildSeed(seeds.get(index).getRarity());
+    }
 
-        // if item is an instance of pot, create a new instance of the pot and return
-        if (shopItems.get(index) instanceof Pot){
-            return ItemBuilder.buildPot(((Pot) shopItems.get(index)).getPotType());
-        }
+    /** Method creates new instance of the selected Pot and returns it. */
+    public Pot getPot(int index) {
+        return ItemBuilder.buildPot(pots.get(index).getPotType());
+    }
 
-        // if item is an instance of seed, create a new instance of seed and return
-        else if (shopItems.get(index) instanceof Seed){
-            return ItemBuilder.buildSeed(((Seed) shopItems.get(index)).getRarity());
-        }
+    /** Method creates new instance of the selected Deco and returns it. */
+    public Deco getDeco(int index) {
+        return ItemBuilder.buildDeco(decos.get(index).getDecoType());
+    }
 
-        return null;
+    /** returns the size of pots arraylist */
+    public int getPotsSize() {
+        return pots.size();
+    }
+
+    /** returns the size of seeds arraylist */
+    public int getSeedsSize() {
+        return seeds.size();
+    }
+
+    /** returns the size of decos arraylist */
+    public int getDecosSize() {
+        return decos.size();
     }
 }
