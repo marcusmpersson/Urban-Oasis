@@ -150,8 +150,7 @@ public class LoginController implements Initializable {
     }
 
     public void signIn(MouseEvent mouseEvent) throws InterruptedException, IOException {
-        //boolean loginAttemptSuccessful = clientController.loginAttempt(email.getText(), password.getText());
-        boolean loginAttemptSuccessful = true;
+        boolean loginAttemptSuccessful = clientController.loginAttempt(email.getText(), password.getText());
 
         if (!loginAttemptSuccessful) {
             wrongLogin.setOpacity(1);
@@ -173,9 +172,8 @@ public class LoginController implements Initializable {
     }
 
     public void registerAccount(MouseEvent mouseEvent) {
-        //String response = clientController.registerAccountAttempt(emailSignup.getText(), usernameSignup.getText(),
-          //      passwordSignup.getText());
-   //     System.out.println(response);
+        Boolean registerAttempt = clientController.registerAccountAttempt(emailSignup.getText(), usernameSignup.getText(), passwordSignup.getText());
+        System.out.println(registerAttempt);
     }
 
     public void switchToMainFrame(MouseEvent mouseEvent) throws IOException, InterruptedException {

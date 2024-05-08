@@ -92,6 +92,7 @@ public class TimeEventHandler {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+               // controller.saveGame();
                 
                 // save the game
                 Controller.getInstance().saveGame();
