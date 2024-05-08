@@ -1,4 +1,4 @@
-package Client.src.Controllers;
+package Controllers;
 
 public class Main {
     public static void main(String[] args) {
