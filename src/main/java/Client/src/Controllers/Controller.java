@@ -31,7 +31,7 @@ public class Controller {
         infoConverter = new InformationConverter(this);
         //widgetHandler = new WidgetHandler();
         weatherUpdater = new WeatherUpdater(this);
-        widgetHandler = new WidgetHandler();
+        //widgetHandler = new WidgetHandler();
 
         currentUser = generateTestUser();
     }
