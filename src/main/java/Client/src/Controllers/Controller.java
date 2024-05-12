@@ -29,7 +29,9 @@ public class Controller {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
+        //widgetHandler = new WidgetHandler();
         weatherUpdater = new WeatherUpdater(this);
+        //widgetHandler = new WidgetHandler();
 
         currentUser = generateTestUser();
     }
@@ -138,16 +140,12 @@ public class Controller {
         gameHandler = new GameHandler(currentUser);
     }
 
-    public Boolean updateAccountInfo(String email, String userName, String password){
-        return clientConnection.updateAccountInfo(email, userName, password);
+    public Boolean checkUserNameAvailability() {
+        return clientConnection.checkUserNameAvailability();
     }
 
-    public Boolean checkUserNameAvailability(String username) {
-        return clientConnection.checkUserNameAvailability(username);
-    }
-
-    public Boolean checkEmailAvailability(String email) {
-        return clientConnection.checkEmailAvailability(email);
+    public Boolean checkEmailAvailability() {
+        return clientConnection.checkEmailAvailability();
     }
 
     /** Method called if email change was NOT approved by server */
