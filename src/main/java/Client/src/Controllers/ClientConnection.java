@@ -50,9 +50,7 @@ public class ClientConnection {
                 if(entity!=null){
                     String responseBody = EntityUtils.toString(entity);
                     System.out.println(responseBody);
-                    Gson gson = new GsonBuilder().
-                            excludeFieldsWithoutExposeAnnotation()
-                            .create();
+                    Gson gson = new Gson();
                     User user = gson.fromJson(responseBody, User.class);
 
                     return user;

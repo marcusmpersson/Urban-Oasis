@@ -44,7 +44,7 @@ public class LoginHandler {
             entity.setContentType("application/json");
             httpPost.setEntity(entity);
 
-            try(CloseableHttpResponse response = httpClient.execute(httpPost)) { // Executes the request to the server with the function
+            try(CloseableHttpResponse response = httpClient.execute(httpPost)) { // Executes the request to the server with the function specified in the httpost.
                 int statusCode = response.getStatusLine().getStatusCode();
 
                 if(statusCode == HttpStatus.SC_OK){
@@ -75,6 +75,15 @@ public class LoginHandler {
         }
         return false;
     }
+
+    /**
+     * Method that calls the register function on the server. The server returns a string confirming if we could
+     * login or not.
+     * @param email
+     * @param userName
+     * @param password
+     * @return String confirmation
+     */
     public Boolean register(String email, String userName, String password) {
         try {
             httpPost = new HttpPost(server_url + "auth/register");
