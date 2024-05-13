@@ -50,9 +50,7 @@ public class ClientConnection {
                 if(entity!=null){
                     String responseBody = EntityUtils.toString(entity);
                     System.out.println(responseBody);
-                    Gson gson = new GsonBuilder().
-                            excludeFieldsWithoutExposeAnnotation()
-                            .create();
+                    Gson gson = new Gson();
                     User user = gson.fromJson(responseBody, User.class);
 
                     return user;
@@ -97,6 +95,31 @@ public class ClientConnection {
         }
         return null;
     }
+    public Boolean updateAccountInfo(String email, String userName, String password){
+        try {
+            httpPost = new HttpPost(server_url + "auth/update");
+            String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\", \"username\": \"" + userName + "\"}";
+            StringEntity entity = new StringEntity(requestBody);
+            entity.setContentType("application/json");
+            httpPost.setEntity(entity);
+
+            try(CloseableHttpResponse response = httpClient.execute(httpPost)){
+                HttpEntity responseEntity = response.getEntity();
+
+                String responseString = EntityUtils.toString(responseEntity);
+
+                if (responseString.equals("Updated")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /*
        Sends a request to the server with the JWT token in the request to ensure that the server knows who's supposed to log out.
      */
@@ -122,25 +145,30 @@ public class ClientConnection {
      * Method that checks if an email is already used in the database and returns true or false depending on response.
      * @return boolean
      */
-    public Boolean checkEmailAvailability(){
+    public Boolean checkEmailAvailability(String email){
         try {
-            HttpGet httpGet1 = new HttpGet(server_url + "auth/email");
-            try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
+            HttpPost httpPost1 = new HttpPost(server_url + "auth/email");
+            String requestBody = "{\"email\": \"" + email + "\"}";
+            StringEntity entity = new StringEntity(requestBody);
+            entity.setContentType("application/json");
+            httpPost1.setEntity(entity);
+
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
                 HttpEntity responseEntity = response.getEntity();
 
-                if(responseEntity != null) {
-                    Gson gson = new Gson();
-                    JsonObject jsonObject = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+                String responseString = EntityUtils.toString(responseEntity);
 
-                    if(jsonObject.has("Email available")) {
-                        return true;
-                    }
+                if(responseString.equals("Email available")) {
+                    return true;
+                }
+                else{
+                    return false;
                 }
             }
         } catch(IOException e){
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     /**
@@ -148,26 +176,30 @@ public class ClientConnection {
      * returns true or false depending on response.
      * @return boolean
      */
-    public Boolean checkUserNameAvailability(){
+    public Boolean checkUserNameAvailability(String username){
         try {
-            HttpGet httpGet1 = new HttpGet(server_url + "auth/username");
-          
-            try(CloseableHttpResponse response = httpClient.execute(httpGet1)) {
+            HttpPost httpPost1 = new HttpPost(server_url + "auth/email");
+            String requestBody = "{\"username\": \"" + username + "\"}";
+            StringEntity entity = new StringEntity(requestBody);
+            entity.setContentType("application/json");
+            httpPost1.setEntity(entity);
+
+            try(CloseableHttpResponse response = httpClient.execute(httpPost1)) {
                 HttpEntity responseEntity = response.getEntity();
 
-                if(responseEntity != null) {
-                    Gson gson = new Gson();
-                    JsonObject jsonObject = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
+                String responseString = EntityUtils.toString(responseEntity);
 
-                    if(jsonObject.has("Username available")) {
-                        return true;
-                    }
+                if(responseString.equals("Username available")) {
+                    return true;
+                }
+                else{
+                    return false;
                 }
             }
         } catch(IOException e){
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     /**
