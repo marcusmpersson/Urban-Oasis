@@ -40,6 +40,7 @@ public class User implements Serializable {
         this.inventory = inventory;
         this.rooms = rooms;
         this.shopCurrency = shopCurrency;
+        setLastUpdatedTime(LocalDateTime.now());
     }
 
     // ------------------------------------------
