@@ -200,13 +200,15 @@ public class GameHandler {
      * swaps placements if both slots taken. If empty, swaps with null */
     public void swapItems(int draggingIndex, int droppingIndex, int roomIndex){
 
-        // save reference to both items placed at the two slots
+// save reference to both items placed at the two slots
         Placeable slot1Item = currentUser.getRoom(roomIndex).getSlot(draggingIndex).getPlacedItem();
         Placeable slot2Item = currentUser.getRoom(roomIndex).getSlot(droppingIndex).getPlacedItem();
 
         // swap items
         currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(slot1Item);
         currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(slot2Item);
+
+        System.out.println("Successfully swapped items.");
     }
 
     /** method sells a PottedPlant that is placed in room. Adds currency to user */

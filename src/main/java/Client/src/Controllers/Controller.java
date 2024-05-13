@@ -30,7 +30,6 @@ public class Controller {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
-        //widgetHandler = new WidgetHandler();
         weatherUpdater = new WeatherUpdater(this);
 
         currentUser = generateTestUser();
@@ -156,12 +155,36 @@ public class Controller {
         gameHandler = new GameHandler(currentUser);
     }
 
-    public Boolean checkUserNameAvailability() {
-        return clientConnection.checkUserNameAvailability();
+    /**
+     * Method that sends a string to the clientConnection which confirms with the server
+     * whether a username is taken or not.
+     * @param username
+     * @return Boolean
+     */
+    public Boolean checkUserNameAvailability(String username) {
+        return clientConnection.checkUserNameAvailability(username);
     }
 
-    public Boolean checkEmailAvailability() {
-        return clientConnection.checkEmailAvailability();
+    /**
+     * Method that sends a string to the clientconnection which confirms with the server
+     * whether an email is used or not.
+     * @param email
+     * @return Boolean
+     */
+    public Boolean checkEmailAvailability(String email) {
+        return clientConnection.checkEmailAvailability(email);
+    }
+
+    /**
+     * Method that is called when a user is trying to update their account information
+     * with new details.
+     * @param email
+     * @param username
+     * @param password
+     * @return Boolean
+     */
+    public Boolean updateAccountInfo(String email, String username, String password){
+        return clientConnection.updateAccountInfo(email, username, password);
     }
 
     /** Method called if email change was NOT approved by server */
@@ -187,6 +210,13 @@ public class Controller {
         return success;
     }
 
+    /**
+     * Method that is called when a user is trying to register a new account.
+     * @param email
+     * @param userName
+     * @param password
+     * @return
+     */
     public Boolean registerAccountAttempt(String email, String userName, String password) {
         return loginHandler.register(email, userName, password);
     }
@@ -222,6 +252,11 @@ public class Controller {
         widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
     }
+
+    /**
+     * Method that returns the current weather from weatherupdater class.
+     * @return String current weather
+     */
     public String getCurrentWeather(){
         return weatherUpdater.getCurrentWeather();
     }
