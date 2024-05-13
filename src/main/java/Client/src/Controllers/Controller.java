@@ -180,17 +180,11 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        /*boolean success = loginHandler.login(email, password);
+        boolean success = loginHandler.login(email, password);
         if (success) {
             loadGame(currentUser);
         }
-        return success;*/
-        if (email.equals("urban@oasis.com") && password.equals("UrbanOasis123!")) {
-            loadGame(currentUser);
-            return true;
-        } else {
-            return false;
-        }
+        return success;
     }
 
     public Boolean registerAccountAttempt(String email, String userName, String password) {
