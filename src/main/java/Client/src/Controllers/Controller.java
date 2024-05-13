@@ -4,6 +4,7 @@ import Builders.ItemBuilder;
 import Builders.PlantTopBuilder;
 import Builders.RoomBuilder;
 import entities.*;
+import enums.DecoType;
 import enums.PotType;
 import enums.Rarity;
 import enums.Species;
@@ -31,7 +32,6 @@ public class Controller {
         infoConverter = new InformationConverter(this);
         //widgetHandler = new WidgetHandler();
         weatherUpdater = new WeatherUpdater(this);
-        widgetHandler = new WidgetHandler();
 
         currentUser = generateTestUser();
     }
@@ -56,17 +56,21 @@ public class Controller {
         Item seed1 = ItemBuilder.buildSeed(Rarity.COMMON);
         Item seed2 = ItemBuilder.buildSeed(Rarity.RARE);
         Item pot2 = ItemBuilder.buildPot(PotType.POT_LILAC);
+        Item deco1 = ItemBuilder.buildDeco(DecoType.TERRARIUM);
+        Item deco2 = ItemBuilder.buildDeco(DecoType.GLOBE_BLUE);
 
-        // inventory
+        // add to inventory
         Inventory inventory = new Inventory();
         inventory.addItem(pot1);
         inventory.addItem(pot2);
         inventory.addItem(seed1);
         inventory.addItem(seed2);
+        inventory.addItem(deco1);
+        inventory.addItem(deco2);
 
-        // potted plant
+        // make potted plants
         Pot pot = ItemBuilder.buildPot(PotType.POT_STRIPED_BLUE);
-        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.COFFEE_PLANT);
+        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.ARROWHEAD_PLANT);
         plantTop.raiseAge(440);
         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
 
@@ -75,9 +79,21 @@ public class Controller {
         plantTop2.raiseAge(440);
         PottedPlant pottedPlant2 = new PottedPlant(pot3, plantTop2);
 
-        // placing potted plant in room
+        Pot pot4 = ItemBuilder.buildPot(PotType.ROUND_POT_GOLDEN);
+        PlantTop plantTop3 = PlantTopBuilder.buildPlantTop(Species.ORCHID);
+        plantTop3.raiseAge(440);
+        PottedPlant pottedPlant3 = new PottedPlant(pot4, plantTop3);
+
+        Pot pot5 = ItemBuilder.buildPot(PotType.POT_ORANGE);
+        PlantTop plantTop4 = PlantTopBuilder.buildPlantTop(Species.CHILI_PEPPER);
+        plantTop4.raiseAge(440);
+        PottedPlant pottedPlant4 = new PottedPlant(pot5, plantTop4);
+
+        // placing potted plants in room
         room.getSlot(2).setPlacedItem(pottedPlant);
         room.getSlot(9).setPlacedItem(pottedPlant2);
+        room.getSlot(20).setPlacedItem(pottedPlant3);
+        room.getSlot(17).setPlacedItem(pottedPlant4);
 
         // user
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
@@ -126,9 +142,9 @@ public class Controller {
     public void loadGame(User user) {
         this.currentUser = user;
         gameHandler = new GameHandler(currentUser);
-        gameHandler.updateSinceLast();
-        gameHandler.startTimer();
-        widgetHandler.loadWidgets(currentUser.getUsername());
+        //gameHandler.updateSinceLast();
+        //gameHandler.startTimer();
+        //widgetHandler.loadWidgets(currentUser.getUsername());
     }
 
     /** MIGHT BE DELETED
@@ -164,7 +180,17 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        return loginHandler.login(email, password);
+        /*boolean success = loginHandler.login(email, password);
+        if (success) {
+            loadGame(currentUser);
+        }
+        return success;*/
+        if (email.equals("urban@oasis.com") && password.equals("UrbanOasis123!")) {
+            loadGame(currentUser);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Boolean registerAccountAttempt(String email, String userName, String password) {
