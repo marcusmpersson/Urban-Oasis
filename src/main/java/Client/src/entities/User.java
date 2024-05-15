@@ -2,7 +2,6 @@ package entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import enums.Rarity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

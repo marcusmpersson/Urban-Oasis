@@ -1,6 +1,6 @@
 package main.java.Application.Controllers;
 
-import Controllers.LocalFileHandler;
+import controller.LocalFileHandler;
 import entities.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;

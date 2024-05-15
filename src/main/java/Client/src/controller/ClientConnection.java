@@ -1,6 +1,5 @@
-package Controllers;
+package controller;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import entities.User;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;

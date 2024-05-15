@@ -1,4 +1,4 @@
-package Controllers;
+package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -12,7 +12,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
-import java.sql.Timestamp;
 
 /**
  * Class that handles the communication between client and Server regarding matters that involve logging in

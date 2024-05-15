@@ -9,7 +9,6 @@ public enum Species {
 
     //------------ rare ------------
     SWORD_FERN(Environment.SHADE, "Polystichum Munitum", 8),
-    PAINTED_NETTLE(Environment.SUNNY, "Coleus Scuttlearioides", 5),
     COFFEE_PLANT(Environment.HUMID, "Coffea Arabica", 8),
 
     //------------ epic ------------
