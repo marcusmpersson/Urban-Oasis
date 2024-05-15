@@ -1,6 +1,6 @@
-package Controllers;
+package controller;
 
-import Builders.PlantTopBuilder;
+import builder.PlantTopBuilder;
 import entities.*;
 import enums.Species;
 
@@ -90,7 +90,7 @@ public class GameHandler {
         }
     }
 
-    /** method places a pottedPlant from the inventory in a room slot.
+    /** method used when drag and dropping a Plant from the inventory to a room slot.
     /* The PottedPlant is then removed from the inventory. */
     public void placeInventoryPlantInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
 
@@ -102,7 +102,7 @@ public class GameHandler {
         currentUser.getInventory().removePottedPlantAt(inventoryIndex);
     }
 
-    /** method places a Pot from the inventory in a room slot.
+    /** method used when drag and dropping a Pot from the inventory to a room slot.
      /* The Pot is then removed from the inventory. */
     public void placeInventoryPotInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
 
@@ -114,7 +114,7 @@ public class GameHandler {
         currentUser.getInventory().removePotAt(inventoryIndex);
     }
 
-    /** method places a Deco from the inventory in a room slot.
+    /** method used when drag and dropping a Deco from the inventory to a room slot.
      /* The Deco is then removed from the inventory. */
     public void placeInventoryDecoInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
 
@@ -125,6 +125,43 @@ public class GameHandler {
         // remove from inventory
         currentUser.getInventory().removeDecorationAt(inventoryIndex);
     }
+
+    /** method places selected plant in the first available slot in the room.
+     * if room is full, send error message */
+    public void placeInventoryPlantInRoom(int inventoryIndex, int roomIndex) {
+        PlacementSlot availableSlot = currentUser.getRoom(roomIndex).getNextAvailableSlot();
+        if (availableSlot != null) {
+            PottedPlant plant = currentUser.getInventory().getPottedPlantAt(inventoryIndex);
+            availableSlot.setPlacedItem(plant);
+        } else {
+            controller.popUpMessage("There are no empty slots in the room.");
+        }
+    }
+
+    /** method places selected pot in the first available slot in the room.
+     * if room is full, send error message */
+    public void placeInventoryPotInRoom(int inventoryIndex, int roomIndex) {
+        PlacementSlot availableSlot = currentUser.getRoom(roomIndex).getNextAvailableSlot();
+        if (availableSlot != null) {
+            Pot pot = currentUser.getInventory().getPotAt(inventoryIndex);
+            availableSlot.setPlacedItem(pot);
+        } else {
+            controller.popUpMessage("There are no empty slots in the room.");
+        }
+    }
+
+    /** method places selected deco in the first available slot in the room.
+     * if room is full, send error message */
+    public void placeInventoryDecoInRoom(int inventoryIndex, int roomIndex) {
+        PlacementSlot availableSlot = currentUser.getRoom(roomIndex).getNextAvailableSlot();
+        if (availableSlot != null) {
+            Deco deco = currentUser.getInventory().getDecorationAt(inventoryIndex);
+            availableSlot.setPlacedItem(deco);
+        } else {
+            controller.popUpMessage("There are no empty slots in the room.");
+        }
+    }
+
 
     /** removes Placeable item from given slot at given room,
      *  places item back in the inventory
@@ -200,7 +237,7 @@ public class GameHandler {
      * swaps placements if both slots taken. If empty, swaps with null */
     public void swapItems(int draggingIndex, int droppingIndex, int roomIndex){
 
-// save reference to both items placed at the two slots
+        // save reference to both items placed at the two slots
         Placeable slot1Item = currentUser.getRoom(roomIndex).getSlot(draggingIndex).getPlacedItem();
         Placeable slot2Item = currentUser.getRoom(roomIndex).getSlot(droppingIndex).getPlacedItem();
 
@@ -378,7 +415,7 @@ public class GameHandler {
     }
 
     /* ---------------------------------
-     * getters for Controller - might be deleted in the end
+     * getters for Controller
      * --------------------------------- */
 
     public ArrayList<Placeable> getRoomItems(int index) {
@@ -398,5 +435,17 @@ public class GameHandler {
     }
     public ArrayList<String> getRoomImagePaths(int index) {
         return currentUser.getRoom(index).getImageFilePaths();
+    }
+
+    public ArrayList<Pot> getShopPots() {
+        return shop.getPots();
+    }
+
+    public ArrayList<Seed> getShopSeeds() {
+        return shop.getSeeds();
+    }
+
+    public ArrayList<Deco> getShopDecos() {
+        return shop.getDecos();
     }
 }

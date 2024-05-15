@@ -1,8 +1,8 @@
-package Controllers;
+package controller;
 
-import Builders.ItemBuilder;
-import Builders.PlantTopBuilder;
-import Builders.RoomBuilder;
+import builder.ItemBuilder;
+import builder.PlantTopBuilder;
+import builder.RoomBuilder;
 import entities.*;
 import enums.DecoType;
 import enums.PotType;
@@ -43,7 +43,7 @@ public class Controller {
         return instance;
     }
 
-    public User generateTestUser(){
+    public User generateTestUser() {
 
         // room
         ArrayList<Room> rooms = new ArrayList<>();
@@ -88,11 +88,23 @@ public class Controller {
         plantTop4.raiseAge(440);
         PottedPlant pottedPlant4 = new PottedPlant(pot5, plantTop4);
 
+        Pot pot6 = ItemBuilder.buildPot(PotType.ROUND_POT_STRIPED_GREEN);
+        PlantTop plantTop5 = PlantTopBuilder.buildPlantTop(Species.SWORD_FERN);
+        plantTop5.raiseAge(440);
+        PottedPlant pottedPlant5 = new PottedPlant(pot6, plantTop5);
+
+        Pot pot7 = ItemBuilder.buildPot(PotType.ROUND_POT_GOLDEN);
+        PlantTop plantTop6 = PlantTopBuilder.buildPlantTop(Species.PINEAPPLE_PLANT);
+        plantTop6.raiseAge(440);
+        PottedPlant pottedPlant6 = new PottedPlant(pot7, plantTop6);
+
         // placing potted plants in room
         room.getSlot(2).setPlacedItem(pottedPlant);
         room.getSlot(9).setPlacedItem(pottedPlant2);
         room.getSlot(20).setPlacedItem(pottedPlant3);
-        room.getSlot(17).setPlacedItem(pottedPlant4);
+        room.getSlot(14).setPlacedItem(pottedPlant4);
+        room.getSlot(16).setPlacedItem(pottedPlant5);
+        room.getSlot(18).setPlacedItem(pottedPlant6);
 
         // user
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
@@ -203,11 +215,13 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        boolean success = loginHandler.login(email, password);
+        /*boolean success = loginHandler.login(email, password);
         if (success) {
             loadGame(currentUser);
         }
-        return success;
+        return success;*/
+        loadGame(currentUser);
+        return true;
     }
 
     /**
@@ -289,6 +303,24 @@ public class Controller {
     /** waters plant at given placement slot index */
     public void waterPlant(int placementIndex){
         gameHandler.waterPlant(0, placementIndex);
+    }
+
+    /** method places a pottedPlant from the inventory in the room,
+     * removes from inventory */
+    public void placePlantInRoom (int inventoryIndex) {
+        gameHandler.placeInventoryPlantInRoom(inventoryIndex, 0);
+    }
+
+    /** method places a Pot from the inventory in the room,
+     * removes from inventory */
+    public void placePotInRoom (int inventoryIndex) {
+        gameHandler.placeInventoryPotInRoom(inventoryIndex, 0);
+    }
+
+    /** method places a Deco from the inventory in the room,
+     * removes from inventory */
+    public void placeDecoInRoom (int inventoryIndex) {
+        gameHandler.placeInventoryDecoInRoom(inventoryIndex, 0);
     }
 
     /** method places a pottedPlant from the inventory in a room slot,
@@ -426,6 +458,21 @@ public class Controller {
     /** Method returns an ArrayList containing all Deco items in players inventory.*/
     public ArrayList<Deco> getInventoryDecos() {
         return gameHandler.getInventoryDecos();
+    }
+
+    /** Method returns an ArrayList containing all Pot items in the shop.*/
+    public ArrayList<Pot> getShopPots() {
+        return gameHandler.getShopPots();
+    }
+
+    /** Method returns an ArrayList containing all Seed items in the shop.*/
+    public ArrayList<Seed> getShopSeeds() {
+        return gameHandler.getShopSeeds();
+    }
+
+    /** Method returns an ArrayList containing all Deco items in the shop.*/
+    public ArrayList<Deco> getShopDecos() {
+        return gameHandler.getShopDecos();
     }
 
     /* --------------------------------------------

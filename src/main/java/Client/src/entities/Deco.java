@@ -1,7 +1,6 @@
 package entities;
 
 import enums.DecoType;
-import enums.PotType;
 
 import java.io.Serializable;
 

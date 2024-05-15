@@ -1,6 +1,6 @@
 package main.java.Application.Controllers;
 
-import Controllers.Controller;
+import controller.Controller;
 import entities.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -20,7 +20,6 @@ import main.java.Application.Animations.Transitions;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
