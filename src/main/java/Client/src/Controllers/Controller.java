@@ -29,9 +29,7 @@ public class Controller {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
-        //widgetHandler = new WidgetHandler();
         weatherUpdater = new WeatherUpdater(this);
-        widgetHandler = new WidgetHandler();
 
         currentUser = generateTestUser();
     }
@@ -126,9 +124,8 @@ public class Controller {
     public void loadGame(User user) {
         this.currentUser = user;
         gameHandler = new GameHandler(currentUser);
-        gameHandler.updateSinceLast();
-        gameHandler.startTimer();
-        widgetHandler.loadWidgets(currentUser.getUsername());
+       // gameHandler.updateSinceLast();
+       // gameHandler.startTimer();
     }
 
     /** MIGHT BE DELETED
@@ -164,7 +161,13 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        return loginHandler.login(email, password);
+        boolean success = true;
+       // boolean success = loginHandler.login(email, password);
+
+        if (success) {
+            loadGame(currentUser);
+        }
+        return success;
     }
 
     public Boolean registerAccountAttempt(String email, String userName, String password) {

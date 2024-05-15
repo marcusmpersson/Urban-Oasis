@@ -66,7 +66,6 @@ public class WidgetHandler {
                 if (foundPottedPlant != null) {
                     if (foundPottedPlant == pottedPlant) {
 
-
                         Image newImage = new Image(pottedPlant.getPlantTop().getImageFilePath());
                         ImageView plantImageView = (ImageView) stage.getProperties().get("PlantImageView");
                         plantImageView.setImage(newImage);
