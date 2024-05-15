@@ -1,4 +1,4 @@
-package Builders;
+package builder;
 
 import entities.Deco;
 import entities.Pot;
@@ -186,7 +186,6 @@ public class ItemBuilder {
     private static Seed rareSeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
         possibleSpecies.add(Species.SWORD_FERN);
-        possibleSpecies.add(Species.PAINTED_NETTLE);
         possibleSpecies.add(Species.COFFEE_PLANT);
 
         return new Seed(Rarity.RARE, possibleSpecies, "Rare Seed",

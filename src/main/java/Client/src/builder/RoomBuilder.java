@@ -1,4 +1,4 @@
-package Builders;
+package builder;
 
 import entities.PlacementSlot;
 import entities.Room;

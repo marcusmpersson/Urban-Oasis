@@ -1,8 +1,8 @@
 package main.java.Application.Controllers;
 
-import Builders.ItemBuilder;
-import Builders.PlantTopBuilder;
-import Controllers.Controller;
+import builder.ItemBuilder;
+import builder.PlantTopBuilder;
+import controller.Controller;
 import entities.*;
 import enums.PotType;
 import enums.Species;

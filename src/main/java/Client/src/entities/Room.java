@@ -85,4 +85,5 @@ public class Room implements Serializable {
     public ArrayList<String> getImageFilePaths() {
         return imageFilePaths;
     }
+
 }

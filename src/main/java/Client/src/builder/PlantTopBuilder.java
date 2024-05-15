@@ -1,4 +1,4 @@
-package Builders;
+package builder;
 
 import entities.PlantTop;
 import enums.Rarity;
@@ -24,8 +24,6 @@ public class PlantTopBuilder {
                 return buildCoffeePlant();
             case CHILI_PEPPER:
                 return buildChiliPepper();
-            case PAINTED_NETTLE:
-                return buildPaintedNettle();
             case ARROWHEAD_PLANT:
                 return buildArrowheadPlant();
             case PINEAPPLE_PLANT:
@@ -90,19 +88,6 @@ public class PlantTopBuilder {
                 "To replicate this environment in your room, place the plant in a shady spot and water it often. ";
 
         return new PlantTop(imageFilePaths, Species.SWORD_FERN, 350, Rarity.RARE, desc);
-    }
-
-    private static PlantTop buildPaintedNettle() {
-        ArrayList<String> imageFilePaths = new ArrayList<>();
-        imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/paintedNettle_baby.png");
-        imageFilePaths.add("plants/paintedNettle_young.png");
-        imageFilePaths.add("plants/paintedNettle_adult.png");
-        imageFilePaths.add("plants/tombstone.png");
-
-        String desc = "";
-
-        return new PlantTop(imageFilePaths, Species.PAINTED_NETTLE, 350, Rarity.RARE, desc);
     }
 
     private static PlantTop buildCoffeePlant() {

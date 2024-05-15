@@ -1,4 +1,4 @@
-package Builders;
+package builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;

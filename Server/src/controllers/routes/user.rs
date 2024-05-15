@@ -14,7 +14,7 @@ use chrono::{DateTime, offset::Utc};
 use crate::{ database::db::DB, entities::data_models::User };
 use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
-use crate::controllers::validators::{check_valid_login, check_valid_signup};
+use crate::controller::validators::{check_valid_login, check_valid_signup};
 
 /*
 #[get("/inventory")]
