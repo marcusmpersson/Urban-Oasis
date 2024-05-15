@@ -28,7 +28,7 @@ public class Shop {
         pots.addAll(ItemBuilder.buildAllPots());
 
         // add decorations to shop
-        decos.add(ItemBuilder.buildDeco(DecoType.TERRARIUM));
+        decos.addAll(ItemBuilder.buildAllDecos());
     }
 
     /** Method creates new instance of the selected Seed type and returns it. */

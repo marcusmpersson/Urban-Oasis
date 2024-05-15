@@ -14,8 +14,6 @@ public class PlantTopBuilder {
                 return buildCactus();
             case ORCHID:
                 return buildOrchid();
-            case CRASSULA:
-                return buildCrassula();
             case ROSE_PLANT:
                 return buildRose();
             case SWORD_FERN:
@@ -32,8 +30,6 @@ public class PlantTopBuilder {
                 return buildArrowheadPlant();
             case PINEAPPLE_PLANT:
                 return buildPineapple();
-            case BEGONIA_POLKA_PLANT:
-                return buildPolkaPlant();
         }
 
         return null;
@@ -124,21 +120,6 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.COFFEE_PLANT, 400, Rarity.RARE, desc);
     }
 
-    private static PlantTop buildCrassula() {
-        ArrayList<String> imageFilePaths = new ArrayList<>();
-        imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/crassula_baby.png");
-        imageFilePaths.add("plants/crassula_young.png");
-        imageFilePaths.add("plants/crassula_adult.png");
-        imageFilePaths.add("plants/tombstone.png");
-
-        String desc = "Crassula, also known as the jade plant, is a popular succulent that originated from South Africa. " +
-                "To take care of it, simply place it in a sunny spot. " +
-                "This plant is very easy to overwater.";
-
-        return new PlantTop(imageFilePaths, Species.CRASSULA, 450, Rarity.EPIC, desc);
-    }
-
     private static PlantTop buildPineapple() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -181,21 +162,6 @@ public class PlantTopBuilder {
                 "Give it lots of sun and water for optimal health. ";
 
         return new PlantTop(imageFilePaths, Species.CHILI_PEPPER, 600, Rarity.LEGENDARY, desc);
-    }
-
-    private static PlantTop buildPolkaPlant() {
-        ArrayList<String> imageFilePaths = new ArrayList<>();
-        imageFilePaths.add("plants/planted.png");
-        imageFilePaths.add("plants/polka_baby.png");
-        imageFilePaths.add("plants/polka_young.png");
-        imageFilePaths.add("plants/polka_adult.png");
-        imageFilePaths.add("plants/tombstone.png");
-
-        String desc = "Polka patterned Begonias are popular for their fun and unique appearance. " +
-                "Their leaves range from dark green to bright shades of orange. " +
-                "Although rare, it can thrive in the shade with moderate water. ";
-
-        return new PlantTop(imageFilePaths, Species.BEGONIA_POLKA_PLANT, 650, Rarity.LEGENDARY, desc);
     }
 
     private static PlantTop buildRose() {
