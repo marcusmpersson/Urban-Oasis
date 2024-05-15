@@ -6,10 +6,13 @@ import Controllers.Controller;
 import entities.*;
 import enums.PotType;
 import enums.Species;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import main.java.Application.View.PlantInformationPopup;
 import main.java.Application.View.RoomPlants;
 
@@ -30,6 +33,9 @@ public class RoomController {
     public Boolean anyOverlap = false;
     public PottedPlant selectedPottedPlant;
     public Group selectedPottedPlantButton;
+    public ArrayList<Rectangle> emptySlots;
+
+    public ArrayList<ImageView> arrowGifs;
 
     public boolean isDragging = false;
 
@@ -41,9 +47,12 @@ public class RoomController {
         this.widgetController = new WidgetHandler(this);
         this.widgetStatus = new HashMap<>();
         this.roomPlantsGuiGenerating = new RoomPlants(roomView);
+        this.emptySlots = new ArrayList<>();
+        this.arrowGifs = new ArrayList<>();
 
         this.plantInformationClass = new PlantInformationPopup(this);
         this.plantInformationView = plantInformationClass.getInformationRectangle();
+
 
         spawnUserPottedPlants();
     }
@@ -99,16 +108,27 @@ public class RoomController {
 
                 setupDraggableSlot(plantContainer);
                 setupMouseClick(plantContainer);
-            } else {
-
-                PottedPlant pottedPlant = getPottedPlantEmptySlot();
-                Group plantContainer = addEmptySpotPottedPlant(pottedPlant, posX, posY);
-                plantContainer.setId("EmptySlot");
-                plantContainer.getProperties().put("Slot", slots.get(i));
-                plantContainer.getProperties().put("SlotIndex", i);
-                roomPlants.add(plantContainer);
-
             }
+
+            Rectangle emptySlot = new Rectangle(posX + 10, posY - 50, 80, 100);
+            emptySlot.setFill(Color.TRANSPARENT);
+            emptySlot.getProperties().put("Slot", slots.get(i));
+            emptySlot.getProperties().put("SlotIndex", i);
+            roomView.getChildren().add(emptySlot);
+            emptySlots.add(emptySlot);
+
+            Image gif = new Image(getClass().getClassLoader().getResource("gifs/arrow_down.gif").toString());
+            ImageView imageView = new ImageView(gif);
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(100);
+            imageView.setPreserveRatio(true);
+            imageView.setLayoutX(posX + 2);
+            imageView.setLayoutY(posY - 125);
+            imageView.setVisible(false);
+            imageView.getProperties().put("SlotIndex", i);
+
+            arrowGifs.add(imageView);
+            roomView.getChildren().add(imageView);
         }
     }
 
@@ -143,9 +163,7 @@ public class RoomController {
             }
 
         }
-
     }
-
     private void setupMouseClick(Group group) {
 
         group.setOnMouseClicked(event -> {
@@ -196,6 +214,23 @@ public class RoomController {
         return null;
     }
 
+    public void updatePlantLocation(Group plant, int newLocationIndex) {
+        if (roomPlants.contains(plant)) {
+            List<PlacementSlot> slots = user.getRoom(0).getSlots();
+            PlacementSlot newSlot = slots.get(newLocationIndex);
+            PlacementSlot oldPlantSlot = (PlacementSlot) plant.getProperties().get("Slot");
+
+            Group newPlant = addPottedPlantToSlot((PottedPlant) newSlot.getPlacedItem(), newSlot.getX(), newSlot.getY());
+
+            Platform.runLater(() -> {
+                roomView.getChildren().remove(plant);
+            });
+
+
+
+
+        }
+    }
     public void setPottedPlantToDead(PottedPlant selectedPottedPlant) {
         for (int i = 0; i < roomPlants.size(); i++) {
             Group plant = roomPlants.get(i);
@@ -212,7 +247,7 @@ public class RoomController {
         if (plantDetailsFrameIsOpened && selectedPottedPlant != null) {
             if (selectedPottedPlantButton != null) {
                 if (!selectedPottedPlantButton.getId().equals("IsWidget")) {
-                    selectedPottedPlantButton.setId("isWidget");
+                    selectedPottedPlantButton.setId("IsWidget");
                     selectedPottedPlantButton.getStyleClass().add("glow");
 
                     String stageId = (String) selectedPottedPlantButton.getProperties().get("StageId");
@@ -227,7 +262,19 @@ public class RoomController {
         plantDetailsFrameIsOpened = bool;
     }
 
+    private Group getPlantFromRectangle(Group plant, Rectangle rectangle) {
+        for (Group plant1 : roomPlants) {
+            for (Rectangle rectangle1 : emptySlots) {
+                if (plant1.getProperties().get("SlotIndex").equals(rectangle1.getProperties().get("SlotIndex"))) {
+                    return plant1;
+                }
+            }
+        }
+        return null;
+    }
+
     private void setupDraggableSlot(Group group) {
+        System.out.println("ok");
         final double[] initialX = new double[1];
         final double[] initialY = new double[1];
 
@@ -236,8 +283,68 @@ public class RoomController {
                 initialX[0] = group.getTranslateX() - event.getScreenX();
                 initialY[0] = group.getTranslateY() - event.getScreenY();
             }
+            for (ImageView gif : arrowGifs) {
+                if (!gif.getProperties().get("SlotIndex").equals(group.getProperties().get("SlotIndex"))) {
+                    gif.setVisible(true);
+                }
+            }
         });
 
+        group.setOnMouseDragged(event -> {
+            if (!plantDetailsFrameIsOpened) {
+                if (!group.getStyleClass().contains("glow")) {
+                    group.getStyleClass().add("glow");
+                }
+                group.setTranslateX(event.getScreenX() + initialX[0]);
+                group.setTranslateY(event.getScreenY() + initialY[0]);
+
+                this.isDragging = true;
+
+                for (Rectangle emptySlot : emptySlots) {
+                    if (group.getBoundsInParent().intersects(emptySlot.getBoundsInParent())) {
+                        if (!group.getProperties().get("SlotIndex").equals(emptySlot.getProperties().get("SlotIndex"))) {
+                            System.out.println(group.getProperties().get("SlotIndex") + " " + emptySlot.getProperties().get("SlotIndex"));
+                            if (!group.getId().equals("Overlapped")) {
+                                group.getStyleClass().add("glow");
+                                group.getProperties().put("EmptySpotDrop", emptySlot.getProperties().get("SlotIndex"));
+                                System.out.println("Overlapping with empty slot.");
+                            }
+                        }
+                    } else {
+                        if (group.getId().equals("Overlapped")) {
+                            group.setId("");
+                        }
+                    }
+                }
+
+
+
+              /*
+                for (int i = 0; i < roomPlants.size(); i++) {
+                    Group plant = roomPlants.get(i);
+                    if (!plant.equals(group)) {
+                        if (group.getBoundsInParent().intersects(plant.getBoundsInParent())) {
+                            if (!anyOverlap) {  // Only the first detected overlap is handled
+                                plant.getStyleClass().add("glow");
+                                plant.setId("Overlapped");
+                                anyOverlap = true;
+                            }
+                        } else {
+                            if (plant.getStyleClass().contains("glow")) { // detect if you were previously moving from a
+                                // glowing plant
+                                anyOverlap = false;
+                            }
+                            plant.getStyleClass().remove("glow");
+                            plant.setId("");
+
+                        }
+                    }
+                }
+               */
+            }
+        });
+
+        /*
         group.setOnMouseDragged(event -> {
             if (!plantDetailsFrameIsOpened) {
                 if (!group.getStyleClass().contains("glow")) {
@@ -270,29 +377,44 @@ public class RoomController {
                 }
             }
         });
+         */
 
         group.setOnMouseReleased(event -> {
 
+            for (ImageView gif : arrowGifs) {
+                gif.setVisible(false);
+            }
+
             group.getStyleClass().remove("glow");
 
-            for (int i = 0; i < roomPlants.size(); i++) {
-                Group plant = roomPlants.get(i);
-                if (plant.getStyleClass().contains("glow")) {
-                    plant.getStyleClass().remove("glow");
+            for (Group roomPlant : roomPlants) {
+                if (roomPlant.getStyleClass().contains("glow")) {
+                    roomPlant.getStyleClass().remove("glow");
                 }
-                if (plant.getId() != null && plant.getId().equals("Overlapped")) {
-
+                if (roomPlant.getProperties().get("EmptySpotDrop") != null) {
+                    System.out.println("droppin homie");
                     int draggingIndex = (int) group.getProperties().get("SlotIndex");
-                    int droppingIndex = (int) plant.getProperties().get("SlotIndex");
+                    int droppingIndex = (int) roomPlant.getProperties().get("EmptySpotDrop");
+
+                    Controller clientController = Controller.getInstance();
+                    clientController.swapItems(draggingIndex, droppingIndex);
+                    updatePlantLocation(group, droppingIndex);
+                }
+
+
+                if (roomPlant.getId() != null && roomPlant.getId().equals("Overlapped")) {
+                    int draggingIndex = (int) group.getProperties().get("SlotIndex");
+                    int droppingIndex = (int) roomPlant.getProperties().get("SlotIndex");
 
                     Controller clientController = Controller.getInstance();
                     clientController.swapItems(draggingIndex, droppingIndex);
                     updateAllSlots(true);
                 }
             }
-            updateAllSlots(false);
+
             this.isDragging = false;
             this.anyOverlap = false;
         });
     }
 }
+

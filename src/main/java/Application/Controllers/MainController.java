@@ -50,7 +50,7 @@ public class MainController implements Initializable {
 
     private Controller clientController;
 
-    private User testUser;
+    private User user;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,8 +58,9 @@ public class MainController implements Initializable {
         switchToRoomView(null);
         startBackgroundTimeChecker();
         clientController = Controller.getInstance();
-        testUser = clientController.getTestUser();
-        new RoomController(roomView, testUser);
+        user = clientController.getTestUser();
+
+        new RoomController(roomView, user);
 
 
         /**
@@ -181,13 +182,17 @@ public class MainController implements Initializable {
         String imagePath;
 
         try {
-            if (timeOfDay.equals("Daytime")) {
-                imagePath = String.valueOf(getClass().getClassLoader().getResource("rooms/roomDaytime.jpg"));
+            if (timeOfDay.equals("Night")) {
+                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getNightFilepath()));
+            } else if (timeOfDay.equals("Sunrise")) {
+                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunriseFilepath()));
+            } else if (timeOfDay.equals("Sunset")) {
+                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunsetFilepath()));
             } else {
-                imagePath = String.valueOf(getClass().getClassLoader().getResource("rooms/roomNighttime.jpg"));
+                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getDaytimeFilepath()));
             }
-            currentBackground = new Image(imagePath);
-            //roomBackground.setImage(currentBackground);
+
+            roomBackground.setImage(new Image(imagePath));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,11 +203,8 @@ public class MainController implements Initializable {
             while (isLoggedIn) {
                 LocalTime currentTime = LocalTime.now();
 
-                if (isNightTime(currentTime)) {
-                   // Platform.runLater(() -> updateRoomBackground("Nighttime"));
-                } else {
-                    Platform.runLater(() -> updateRoomBackground("Daytime"));
-                }
+                String timeOfDay = getTimeOfDay(currentTime);
+                Platform.runLater(() -> updateRoomBackground(timeOfDay));
 
                 try {
                     Thread.sleep(5000);
@@ -215,8 +217,17 @@ public class MainController implements Initializable {
         timeCheckerThread.start();
     }
 
-    public boolean isNightTime(LocalTime time) {
-        return (time.isAfter(LocalTime.of(15, 50)) && time.isBefore(LocalTime.of(16,07)));
+    public String getTimeOfDay(LocalTime time) {
+        if (time.isAfter(LocalTime.of(5,0)) && time.isBefore(LocalTime.of(9,0))) {
+            return "Sunrise";
+        } else if (time.isAfter(LocalTime.of(9,0)) && time.isBefore(LocalTime.of(16,0))) {
+            return "Day";
+        } else if (time.isAfter(LocalTime.of(16,0)) && time.isBefore(LocalTime.of(19,0))) {
+            return "Sunset";
+        } else if (time.isAfter(LocalTime.of(19,0)) && time.isBefore(LocalTime.of(05,0))) {
+            return "Night";
+        }
+        return "Day";
     }
 
     public void switchToLoginScene (MouseEvent event) throws IOException {

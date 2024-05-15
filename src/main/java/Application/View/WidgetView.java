@@ -94,8 +94,8 @@ public class WidgetView {
         roundedRectangle.heightProperty().bind(layout.heightProperty().add(20));
 
         root = new StackPane(roundedRectangle, layout);
-        root.setPadding(new Insets(10)); // padding to ensure the rectangle does not clip content
-        root.setStyle("-fx-background-color: transparent;"); // make root transparent
+        root.setPadding(new Insets(10));
+        root.setStyle("-fx-background-color: transparent;");
 
         Scene scene = new Scene(root, 220, 250); // Adjusted size to fit the rounded rectangle
         scene.setFill(null); // Make scene transparent
@@ -121,9 +121,5 @@ public class WidgetView {
 
     public Stage getStage() {
         return stage;
-    }
-
-    public ImageView getPlantImageView () {
-        return plantImageView;
     }
 }
