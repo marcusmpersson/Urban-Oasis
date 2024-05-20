@@ -58,15 +58,15 @@ public class TimeEventHandler {
                     Thread.sleep(60000);
                     gameHandler.increaseCurrency(1);
                     gameHandler.raiseAges(1);
-
+                    
                     // check current time
                     // if it's been an hour, update water and environment levels
                     LocalDateTime now = LocalDateTime.now();
                     if (now.isAfter(lastCheckedTime) &&
                             Duration.between(lastCheckedTime, now).toHours() >= 1) {
 
-                        gameHandler.lowerAllWaterLevels(1);
-                        gameHandler.updateEnvSatisfactions(1);
+                        gameHandler.lowerAllWaterLevels(1, false);
+                        gameHandler.updateEnvSatisfactions(1, false);
 
                         // save current time
                         lastCheckedTime = now;

@@ -9,6 +9,7 @@ import enums.PotType;
 import enums.Rarity;
 import enums.Species;
 import main.java.Application.Controllers.MainController;
+import main.java.Application.Controllers.SoundEffectHandler;
 import main.java.Application.Controllers.WidgetHandler;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Controller {
     private InformationConverter infoConverter;
     private User currentUser;
     private MainController guiController;
+    private SoundEffectHandler soundEffectHandler;
     private static Controller instance;
 
     /** Constructor initializes all controller classes connected to this controller. */
@@ -31,6 +33,7 @@ public class Controller {
         loginHandler = new LoginHandler(this);
         infoConverter = new InformationConverter(this);
         weatherUpdater = new WeatherUpdater(this);
+        soundEffectHandler = new SoundEffectHandler();
 
         currentUser = generateTestUser();
     }
@@ -94,8 +97,8 @@ public class Controller {
         PottedPlant pottedPlant5 = new PottedPlant(pot6, plantTop5);
 
         Pot pot7 = ItemBuilder.buildPot(PotType.ROUND_POT_GOLDEN);
-        PlantTop plantTop6 = PlantTopBuilder.buildPlantTop(Species.PINEAPPLE_PLANT);
-        plantTop6.raiseAge(440);
+        PlantTop plantTop6 = PlantTopBuilder.buildPlantTop(ItemBuilder.buildSeed(Rarity.EPIC).getSpecies());
+        plantTop6.raiseAge(18);
         PottedPlant pottedPlant6 = new PottedPlant(pot7, plantTop6);
 
         // placing potted plants in room
@@ -153,8 +156,9 @@ public class Controller {
     public void loadGame(User user) {
         this.currentUser = user;
         gameHandler = new GameHandler(currentUser);
+        soundEffectHandler.startBackgroundMusic();
         //gameHandler.updateSinceLast();
-        //gameHandler.startTimer();
+        gameHandler.startTimer();
         //widgetHandler.loadWidgets(currentUser.getUsername());
     }
 
@@ -205,7 +209,7 @@ public class Controller {
     }
 
     /* --------------------------
-    *  methods for GUIController
+    *  login/logout methods for GUIController
     *  -------------------------- */
 
     /**
@@ -242,7 +246,8 @@ public class Controller {
     public void logoutAttempt() {
         gameHandler.stopTimer();
         gameHandler = null;
-        widgetHandler.updateLocalFile(currentUser.getUsername());
+        soundEffectHandler.stopBackgroundMusic();
+        //widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
         clientConnection.logout();
     }
@@ -276,6 +281,7 @@ public class Controller {
     }
     public void popUpMessage(String message) {
         //TODO: show pop-up message in GUI
+        playPopupSound();
     }
 
     /* ------------------------------------------------
@@ -349,6 +355,7 @@ public class Controller {
     /** plants a seed in a pot, creates a PottedPlant, places in inventory */
     public void plantSeed(int inventoryPotIndex, int inventorySeedIndex) {
         gameHandler.plantSeed(inventoryPotIndex, inventorySeedIndex);
+        playPlantingSound();
     }
 
     /** disposes Pot from inventory.
@@ -485,6 +492,50 @@ public class Controller {
         if (item instanceof PottedPlant){
             widgetHandler.addWidget(item, null);
         }
+    }
+
+    /* ------------------------------------------
+    * sound effect methods
+    * ------------------------------------------- */
+
+    public void playWaterSound() {
+        soundEffectHandler.playWaterSound();
+    }
+
+    public void playSwappingSound() {
+        soundEffectHandler.playSwappingSound();
+    }
+
+    public void playPopupSound() {
+        soundEffectHandler.playPopupSound();
+    }
+
+    public void playDeathSound() {
+        soundEffectHandler.playDeathSound();
+    }
+
+    public void playClickSound() {
+        soundEffectHandler.playClickSound();
+    }
+
+    public void playPurchaseSound() {
+        soundEffectHandler.playPurchaseSound();
+    }
+
+    public void playPlantingSound() {
+        soundEffectHandler.playPlantingSound();
+    }
+
+    public void pauseMusic() {
+        soundEffectHandler.stopBackgroundMusic();
+    }
+
+    public void playMusic() {
+        soundEffectHandler.startBackgroundMusic();
+    }
+
+    public void updateBackgroundMusic() {
+        soundEffectHandler.updateBackgroundMusic();
     }
 
 }
