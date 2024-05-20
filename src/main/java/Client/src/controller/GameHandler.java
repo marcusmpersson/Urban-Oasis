@@ -105,6 +105,18 @@ public class GameHandler {
         }
     }
 
+    /** receives reference to a PottedPlant and waters it, plays water sound effect
+     * checks for death */
+    public void waterPlant(PottedPlant plant) {
+        // if not dead
+        if (plant.getPlantTop().getStage() != Stage.DEAD) {
+
+            // water plant
+            plant.getPlantTop().water();
+            controller.playWaterSound();
+        }
+    }
+
     /** method used when drag and dropping a Plant from the inventory to a room slot.
     /* The PottedPlant is then removed from the inventory. */
     public void placeInventoryPlantInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
@@ -477,4 +489,5 @@ public class GameHandler {
     public ArrayList<Deco> getShopDecos() {
         return shop.getDecos();
     }
+
 }

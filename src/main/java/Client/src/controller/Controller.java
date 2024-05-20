@@ -311,6 +311,21 @@ public class Controller {
         gameHandler.waterPlant(0, placementIndex);
     }
 
+    /** waters the given plant via gameHandler */
+    public void waterPlant(PottedPlant plant){
+        gameHandler.waterPlant(plant);
+    }
+
+    /** returns the water level of given PottedPlant */
+    public int getWaterLevelOf (PottedPlant plant){
+        return plant.getPlantTop().getHealthStat().getWaterLevel();
+    }
+
+    /** returns the water level of given PottedPlant */
+    public int getEnvironmentLevelOf (PottedPlant plant){
+        return plant.getPlantTop().getHealthStat().getEnvSatisfaction();
+    }
+
     /** method places a pottedPlant from the inventory in the room,
      * removes from inventory */
     public void placePlantInRoom (int inventoryIndex) {
