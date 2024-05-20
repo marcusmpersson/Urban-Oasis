@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="mainAnchor" maxWidth="1161.0" minHeight="824.0" minWidth="1161.0" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Application.Controllers.LoginController">
+   <children>
+      <ImageView fx:id="mainBackground" cache="true" fitHeight="853.0" fitWidth="1161.0" preserveRatio="true" AnchorPane.bottomAnchor="-29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../loginbackground.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </ImageView>
+      <ImageView id="backgroundImage" cache="true" fitHeight="161.0" fitWidth="176.0" layoutX="624.0" layoutY="14.0" AnchorPane.bottomAnchor="849.0">
+         <image>
+            <Image url="@../URBAN_OASIS_LOGO2.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </ImageView>
+      <Group fx:id="mainLoginFrame" layoutX="295.0" layoutY="168.0" scaleX="0.8" scaleY="0.8" AnchorPane.topAnchor="168.0">
+         <children>
+            <ImageView fitHeight="488.0" fitWidth="786.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../loginRectangle.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="57.0" fitWidth="273.0" layoutX="165.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../signIn.png" />
+               </image>
+            </ImageView>
+            <Group layoutX="100.0" layoutY="320.0" translateY="15.0">
+               <children>
+                  <ImageView id="signIn" fitHeight="47.0" fitWidth="176.0" layoutX="225.0" onMouseClicked="#signIn" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../signInButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resetButton.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView id="register" fitHeight="47.0" fitWidth="176.0" layoutX="113.0" layoutY="72.0" onMouseClicked="#switchToSignupScene" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../registerButton.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+            <TextField fx:id="email" layoutX="92.0" layoutY="148.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor">
+               <font>
+                  <Font name="Pixeloid Sans" size="12.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="password" layoutX="97.0" layoutY="244.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="128.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../E-mailText.png" />
+               </image>
+            </ImageView>
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="223.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../PasswordText.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="wrongLogin" fitHeight="24.0" fitWidth="369.0" layoutX="113.0" layoutY="303.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../wronglogin.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="successfulLogin" fitHeight="15.0" fitWidth="253.0" layoutX="218.0" layoutY="302.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../successfulLogin.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <Group fx:id="registerFrame" layoutX="295.0" layoutY="63.0" opacity="0.0" scaleX="0.8" scaleY="0.8" AnchorPane.topAnchor="63.0">
+         <children>
+            <ImageView fitHeight="698.0" fitWidth="623.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../signupRectangle.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="57.0" fitWidth="273.0" layoutX="165.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../signup.png" />
+               </image>
+            </ImageView>
+            <HBox layoutX="100.0" layoutY="415.0" spacing="50.0">
+               <children>
+                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseClicked="#switchToMainFrame" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../backButton.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="signUpButton" fitHeight="47.0" fitWidth="176.0" onMouseClicked="#registerAccount" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../signUpButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </HBox>
+            <VBox layoutX="110.0" layoutY="482.0" prefHeight="135.0" prefWidth="383.0" spacing="5.0" styleClass="textFont" stylesheets="@../style.css">
+               <children>
+                  <Text fill="#443c97" strokeType="OUTSIDE" strokeWidth="0.0" text="Password must contain" textAlignment="CENTER" wrappingWidth="362.11111068725586">
+                     <font>
+                        <Font name="Pixeloid Sans" size="25.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="min8chars" fill="#443c97" strokeType="OUTSIDE" strokeWidth="0.0" text="- minimum 8 characters" wrappingWidth="285.11111068725586">
+                     <font>
+                        <Font name="Pixeloid Sans" size="19.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="specialchar" fill="#443c97" strokeType="OUTSIDE" strokeWidth="0.0" text="- at least one special character" wrappingWidth="361.11111068725586">
+                     <font>
+                        <Font name="Pixeloid Sans" size="19.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="capitalletter" fill="#443c97" strokeType="OUTSIDE" strokeWidth="0.0" text="- at least one capital letter" wrappingWidth="285.11111068725586">
+                     <font>
+                        <Font name="Pixeloid Sans" size="19.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="onedigit" fill="#443c97" strokeType="OUTSIDE" strokeWidth="0.0" text="- at least one digit" wrappingWidth="285.11111068725586">
+                     <font>
+                        <Font name="Pixeloid Sans" size="19.0" />
+                     </font>
+                  </Text>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+            <VBox layoutX="97.0" layoutY="134.0" prefHeight="200.0" prefWidth="100.0" spacing="25.0">
+               <children>
+                  <Group>
+                     <children>
+                        <TextField fx:id="emailSignup" layoutY="20.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+                        <Text fx:id="emailTitle" fill="WHITE" layoutX="6.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" wrappingWidth="82.11111068725586">
+                           <font>
+                              <Font name="Pixeloid Sans" size="14.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="usernameTitle11" fill="#23ff62" layoutX="250.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Taken" textAlignment="RIGHT" wrappingWidth="151.11111068725586">
+                           <font>
+                              <Font name="Pixeloid Sans" size="14.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Group>
+                  <Group>
+                     <children>
+                        <Text fx:id="usernameTitle" fill="WHITE" layoutX="6.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" wrappingWidth="82.11111068725586">
+                           <font>
+                              <Font name="Pixeloid Sans" size="14.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="usernameSignup" layoutY="20.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+                        <Text fx:id="usernameTitle1" fill="#23ff62" layoutX="250.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Taken" textAlignment="RIGHT" wrappingWidth="151.11111068725586">
+                           <font>
+                              <Font name="Pixeloid Sans" size="14.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Group>
+                  <Group>
+                     <children>
+                        <Text fx:id="passwordTitle" fill="WHITE" layoutX="6.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="82.11111068725586">
+                           <font>
+                              <Font name="Pixeloid Sans" size="14.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="passwordSignup" layoutY="20.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
+                     </children>
+                  </Group>
+               </children>
+            </VBox>
+         </children>
+      </Group>
+   </children>
+</AnchorPane>
