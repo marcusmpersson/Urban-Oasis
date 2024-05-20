@@ -16,7 +16,7 @@ use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
 use crate::controllers::validators::{check_valid_login, check_valid_signup};
 
-/*
+
 #[get("/inventory")]
 pub async fn get_inventory(
     db: &State<DB>,
@@ -24,11 +24,11 @@ pub async fn get_inventory(
 ) -> Response<Json<Vec<Inventory>>> {
     let db: &DB = db as &DB;
 
-    //let inventory = db.fetch_inventory().await.unwrap();
+    let inventory = db.fetch_inventory().await.unwrap();
 
-    //Ok(SuccessResponse((Status::Ok, Json(inventory))))
+    Ok(SuccessResponse((Status::Ok, Json(inventory))))
 }
-*/
+
 
 #[post("/inventory", data="<req_inventory>")]
 pub async fn add_inventory(
@@ -69,8 +69,8 @@ pub struct Inventory {
 
 impl DB {
 
-    /*
-    pub async fn fetch_inventory(&self) -> mongodb::error::Result<Inventory> {
+    
+    pub async fn fetch_inventory(&self, id: ObjectId) -> mongodb::error::Result<Inventory> {
         let collection = self.database.collection("inventory");
 
         let cursor = collection.find(None, None).await?;
@@ -90,7 +90,7 @@ impl DB {
 
         Ok(inventory)
     }
-    */
+    
 
     pub async fn add_inventory(&self, inventory: Inventory) -> mongodb::error::Result<()> {
         let collection = self.database.collection("inventory");
