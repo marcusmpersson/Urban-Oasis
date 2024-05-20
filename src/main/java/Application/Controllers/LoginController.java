@@ -3,8 +3,6 @@ package main.java.Application.Controllers;
 import Controllers.Controller;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,25 +12,28 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.text.Text;
 import main.java.Application.Animations.Transitions;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * LoginController handles the login and registration processes.
+ *
+ * Author: Mouhammed Fakhro
+ */
 public class LoginController implements Initializable {
 
     private Controller clientController;
     private Transitions transitions;
-
     private Parent root;
 
     @FXML
@@ -52,17 +53,6 @@ public class LoginController implements Initializable {
 
     @FXML
     private ImageView successfulLogin;
-
-    @FXML
-    private Group storeView;
-
-    @FXML
-    private Group roomView;
-
-    @FXML
-    private ImageView roomBackground;
-
-    private Image currentBackground;
 
     @FXML
     private ImageView signUpButton;
@@ -94,37 +84,42 @@ public class LoginController implements Initializable {
     @FXML
     private AnchorPane mainAnchor;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.transitions = new Transitions();
         this.clientController = Controller.getInstance();
         transitions.frameFlyUpTransition(1400, registerFrame, 0.1);
 
-        passwordSignup.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                setTextColor(newValue.matches(".*[A-Z].*"), capitalletter); // capital letter
-                setTextColor(newValue.matches(".*[^a-zA-Z0-9].*"), specialchar); // has special char
-                setTextColor(newValue.matches(".*[0-9].*"), onedigit); // has digit
-                setTextColor(newValue.length() >= 8, min8chars); // has at least 8 chars
-            }
+        passwordSignup.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            setTextColor(newValue.matches(".*[A-Z].*"), capitalletter); // capital letter
+            setTextColor(newValue.matches(".*[^a-zA-Z0-9].*"), specialchar); // has special char
+            setTextColor(newValue.matches(".*[0-9].*"), onedigit); // has digit
+            setTextColor(newValue.length() >= 8, min8chars); // has at least 8 chars
         });
 
         mainBackground.fitWidthProperty().bind(mainAnchor.widthProperty());
         mainBackground.fitHeightProperty().bind(mainAnchor.heightProperty());
     }
 
-
-
+    /**
+     * Sets the text color of the specified text element based on the validity.
+     *
+     * @param valid the validity of the condition
+     * @param text the text element to update
+     */
     public void setTextColor(boolean valid, Text text) {
         if (valid) {
             text.setFill(Color.rgb(32, 208, 67));
         } else {
-            text.setFill(Color.rgb(68,60,151));
+            text.setFill(Color.rgb(68, 60, 151));
         }
     }
 
+    /**
+     * Displays a message using a fade-out transition.
+     *
+     * @param image the image view to display
+     */
     public void displayMessage(ImageView image) {
         Task<Void> fadeTask = new Task<Void>() {
             @Override
@@ -137,11 +132,14 @@ public class LoginController implements Initializable {
         new Thread(fadeTask).start();
     }
 
+    /**
+     * Switches to the main scene after a successful login.
+     *
+     * @param event the mouse event triggering the switch
+     * @throws IOException if the FXML file cannot be loaded
+     */
     public void switchToLoggedInScene(MouseEvent event) throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        System.out.println(classLoader);
-        URL mainClass = classLoader.getResource("fxml/Main.fxml");
-        System.out.println(mainClass);
+        URL mainClass = getClass().getClassLoader().getResource("fxml/Main.fxml");
         root = FXMLLoader.load(mainClass);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
@@ -149,7 +147,13 @@ public class LoginController implements Initializable {
         stage.show();
     }
 
-    public void signIn(MouseEvent mouseEvent) throws InterruptedException, IOException {
+    /**
+     * Handles the sign-in process.
+     *
+     * @param mouseEvent the mouse event triggering the sign-in
+     * @throws IOException if the FXML file cannot be loaded
+     */
+    public void signIn(MouseEvent mouseEvent) throws IOException {
         boolean loginAttemptSuccessful = clientController.loginAttempt(email.getText(), password.getText());
 
         if (!loginAttemptSuccessful) {
@@ -171,28 +175,54 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Handles the registration process.
+     *
+     * @param mouseEvent the mouse event triggering the registration
+     */
     public void registerAccount(MouseEvent mouseEvent) {
         Boolean registerAttempt = clientController.registerAccountAttempt(emailSignup.getText(), usernameSignup.getText(), passwordSignup.getText());
         System.out.println(registerAttempt);
     }
 
-    public void switchToMainFrame(MouseEvent mouseEvent) throws IOException, InterruptedException {
+    /**
+     * Switches to the main frame view.
+     *
+     * @param mouseEvent the mouse event triggering the switch
+     * @throws IOException if the FXML file cannot be loaded
+     */
+    public void switchToMainFrame(MouseEvent mouseEvent) throws IOException {
         transitions.frameFlyUpTransition(1400, registerFrame, 1);
         transitions.frameFlyUpTransition(1500, mainLoginFrame, 1);
     }
 
+    /**
+     * Switches to the signup scene view.
+     *
+     * @param mouseEvent the mouse event triggering the switch
+     * @throws IOException if the FXML file cannot be loaded
+     */
     public void switchToSignupScene(MouseEvent mouseEvent) throws IOException {
         registerFrame.setOpacity(1);
         transitions.frameFlyUpTransition(-1500, mainLoginFrame, 1);
         transitions.frameFlyUpTransition(-1400, registerFrame, 1);
     }
 
-    public void handleMouseEntered(MouseEvent mouseEvent) {
-        transitions.handleMouseEnteredButtonEffect(mouseEvent);
+    /**
+     * Handles mouse enter event for button glow effect.
+     *
+     * @param mouseEvent the mouse event
+     */
+    public void handleMouseEnteredButtonGlow(MouseEvent mouseEvent) {
+        transitions.mouseEnteredButtonGlow(mouseEvent);
     }
 
-    public void handleMouseExited(MouseEvent mouseEvent) {
-        transitions.handleMouseExitedButtonEffect(mouseEvent);
+    /**
+     * Handles mouse exit event for button glow effect.
+     *
+     * @param mouseEvent the mouse event
+     */
+    public void handleMouseExitedButtonGlow(MouseEvent mouseEvent) {
+        transitions.mouseExitedButtonGlow(mouseEvent);
     }
-
 }
