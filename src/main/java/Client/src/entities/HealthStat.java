@@ -46,6 +46,7 @@ public class HealthStat implements Serializable {
         if (waterLevel > 0) {
             this.waterLevel -= amount;
             calculateOverallMood();
+            System.out.println("Water Level is: " + waterLevel);
         }
     }
 
