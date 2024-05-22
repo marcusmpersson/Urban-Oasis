@@ -3,6 +3,7 @@ package controller;
 import builder.PlantTopBuilder;
 import entities.*;
 import enums.Species;
+import enums.Stage;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -37,9 +38,11 @@ public class GameHandler {
             currentUser.subtractCurrency(item.getPrice());
             //add to inventory
             currentUser.getInventory().addItem(item);
+            controller.playPurchaseSound();
             return true;
         }
         else {
+            controller.popUpMessage("Insufficient funds.");
             return false;
         }
     }
@@ -85,8 +88,32 @@ public class GameHandler {
             Placeable itemPlaced = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
 
             if (itemPlaced instanceof PottedPlant) {
-                ((PottedPlant)itemPlaced).getPlantTop().water();
+
+                // if not dead prior
+                if (((PottedPlant)itemPlaced).getPlantTop().getStage() != Stage.DEAD) {
+
+                    // water plant
+                    ((PottedPlant) itemPlaced).getPlantTop().water();
+                    controller.playWaterSound();
+
+                    // if now dead, play sound effect
+                    if (((PottedPlant) itemPlaced).getPlantTop().getStage() == Stage.DEAD) {
+                        controller.playDeathSound();
+                    }
+                }
             }
+        }
+    }
+
+    /** receives reference to a PottedPlant and waters it, plays water sound effect
+     * checks for death */
+    public void waterPlant(PottedPlant plant) {
+        // if not dead
+        if (plant.getPlantTop().getStage() != Stage.DEAD) {
+
+            // water plant
+            plant.getPlantTop().water();
+            controller.playWaterSound();
         }
     }
 
@@ -245,6 +272,8 @@ public class GameHandler {
         currentUser.getRoom(roomIndex).getSlot(droppingIndex).setPlacedItem(slot1Item);
         currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(slot2Item);
 
+        controller.playSwappingSound();
+
         System.out.println("Successfully swapped items.");
     }
 
@@ -294,8 +323,9 @@ public class GameHandler {
         for (Room room : currentUser.getRoomsArray()){
             // for every item placed in the room
             for (Placeable item : room.getPlacedItems()){
-                // if it's a plant
-                if (item instanceof PottedPlant){
+                // if it's a plant and isn't dead
+                if (item instanceof PottedPlant
+                        && ((PottedPlant) item).getPlantTop().getStage() != Stage.DEAD){
                     switch (((PottedPlant) item).getPlantTop().getRarity()){
                         case COMMON:
                             amount += 1;
@@ -333,7 +363,7 @@ public class GameHandler {
 
     /** updates water level of all plants in all rooms by given amount
      * @param hours number of hours passed */
-    public void lowerAllWaterLevels(int hours) {
+    public void lowerAllWaterLevels(int hours, boolean startup) {
         // for every room
         for (Room room : currentUser.getRoomsArray()){
             // for every placed item
@@ -341,6 +371,11 @@ public class GameHandler {
                 // if it's a plant, lower water level
                 if (item instanceof PottedPlant){
                     ((PottedPlant)item).getPlantTop().lowerWaterLevel(hours);
+
+                    // if not startup and a plant dies, play sound effect (not spamming sound effect at startup)
+                    if (!startup && ((PottedPlant)item).getPlantTop().getStage() == Stage.DEAD ) {
+                        controller.playDeathSound();
+                    }
                 }
             }
         }
@@ -348,7 +383,7 @@ public class GameHandler {
 
     /** updates environment satisfaction of all plants in all rooms by given amount
      * @param hours number of hours passed */
-    public void updateEnvSatisfactions(int hours) {
+    public void updateEnvSatisfactions(int hours, boolean startup) {
         // for every room
         for (Room room : currentUser.getRoomsArray()){
             // for every placed item
@@ -356,6 +391,12 @@ public class GameHandler {
                 // if it's a plant, update environment satisfaction
                 if (item instanceof PottedPlant){
                     ((PottedPlant)item).getPlantTop().updateEnvSatisfaction(hours);
+
+                    // if not startup and a plant dies, play sound effect (not spamming sound effect at startup)
+                    if (!startup && ((PottedPlant)item).getPlantTop().getStage() == Stage.DEAD ) {
+                        controller.playDeathSound();
+                    }
+
                 }
             }
         }
@@ -403,8 +444,8 @@ public class GameHandler {
             increaseCurrency(Math.toIntExact(minutes));
 
             // 1 hour pace updates
-            lowerAllWaterLevels(Math.toIntExact(hours));
-            updateEnvSatisfactions(Math.toIntExact(hours));
+            lowerAllWaterLevels(Math.toIntExact(hours), true);
+            updateEnvSatisfactions(Math.toIntExact(hours), true);
 
             // update user last updated time
             updateUserLastUpdatedTime(now);
@@ -448,4 +489,5 @@ public class GameHandler {
     public ArrayList<Deco> getShopDecos() {
         return shop.getDecos();
     }
+
 }
