@@ -23,18 +23,36 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
-      <Group id="storeView" fx:id="storeView" layoutX="149.0" opacity="0.0">
+      <Group fx:id="roomView" layoutX="149.0" layoutY="-5.0">
          <children>
-            <ImageView id="backgroundImage" cache="true" fitHeight="73.0" fitWidth="1312.0">
+            <ImageView fx:id="roomBackground" cache="true" fitHeight="830.0" fitWidth="1032.0" layoutX="-17.0">
                <cursor>
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
+               <image>
+                  <Image url="@../rooms/roomDaytime.jpg" />
+               </image>
             </ImageView>
-            <HBox alignment="TOP_CENTER" layoutX="5.0" layoutY="7.0" prefHeight="59.0" prefWidth="1302.0" spacing="150.0">
+         </children>
+      </Group>
+      <Group id="storeView" fx:id="storeView" layoutX="149.0" opacity="0.0">
+         <children>
+            <HBox alignment="TOP_CENTER" layoutX="50" layoutY="7.0" prefHeight="59.0" prefWidth="1302.0" spacing="150.0">
                <children>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0">
+                  <ImageView fx:id="SeedsButtonList" cache="true" fitHeight="33.0" fitWidth="143.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true">
                      <image>
                         <Image url="@../SEEDSButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets left="-400.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="decorationButtonList" cache="true" fitHeight="33.0" fitWidth="185.0" layoutX="590.0" layoutY="20.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                     <image>
+                        <Image url="@../DECORATIONS.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -43,20 +61,9 @@
                         <Insets top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="590.0" layoutY="20.0">
+                  <ImageView fx:id="potsButtonList" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="736.0" layoutY="10.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../SEEDSButton.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                     <HBox.margin>
-                        <Insets top="10.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="736.0" layoutY="10.0">
-                     <image>
-                        <Image url="@../SEEDSButton.png" />
+                        <Image url="@../POTS.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -67,7 +74,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <Group layoutX="21.0" layoutY="96.0">
+            <Group id="SeedsTab" layoutX="21.0" layoutY="96.0">
                <children>
                   <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0">
                      <image>
@@ -82,6 +89,143 @@
                         <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
                            <content>
                               <TilePane fx:id="shopPane" hgap="30.0" prefHeight="712.0" prefWidth="970.0" vgap="30.0">
+                                 <children>
+                                    <Group layoutX="284.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Common Seed" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="200" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Rare Seed" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="253.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="300" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Epic Seed" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="481.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="500" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Legend Seed" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="15.0" top="15.0" />
+                                 </padding>
+                              </TilePane>
+                           </content>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </ScrollPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </Group>
+            <Group id="DecorationsTab" layoutX="31.0" layoutY="106.0" opacity="0.0">
+               <children>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0" opacity="0.3">
+                     <image>
+                        <Image url="@../storeBigRectangle.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <StackPane prefHeight="521.0" prefWidth="663.0">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
+                           <content>
+                              <TilePane fx:id="shopPane1" hgap="30.0" prefHeight="712.0" prefWidth="970.0" vgap="30.0">
                                  <children>
                                     <Group layoutX="284.0" layoutY="-3.0">
                                        <children>
@@ -103,10 +247,433 @@
                                                       <Cursor fx:constant="DEFAULT" />
                                                    </cursor>
                                                 </ImageView>
-                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1.000" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
                                              </children>
                                           </Group>
-                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="sus" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Terrarium" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="200" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Geode" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="253.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="300" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Buddha statue" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="481.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="500" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Music Box" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Old Clock" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Blue Globe" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Gray Globe" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Funky Globe" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="15.0" top="15.0" />
+                                 </padding>
+                              </TilePane>
+                           </content>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </ScrollPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </Group>
+            <Group id="PotsTab" layoutX="41.0" layoutY="116.0" opacity="0.0">
+               <children>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0" opacity="0.3">
+                     <image>
+                        <Image url="@../storeBigRectangle.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <StackPane prefHeight="521.0" prefWidth="663.0">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
+                           <content>
+                              <TilePane fx:id="shopPane11" hgap="30.0" prefHeight="712.0" prefWidth="970.0" vgap="30.0">
+                                 <children>
+                                    <Group layoutX="284.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Lilac Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="200" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Orange Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="253.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="300" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Blue-Stripe Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="481.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="500" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Polka-Pink Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Round Clay Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Round Gold Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Green Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
+                                       </children>
+                                    </Group>
+                                    <Group layoutX="25.0" layoutY="-3.0">
+                                       <children>
+                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
+                                             <image>
+                                                <Image url="@../itemBackground.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </ImageView>
+                                          <Group layoutX="38.0" layoutY="173.0">
+                                             <children>
+                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
+                                                   <image>
+                                                      <Image url="@../priceBackground.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
+                                             </children>
+                                          </Group>
+                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="Round Red Pot" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
                                        </children>
                                     </Group>
                                  </children>
@@ -128,25 +695,13 @@
             </Group>
          </children>
       </Group>
-      <Group fx:id="roomView" layoutX="149.0" layoutY="-5.0">
-         <children>
-            <ImageView fx:id="roomBackground" cache="true" fitHeight="830.0" fitWidth="1032.0" layoutX="-17.0">
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
-               <image>
-                  <Image url="@../rooms/roomDaytime.jpg" />
-               </image>
-            </ImageView>
-         </children>
-      </Group>
       <Group fx:id="menuBar" layoutX="-50.0">
          <children>
-            <VBox layoutX="88.0" layoutY="225.0" prefHeight="211.0" prefWidth="65.0" spacing="15.0">
+            <VBox layoutX="88.0" layoutY="225.0" prefHeight="211.0" prefWidth="65.0" spacing="30.0">
                <children>
                   <ImageView id="roomButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../RoomButton.png" />
+                        <Image url="@../icons/room.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -154,7 +709,7 @@
                   </ImageView>
                   <ImageView id="storeButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToStoreView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../StoreButton.png" />
+                        <Image url="@../icons/shop1.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -162,7 +717,7 @@
                   </ImageView>
                   <ImageView id="inventoryButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../InventoryButton.png" />
+                        <Image url="@../icons/inventory.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -170,7 +725,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <ImageView cache="true" fitHeight="824.0" fitWidth="22.0" layoutX="174.0">
+            <ImageView cache="true" fitHeight="824.0" fitWidth="22.0" layoutX="174.0" opacity="0.7">
                <image>
                   <Image url="@../LineSeperator.png" />
                </image>
@@ -178,8 +733,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="returnButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="7.0" onMouseClicked="#switchToLoginScene" onMouseEntered="#handleMouseEntered"
-                       onMouseExited="#handleMouseExited">
+            <ImageView fx:id="returnButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="7.0" onMouseClicked="#switchToLoginScene" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                <image>
                   <Image url="@../returnButton.png" />
                </image>

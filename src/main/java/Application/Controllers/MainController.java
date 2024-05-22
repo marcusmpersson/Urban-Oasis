@@ -160,13 +160,20 @@ public class MainController implements Initializable {
 
 
     public void switchToRoomView(MouseEvent mouseEvent) {
+        System.out.println("PressedButton");
         storeView.setOpacity(0);
         roomView.setOpacity(1);
+        roomView.toFront();
+        roomView.setMouseTransparent(false);
+        storeView.setMouseTransparent(true);
     }
 
     public void switchToStoreView(MouseEvent mouseEvent) {
         roomView.setOpacity(0);
         storeView.setOpacity(1);
+        storeView.toFront();
+        storeView.setMouseTransparent(false);
+        roomView.setMouseTransparent(true);
     }
 
     public void handleMouseEntered(MouseEvent mouseEvent) {
@@ -230,6 +237,7 @@ public class MainController implements Initializable {
     }
 
     public void switchToLoginScene (MouseEvent event) throws IOException {
+
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);

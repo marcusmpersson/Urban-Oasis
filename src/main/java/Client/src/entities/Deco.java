@@ -1,11 +1,15 @@
 package entities;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import enums.DecoType;
 
 import java.io.Serializable;
 
 public class Deco extends ShopItem implements Placeable, Serializable {
     private PlacementSlot placedAt;
+    @Expose
+    @SerializedName("Decoration")
     private DecoType type;
 
     /** constructor assigns all instance variables */
