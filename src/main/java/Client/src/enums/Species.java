@@ -9,17 +9,14 @@ public enum Species {
 
     //------------ rare ------------
     SWORD_FERN(Environment.SHADE, "Polystichum Munitum", 8),
-    PAINTED_NETTLE(Environment.SUNNY, "Coleus Scuttlearioides", 5),
     COFFEE_PLANT(Environment.HUMID, "Coffea Arabica", 8),
 
     //------------ epic ------------
-    CRASSULA(Environment.SUNNY, "Crassula Orbicularis", 1),
     PINEAPPLE_PLANT(Environment.HALF_SHADE, "Ananas Comosus", 4),
     ORCHID(Environment.HUMID, "Orchidaceae", 7),
 
     //------------ legendary ------------
     CHILI_PEPPER(Environment.SUNNY, "Chili Capsicum", 7),
-    BEGONIA_POLKA_PLANT(Environment.SHADE, "Begonia", 6),
     ROSE_PLANT(Environment.SUNNY, "Rosa", 9);
 
 
