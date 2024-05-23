@@ -13,10 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Application.Controllers.MainController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controllers.MainController">
    <children>
       <ImageView id="backgroundImage" cache="true" fitHeight="824.0" fitWidth="1161.0" opacity="0.9">
          <image>
+
             <Image url="@../loginbackground.png" />
          </image>
          <cursor>
@@ -76,7 +77,7 @@
             </HBox>
             <Group id="SeedsTab" layoutX="21.0" layoutY="96.0">
                <children>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0">
+                  <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0" opacity="0.3">
                      <image>
                         <Image url="@../storeBigRectangle.png" />
                      </image>
@@ -86,7 +87,7 @@
                   </ImageView>
                   <StackPane prefHeight="521.0" prefWidth="663.0">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
+                        <ScrollPane fx:id="storeScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
                            <content>
                               <TilePane fx:id="shopPane" hgap="30.0" prefHeight="712.0" prefWidth="970.0" vgap="30.0">
                                  <children>

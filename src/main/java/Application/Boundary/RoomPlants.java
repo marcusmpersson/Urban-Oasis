@@ -1,4 +1,4 @@
-package main.java.Application.Boundary;
+package Application.Boundary;
 
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
