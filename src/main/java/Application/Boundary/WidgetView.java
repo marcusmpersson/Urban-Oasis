@@ -1,4 +1,4 @@
-package main.java.Application.View;
+package main.java.Application.Boundary;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,29 +17,42 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.Application.Controllers.WidgetHandler;
 
-import java.util.Objects;
-
+/**
+ * WidgetView handles the graphical representation and interactions for the plant widget.
+ *
+ * Author: Mouhammed Fakhro
+ */
 public class WidgetView {
 
     private Rectangle roundedRectangle;
     private HBox menuBar;
     private StackPane root;
-
     private Stage stage;
     private WidgetHandler widgetHandler;
-
+    private Text waterLevelText;
     private ImageView plantImageView;
 
+    /**
+     * Constructor for WidgetView.
+     *
+     * @param widgetHandler the widget handler
+     */
     public WidgetView(WidgetHandler widgetHandler) {
         this.widgetHandler = widgetHandler;
     }
 
-
-    public StackPane setWidget(Image plantImage, Image potImage, String stageId) {
+    /**
+     * Sets up the widget view for a potted plant.
+     *
+     * @param plantImage the image of the plant
+     * @param potImage the image of the pot
+     * @param currentWaterLevel the current water level of the plant
+     * @return the stack pane representing the widget
+     */
+    public StackPane setWidget(Image plantImage, Image potImage, String currentWaterLevel) {
         stage = new Stage(StageStyle.TRANSPARENT);
 
-
-        Text waterLevelText = new Text("Water Level: 0/100");
+        waterLevelText = new Text("Water Level: " + currentWaterLevel + "/100");
         waterLevelText.setFill(Color.WHITE);
         waterLevelText.setFont(Font.font("Pixeloid Sans", 16));
 
@@ -74,7 +87,7 @@ public class WidgetView {
         btnRemove.setStyle(buttonStyle);
         btnRemove.setOnMouseClicked(event -> {
             widgetHandler.removeWidget(stage);
-        }); // Close the stage when clicked
+        });
 
         stage.getProperties().put("PlantImageView", plantImageView);
         stage.getProperties().put("WaterText", waterLevelText);
@@ -94,8 +107,8 @@ public class WidgetView {
         roundedRectangle.heightProperty().bind(layout.heightProperty().add(20));
 
         root = new StackPane(roundedRectangle, layout);
-        root.setPadding(new Insets(10)); // padding to ensure the rectangle does not clip content
-        root.setStyle("-fx-background-color: transparent;"); // make root transparent
+        root.setPadding(new Insets(10));
+        root.setStyle("-fx-background-color: transparent;");
 
         Scene scene = new Scene(root, 220, 250); // Adjusted size to fit the rounded rectangle
         scene.setFill(null); // Make scene transparent
@@ -106,24 +119,28 @@ public class WidgetView {
         return root;
     }
 
-
+    /**
+     * Sets up mouse entered and exited events for the root pane.
+     */
     public void mouseEnteredAndExitedEvents() {
-
         root.setOnMouseEntered(event -> {
             roundedRectangle.setVisible(true);
             menuBar.setVisible(true);
+            waterLevelText.setVisible(true);
         });
         root.setOnMouseExited(event -> {
             roundedRectangle.setVisible(false);
             menuBar.setVisible(false);
+            waterLevelText.setVisible(false);
         });
     }
 
+    /**
+     * Gets the stage associated with the widget view.
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return stage;
-    }
-
-    public ImageView getPlantImageView () {
-        return plantImageView;
     }
 }

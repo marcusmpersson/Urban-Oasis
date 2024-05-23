@@ -45,7 +45,7 @@
             </ImageView>
             <Group layoutX="100.0" layoutY="320.0" translateY="15.0">
                <children>
-                  <ImageView id="signIn" fitHeight="47.0" fitWidth="176.0" layoutX="225.0" onMouseClicked="#signIn" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="signIn" fitHeight="47.0" fitWidth="176.0" layoutX="225.0" onMouseClicked="#signIn" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../signInButton.png" />
                      </image>
@@ -53,12 +53,12 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </ImageView>
-                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resetButton.png" />
                      </image>
                   </ImageView>
-                  <ImageView id="register" fitHeight="47.0" fitWidth="176.0" layoutX="113.0" layoutY="72.0" onMouseClicked="#switchToSignupScene" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="register" fitHeight="47.0" fitWidth="176.0" layoutX="113.0" layoutY="72.0" onMouseClicked="#switchToSignupScene" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../registerButton.png" />
                      </image>
@@ -71,12 +71,12 @@
                </font>
             </TextField>
             <PasswordField fx:id="password" layoutX="97.0" layoutY="244.0" prefHeight="47.0" prefWidth="410.0" styleClass="borderColor" />
-            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="128.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="128.0" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../E-mailText.png" />
                </image>
             </ImageView>
-            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="223.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="reset" fitHeight="12.0" fitWidth="163.0" layoutX="100.0" layoutY="223.0" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../PasswordText.png" />
                </image>
@@ -107,12 +107,12 @@
             </ImageView>
             <HBox layoutX="100.0" layoutY="415.0" spacing="50.0">
                <children>
-                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseClicked="#switchToMainFrame" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="reset" fitHeight="40.0" fitWidth="189.0" onMouseClicked="#switchToMainFrame" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../backButton.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="signUpButton" fitHeight="47.0" fitWidth="176.0" onMouseClicked="#registerAccount" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="signUpButton" fitHeight="47.0" fitWidth="176.0" onMouseClicked="#registerAccount" onMouseEntered="#handleMouseEnteredButtonGlow" onMouseExited="#handleMouseExitedButtonGlow" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../signUpButton.png" />
                      </image>

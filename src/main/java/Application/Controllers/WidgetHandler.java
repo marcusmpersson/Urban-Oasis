@@ -7,83 +7,108 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import main.java.Application.View.WidgetView;
+import main.java.Application.Boundary.WidgetView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * WidgetHandler manages the widgets representing potted plants in the application.
+ *
+ * Author: Mouhammed Fakhro
+ * Author: Rana Noorzadeh
+ */
 public class WidgetHandler {
-    
-    private ArrayList<WidgetEntity> widgets;
-    private LocalFileHandler localFileHandler;
-    private Map<String, StageData> stages;
-    private RoomController roomController;
-    private ArrayList<Stage> uiWidgets;
 
-    public WidgetHandler (RoomController roomController) {
-        this.widgets = new ArrayList<WidgetEntity>();
-        this.localFileHandler = new LocalFileHandler();
-        this.stages = new HashMap<>();
-        this.uiWidgets = new ArrayList<>();
+    private ArrayList<WidgetEntity> widgets = new ArrayList<>();
+    private LocalFileHandler localFileHandler = new LocalFileHandler();
+    private Map<String, StageData> stageDataMap = new HashMap<>();
+    private ArrayList<Stage> uiStages = new ArrayList<>();
+    private RoomController roomController;
+
+    /**
+     * Constructor for WidgetHandler.
+     *
+     * @param roomController the room controller
+     */
+    public WidgetHandler(RoomController roomController) {
         this.roomController = roomController;
     }
 
+    /**
+     * Sets up a widget for a given potted plant.
+     *
+     * @param pottedPlant the potted plant
+     * @param stageId the stage ID
+     */
     public void setWidget(PottedPlant pottedPlant, String stageId) {
-
-        String plantImage = pottedPlant.getPlantTop().getImageFilePath();
-        String potImage = pottedPlant.getPot().getImageFilePath();
+        String plantImageFilePath = pottedPlant.getPlantTop().getImageFilePath();
+        String potImageFilePath = pottedPlant.getPot().getImageFilePath();
+        String currentWaterLevel = roomController.getCurrentWaterLevel(pottedPlant);
 
         WidgetView widgetView = new WidgetView(this);
-        StackPane root = widgetView.setWidget(new Image(plantImage),new Image(potImage),stageId);
+        StackPane root = widgetView.setWidget(new Image(plantImageFilePath), new Image(potImageFilePath), currentWaterLevel);
         Stage stage = widgetView.getStage();
 
         stage.getProperties().put("PottedPlant", pottedPlant);
         widgetView.mouseEnteredAndExitedEvents();
 
-        WidgetHandler.StageData data = new WidgetHandler.StageData(stage);
-        stages.put(stageId, data);
+        StageData stageData = new StageData(stage);
+        stageDataMap.put(stageId, stageData);
 
         root.setOnMousePressed(event -> {
-            data.xOffset = stage.getX() - event.getScreenX();
-            data.yOffset = stage.getY() - event.getScreenY();
+            stageData.xOffset = stage.getX() - event.getScreenX();
+            stageData.yOffset = stage.getY() - event.getScreenY();
         });
 
         root.setOnMouseDragged(event -> {
-            stage.setX(event.getScreenX() + data.xOffset);
-            stage.setY(event.getScreenY() + data.yOffset);
+            stage.setX(event.getScreenX() + stageData.xOffset);
+            stage.setY(event.getScreenY() + stageData.yOffset);
         });
 
-        uiWidgets.add(stage);
+        uiStages.add(stage);
     }
 
+    /**
+     * Updates the plant image for the specified potted plant.
+     *
+     * @param pottedPlant the potted plant
+     */
     public void updatePlantImage(PottedPlant pottedPlant) {
-        for (int i = 0; i < uiWidgets.size(); i++) {
-            Stage stage = uiWidgets.get(i);
+        for (Stage stage : uiStages) {
             if (stage != null) {
                 PottedPlant foundPottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
 
-                if (foundPottedPlant != null) {
-                    if (foundPottedPlant == pottedPlant) {
-
-
-                        Image newImage = new Image(pottedPlant.getPlantTop().getImageFilePath());
-                        ImageView plantImageView = (ImageView) stage.getProperties().get("PlantImageView");
-                        plantImageView.setImage(newImage);
-                        Text waterText = (Text) stage.getProperties().get("WaterText");
-                        waterText.setText("Water Level: " + String.valueOf(pottedPlant.getPlantTop().getHealthStat().getWaterLevel()) + "/200");
-                    }
+                if (foundPottedPlant != null && foundPottedPlant.equals(pottedPlant)) {
+                    Image newImage = new Image(pottedPlant.getPlantTop().getImageFilePath());
+                    ImageView plantImageView = (ImageView) stage.getProperties().get("PlantImageView");
+                    plantImageView.setImage(newImage);
+                    Text waterText = (Text) stage.getProperties().get("WaterText");
+                    waterText.setText("Water Level: " + pottedPlant.getPlantTop().getHealthStat().getWaterLevel() + "/200");
                 }
             }
         }
     }
 
+    /**
+     * Removes the widget for the specified stage.
+     *
+     * @param stage the stage
+     */
     public void removeWidget(Stage stage) {
         stage.close();
         PottedPlant pottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
-        roomController.removeWidget(pottedPlant);
+        roomController.removeRoomPlantGlow(pottedPlant);
     }
 
+    /**
+     * Waters the potted plant associated with the specified stage and updates the image view.
+     *
+     * @param stage the stage
+     * @param imageView the image view to update
+     * @return the current water level
+     */
     public String water(Stage stage, ImageView imageView) {
         PottedPlant selectedPottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
 
@@ -101,48 +126,65 @@ public class WidgetHandler {
         return currentWaterLevel;
     }
 
-    public void removeWidget(String stageId) {
-        for (Map.Entry<String, StageData> entry : stages.entrySet()) {
-            if (entry.getKey().equals(stageId)) {
-                StageData data = entry.getValue();
-                Stage stage = data.stage;
-                stage.close();
-            }
-        }
-    }
-
-
-
-    public void loadWidgets (String username) {
+    /**
+     * Loads the widgets from the local file associated with the given username.
+     *
+     * @param username the username
+     */
+    public void loadWidgets(String username) {
         this.widgets = localFileHandler.readLocalFile(username);
         if (widgets != null) {
-            //TODO: load widgets on desktop via GUI controller
+            // TODO: load widgets on desktop via GUI controller
         }
     }
 
+    /**
+     * Updates the local file with the current widgets.
+     *
+     * @param username the username
+     */
     public void updateLocalFile(String username) {
         localFileHandler.updateLocalFile(widgets, username);
     }
 
+    /**
+     * Adds a widget for the given placeable item.
+     *
+     * @param item the placeable item
+     * @param stageId the stage ID
+     */
     public void addWidget(Placeable item, String stageId) {
         WidgetEntity widget = new WidgetEntity((PottedPlant) item, 200, 200);
         widgets.add(widget);
         setWidget((PottedPlant) item, stageId);
-        //TODO: load widget via GUI controller
+        // TODO: load widget via GUI controller
     }
 
-    public WidgetEntity getWidgetAt(int index){
+    /**
+     * Gets the widget entity at the specified index.
+     *
+     * @param index the index
+     * @return the widget entity
+     */
+    public WidgetEntity getWidgetAt(int index) {
         return widgets.get(index);
     }
 
+    /**
+     * Inner static class to hold stage data.
+     */
     static class StageData {
         Stage stage;
         double xOffset = 0;
         double yOffset = 0;
 
+        /**
+         * Constructor for StageData.
+         *
+         * @param stage the stage
+         */
         public StageData(Stage stage) {
             this.stage = stage;
         }
     }
-    
 }
