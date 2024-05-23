@@ -34,22 +34,16 @@ public class MainController implements Initializable {
     private boolean isLoggedIn;
     private Transitions transitions = new Transitions();
     private WidgetHandler widgetHandler;
-
     @FXML
     private Group storeView;
-
     @FXML
     private Group roomView;
-
     @FXML
     private ImageView roomBackground;
-
     @FXML
     private TilePane shopPane;
-
     @FXML
     private ImageView returnButton;
-
     private Controller clientController;
     private User user;
 
@@ -59,10 +53,10 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isLoggedIn = true;
-        switchToRoomView(null);
-        startBackgroundTimeChecker();
         clientController = Controller.getInstance();
         user = clientController.getTestUser();
+        switchToRoomView(null);
+        startBackgroundTimeChecker();
 
         new RoomController(roomView, user);
     }
@@ -83,6 +77,8 @@ public class MainController implements Initializable {
         storeView.setOpacity(0);
         roomView.setOpacity(1);
     }
+
+
 
     /**
      * Switches to the store view.
@@ -120,14 +116,19 @@ public class MainController implements Initializable {
     public void updateRoomBackground(String timeOfDay) {
         String imagePath;
         try {
-            if (timeOfDay.equals("Night")) {
-                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getNightFilepath()));
-            } else if (timeOfDay.equals("Sunrise")) {
-                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunriseFilepath()));
-            } else if (timeOfDay.equals("Sunset")) {
-                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunsetFilepath()));
-            } else {
-                imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getDaytimeFilepath()));
+            switch (timeOfDay) {
+                case "Night":
+                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getNightFilepath()));
+                    break;
+                case "Sunrise":
+                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunriseFilepath()));
+                    break;
+                case "Sunset":
+                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunsetFilepath()));
+                    break;
+                default:
+                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getDaytimeFilepath()));
+                    break;
             }
             roomBackground.setImage(new Image(imagePath));
         } catch (Exception e) {
@@ -142,15 +143,15 @@ public class MainController implements Initializable {
      * @return the time of day as a string
      */
     public String getTimeOfDay(LocalTime time) {
+        String timeOfDay = "Night";
         if (time.isAfter(LocalTime.of(5, 0)) && time.isBefore(LocalTime.of(9, 0))) {
-            return "Sunrise";
+            timeOfDay = "Sunrise";
         } else if (time.isAfter(LocalTime.of(9, 0)) && time.isBefore(LocalTime.of(16, 0))) {
-            return "Day";
+            timeOfDay = "Day";
         } else if (time.isAfter(LocalTime.of(16, 0)) && time.isBefore(LocalTime.of(19, 0))) {
-            return "Sunset";
-        } else {
-            return "Night";
+            timeOfDay = "Sunset";
         }
+        return timeOfDay;
     }
 
     /**
@@ -162,6 +163,7 @@ public class MainController implements Initializable {
                 LocalTime currentTime = LocalTime.now();
                 String timeOfDay = getTimeOfDay(currentTime);
                 Platform.runLater(() -> updateRoomBackground(timeOfDay));
+                // method that updates plant images
 
                 try {
                     Thread.sleep(5000);

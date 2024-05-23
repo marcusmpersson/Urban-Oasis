@@ -16,23 +16,23 @@ import java.util.List;
 /**
  * RoomController handles the interactions and management of plants within a room.
  *
- * Author: Mouhammed Fakhro
+ * @Author Mouhammed Fakhro
  */
 public class RoomController {
-    private ArrayList<Group> roomPlants;
+    private ArrayList<Group> roomPlants = new ArrayList<>();
     private Group roomView;
     private Room room;
-    private WidgetHandler widgetHandler;
+    private WidgetHandler widgetHandler = new WidgetHandler(this);
     private User user;
     private RoomPlants roomGuiContent;
     private Group plantInformationView;
-    private PlantInformationPopup plantInformationPopup;
-    public Boolean isPlantDetailsFrameOpened = false;
-    public PottedPlant selectedPottedPlant;
-    public Group selectedPottedPlantButton;
-    public ArrayList<Rectangle> slotZones;
-    public ArrayList<ImageView> arrowIndicators;
-    public boolean isDragging = false;
+    private PlantInformationPopup plantInformationPopup = new PlantInformationPopup(this);
+    private Boolean isPlantDetailsFrameOpened = false;
+    private PottedPlant selectedPottedPlant;
+    private Group selectedPottedPlantButton;
+    private ArrayList<Rectangle> slotZones = new ArrayList<>();
+    private ArrayList<ImageView> arrowIndicators = new ArrayList<>();
+    private boolean isDragging = false;
 
     /**
      * Constructor for RoomController.
@@ -43,13 +43,8 @@ public class RoomController {
     public RoomController(Group roomView, User user) {
         this.roomView = roomView;
         this.user = user;
-        this.roomPlants = new ArrayList<>();
         this.room = user.getRoom(0);
-        this.widgetHandler = new WidgetHandler(this);
         this.roomGuiContent = new RoomPlants(roomView);
-        this.slotZones = new ArrayList<>();
-        this.arrowIndicators = new ArrayList<>();
-        this.plantInformationPopup = new PlantInformationPopup(this);
         this.plantInformationView = plantInformationPopup.getInformationRectangle();
 
         spawnUserPottedPlants();
@@ -95,7 +90,6 @@ public class RoomController {
                 PottedPlant pottedPlant = (PottedPlant) slots.get(i).getPlacedItem();
 
                 Group plantContainer = addPottedPlantToSlot(pottedPlant, posX, posY);
-                plantContainer.setId("ActivePlant");
                 plantContainer.getProperties().put("Slot", slots.get(i));
                 plantContainer.getProperties().put("PottedPlant", pottedPlant);
                 plantContainer.getProperties().put("SlotIndex", i);
@@ -198,11 +192,10 @@ public class RoomController {
                     int draggingIndex = (int) group.getProperties().get("SlotIndex");
                     int droppingIndex = (int) roomPlant.getProperties().get("SlotDrop");
 
-                    Rectangle draggingSlot = slotZones.get(draggingIndex);
                     Rectangle droppingSlot = slotZones.get(droppingIndex);
 
                     if (droppingSlot.getProperties().get("IsEmpty").equals(false)) {
-                        Group switchingPlant = null;
+                        Group switchingPlant;
 
                         for (Group roomPlant2 : roomPlants) {
                             if (roomPlant2.getProperties().get("SlotIndex").equals(droppingIndex)) {
@@ -221,6 +214,7 @@ public class RoomController {
                     updatePlantLocation(group, (Integer) group.getProperties().get("SlotIndex"));
                 }
             }
+
             group.getProperties().put("SlotDrop", null);
 
             roomGuiContent.removeAllPlantGlows(roomPlants, null);
@@ -228,7 +222,7 @@ public class RoomController {
             Thread isDraggingBooleanTask = new Thread(() -> { // we use a thread wait here in order to ensure that
                 // the popup menu does not appear when dropping a plant after dragging it.
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     isDragging = false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -244,7 +238,7 @@ public class RoomController {
      * This is only used when we remove widgets as it should update the corresponding plant in the room.
      * @param pottedPlant the potted plant
      */
-    public void removeWidgetGlow(PottedPlant pottedPlant) {
+    public void removeRoomPlantGlow(PottedPlant pottedPlant) {
         for (Group plant : roomPlants) {
             PlacementSlot slot = (PlacementSlot) plant.getProperties().get("Slot");
             PottedPlant pottedSlot = (PottedPlant) slot.getPlacedItem();
@@ -262,7 +256,11 @@ public class RoomController {
      * @return the potted plant
      */
     private PottedPlant getPottedPlantFromGroup(Group group) {
-        return (PottedPlant) group.getProperties().get("PottedPlant");
+        Object pottedPlant = group.getProperties().get("PottedPlant");
+        if (pottedPlant instanceof PottedPlant){
+            return (PottedPlant) pottedPlant;
+        }
+        return null;
     }
 
     /**
@@ -388,7 +386,8 @@ public class RoomController {
      *
      * @param selectedPottedPlant the potted plant to set as dead
      */
-    public void setPottedPlantToDead(PottedPlant selectedPottedPlant) {
+    public void setPottedPlantToDead(PottedPlant selectedPottedPlant) { // remove this later. Backend already handles
+        // water level
         for (Group plant : roomPlants) {
             PottedPlant foundPottedPlant = (PottedPlant) plant.getProperties().get("PottedPlant");
             if (foundPottedPlant == selectedPottedPlant) {
