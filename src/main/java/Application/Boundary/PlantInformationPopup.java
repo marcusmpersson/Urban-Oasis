@@ -1,4 +1,4 @@
-package main.java.Application.Boundary;
+package Application.Boundary;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
@@ -13,7 +13,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-import main.java.Application.Controllers.RoomController;
+import Application.Controllers.RoomController;
 
 /**
  * PlantInformationPopup handles the graphical representation and interactions

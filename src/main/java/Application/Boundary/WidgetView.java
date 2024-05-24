@@ -1,4 +1,4 @@
-package main.java.Application.Boundary;
+package Application.Boundary;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import main.java.Application.Controllers.WidgetHandler;
+import Application.Controllers.WidgetHandler;
 
 /**
  * WidgetView handles the graphical representation and interactions for the plant widget.

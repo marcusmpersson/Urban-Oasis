@@ -1,6 +1,6 @@
-package main.java.Application.Controllers;
+package Application.Controllers;
 
-import Controllers.Controller;
+import controller.Controller;
 import entities.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +35,11 @@ public class MainController implements Initializable {
     private boolean isLoggedIn;
     private Transitions transitions = new Transitions();
     private WidgetHandler widgetHandler;
+
+    @FXML
+    private ImageView SeedsButtonList;
+
+    private ScrollPane storeScrollPane;
     @FXML
     private Group storeView;
     @FXML
@@ -59,6 +65,7 @@ public class MainController implements Initializable {
         startBackgroundTimeChecker();
 
         new RoomController(roomView, user);
+        new StoreController(storeView)
     }
 
     /**
@@ -86,8 +93,8 @@ public class MainController implements Initializable {
      * @param mouseEvent the mouse event triggering the switch
      */
     public void switchToStoreView(MouseEvent mouseEvent) {
-        roomView.setOpacity(0);
-        storeView.setOpacity(1);
+        roomView.setVisible(false);
+        storeView.setVisible(true);
     }
 
     /**

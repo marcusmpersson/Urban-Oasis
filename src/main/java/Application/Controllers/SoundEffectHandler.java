@@ -1,4 +1,4 @@
-package main.java.Application.Controllers;
+package Application.Controllers;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
