@@ -40,7 +40,7 @@ public class Transitions {
     }
 
     @FXML
-    public void handleMouseEnteredButtonEffect(MouseEvent event) {
+    public void mouseEnteredButtonGlow(MouseEvent event) {
         initialize();
         ImageView imageview = (ImageView) event.getSource();
         borderGlow.setColor(getColorFromButton(imageview));
@@ -53,7 +53,7 @@ public class Transitions {
     }
 
     @FXML
-    public void handleMouseExitedButtonEffect (MouseEvent event) {
+    public void mouseExitedButtonGlow(MouseEvent event) {
         ImageView imageview  = (ImageView) event.getSource();
         borderGlow.setColor(getColorFromButton(imageview));
         Timeline timeline = new Timeline(

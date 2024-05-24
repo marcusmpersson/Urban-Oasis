@@ -38,7 +38,8 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setResizable(false);
 
-            Image image = new Image("logo.png");
+            Image image =
+                    new Image(getClass().getClassLoader().getResource("icons/logo_white_txt.png").toString());
             stage.getIcons().add(image);
             stage.setTitle("Urban Oasis");
 
