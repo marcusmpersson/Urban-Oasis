@@ -54,6 +54,10 @@ public class SoundEffectHandler {
         }
     }
 
+    public boolean musicIsPlaying() {
+        return musicPlaying;
+    }
+
     private void playSound(String soundPath) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundPath));
@@ -64,6 +68,7 @@ public class SoundEffectHandler {
             throw new RuntimeException(e);
         }
     }
+
 
     public void playWaterSound() {
         playSound("src/main/resources/sounds/water.wav");

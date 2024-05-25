@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
 
+    public ImageView resetButton;
     private Stage stage;
     private Scene scene;
     private boolean isLoggedIn;
@@ -45,8 +46,13 @@ public class MainController implements Initializable {
     private TilePane shopPane;
     @FXML
     private ImageView returnButton;
+
+    @FXML
+    private ImageView soundButton;
     private Controller clientController;
     private User user;
+
+    private RoomController roomController;
 
     /**
      * This method runs as soon as the Main view opens up.
@@ -59,7 +65,7 @@ public class MainController implements Initializable {
         switchToRoomView(null);
         startBackgroundTimeChecker();
 
-        new RoomController(roomView, user);
+        roomController = new RoomController(roomView, user);
   //      new StoreController(storeView);
     }
 
@@ -139,6 +145,8 @@ public class MainController implements Initializable {
         }
     }
 
+
+
     /**
      * Determines the time of day based on the given time.
      *
@@ -192,5 +200,28 @@ public class MainController implements Initializable {
         stage.setScene(scene);
         stage.show();
         cleanup();
+    }
+
+    public void handleMusicButton(MouseEvent event) {
+        if (clientController.musicIsPlaying()) {
+            clientController.pauseMusic();
+            soundButton.setImage(getImageFromImageName("icons/soundOFF.png"));
+        } else {
+            clientController.playMusic();
+            soundButton.setImage(getImageFromImageName("icons/soundON.png"));
+        }
+    }
+
+    private Image getImageFromImageName(String name) {
+        URL resourceUrl = getClass().getClassLoader().getResource(name);
+        if (resourceUrl == null) {
+            System.out.println("Resource not found: " + name);
+            return null;
+        }
+        return new Image(resourceUrl.toString());
+    }
+
+    public void resetRoom (MouseEvent event) {
+        roomController.resetRoom();
     }
 }

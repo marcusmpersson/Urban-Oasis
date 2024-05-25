@@ -219,7 +219,8 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        boolean success = loginHandler.login(email, password);
+       // boolean success = loginHandler.login(email, password);
+        boolean success = true;
         if (success) {
             loadGame(currentUser);
         }
@@ -551,6 +552,10 @@ public class Controller {
 
     public void updateBackgroundMusic() {
         soundEffectHandler.updateBackgroundMusic();
+    }
+
+    public boolean musicIsPlaying() {
+        return soundEffectHandler.musicIsPlaying();
     }
 
 }

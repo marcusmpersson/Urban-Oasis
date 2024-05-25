@@ -273,8 +273,6 @@ public class GameHandler {
         currentUser.getRoom(roomIndex).getSlot(draggingIndex).setPlacedItem(slot2Item);
 
         controller.playSwappingSound();
-
-        System.out.println("Successfully swapped items.");
     }
 
     /** method sells a PottedPlant that is placed in room. Adds currency to user */

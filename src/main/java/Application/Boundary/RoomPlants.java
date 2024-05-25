@@ -52,10 +52,10 @@ public class RoomPlants {
         potImageView.setFitHeight(60);
         potImageView.setFitWidth(100);
 
-        potImageView.toBack();
-        plantImageView.toFront();
-
         plantContainer.getChildren().addAll(potImageView, plantImageView);
+
+        plantImageView.toBack();
+        potImageView.toFront();
 
         plantImageView.setLayoutY(potImageView.getLayoutY() - plantImageView.getFitHeight());
 

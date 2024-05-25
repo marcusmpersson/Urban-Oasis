@@ -2,11 +2,15 @@ package main.java.Application.Controllers;
 
 import controller.Controller;
 import entities.*;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import main.java.Application.Boundary.PlantInformationPopup;
 import main.java.Application.Boundary.RoomPlants;
 
@@ -69,6 +73,7 @@ public class RoomController {
      * Spawns user potted plants in their respective slots.
      */
     private void spawnUserPottedPlants() {
+        System.out.println("spawned new plants");
         List<PlacementSlot> slots = user.getRoom(0).getSlots();
 
         for (int i = 0; i < slots.size(); i++) {
@@ -105,7 +110,7 @@ public class RoomController {
     /**
      * Sets up mouse events for a given plant group.
      *
-     * @param group the plant group
+     * @param group the plant group (button/image)
      */
     private void setupMouseEvents(Group group) {
         // Mouse click for the plant. It should open up the menu and update the content with correct water level
@@ -123,6 +128,7 @@ public class RoomController {
                 plantInformationPopup.updateWaterLevelText(getCurrentWaterLevel(currentPlant));
             }
         });
+
 
         // this is used to track the initial X and Y position when dragging.
         final double[] initialX = new double[1];
@@ -144,39 +150,36 @@ public class RoomController {
 
         // this is used to detect mouse drag for the plants.
         group.setOnMouseDragged(event -> {
-            if (!isPlantDetailsFrameOpened) {
-                this.isDragging = true;
-                roomGuiContent.addGlowToPlant(group);
-                group.setTranslateX(event.getScreenX() + initialX[0]);
-                group.setTranslateY(event.getScreenY() + initialY[0]);
+            this.isDragging = true;
+            roomGuiContent.addGlowToPlant(group);
+            group.setTranslateX(event.getScreenX() + initialX[0]);
+            group.setTranslateY(event.getScreenY() + initialY[0]);
 
-                for (Rectangle emptySlot : slotZones) {
-                    if (group.getBoundsInParent().intersects(emptySlot.getBoundsInParent())) {
-                        if (!group.getProperties().get("SlotIndex").equals(emptySlot.getProperties().get("SlotIndex"))) {
-                            Group droppingPlant = getPlantFromRectangleDetection(emptySlot);
-                            if (droppingPlant != null) {
-                                roomGuiContent.addGlowToPlant(droppingPlant);
-                            } else {
-                                roomGuiContent.removeAllPlantGlows(roomPlants, group);
-                            }
-                            ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
-                            if (arrow.getEffect() == null) {
-                                roomGuiContent.addColorEffectToRoomArrow(arrow);
+            for (Rectangle emptySlot : slotZones) {
+                if (group.getBoundsInParent().intersects(emptySlot.getBoundsInParent())) {
+                    if (!group.getProperties().get("SlotIndex").equals(emptySlot.getProperties().get("SlotIndex"))) {
+                        Group droppingPlant = getPlantFromRectangleDetection(emptySlot);
+                        if (droppingPlant != null) {
+                            roomGuiContent.addGlowToPlant(droppingPlant);
+                        } else {
+                            roomGuiContent.removeAllPlantGlows(roomPlants, group);
+                        }
+                        ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
+                        if (arrow.getEffect() == null) {
+                            roomGuiContent.addColorEffectToRoomArrow(arrow);
 
-                                for (ImageView gif : arrowIndicators) {
-                                    if (gif != arrow) {
-                                        roomGuiContent.removeColorEffectFromArrow(gif);
-                                    }
+                            for (ImageView gif : arrowIndicators) {
+                                if (gif != arrow) {
+                                    roomGuiContent.removeColorEffectFromArrow(gif);
                                 }
                             }
-
-                            group.getProperties().put("SlotDrop", emptySlot.getProperties().get("SlotIndex"));
                         }
-                    } else {
-                        group.setId("");
-                        ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
-                        roomGuiContent.removeColorEffectFromArrow(arrow);
+
+                        group.getProperties().put("SlotDrop", emptySlot.getProperties().get("SlotIndex"));
                     }
+                } else {
+                    ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
+                    roomGuiContent.removeColorEffectFromArrow(arrow);
                 }
             }
         });
@@ -202,6 +205,7 @@ public class RoomController {
                                 PlacementSlot slot = (PlacementSlot) roomPlant2.getProperties().get("Slot");
                                 switchingPlant = getRoomPlantFromPlacementSlot(slot);
                                 switchPlantLocations(group, switchingPlant);
+                                break;
                             }
                         }
                     } else {
@@ -215,14 +219,18 @@ public class RoomController {
                 }
             }
 
+
             group.getProperties().put("SlotDrop", null);
 
             roomGuiContent.removeAllPlantGlows(roomPlants, null);
+            checkForPottedPlantMisplacement();
+
+
 
             Thread isDraggingBooleanTask = new Thread(() -> { // we use a thread wait here in order to ensure that
                 // the popup menu does not appear when dropping a plant after dragging it.
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                     isDragging = false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -231,6 +239,73 @@ public class RoomController {
 
             isDraggingBooleanTask.start();
         });
+    }
+
+    private void checkForPottedPlantMisplacement() {
+        for (Group roomPlant : roomPlants) {
+            PlacementSlot slot = null;
+            if (roomPlant.getProperties().get("Slot") instanceof PlacementSlot) {
+                slot = (PlacementSlot) roomPlant.getProperties().get("Slot");
+            }
+            if (slot != null) {
+                if (roomPlant.getLayoutX() != slot.getX()) {
+                    roomPlant.setLayoutX(slot.getX());
+                }
+                if (roomPlant.getLayoutY() != slot.getY()) {
+                    roomPlant.setLayoutY(slot.getY());
+                }
+            }
+        }
+    }
+
+    public void resetRoom() {
+        ParallelTransition parallelTransition = new ParallelTransition();
+
+        for (ImageView arrowIndicator : arrowIndicators) {
+            roomView.getChildren().remove(arrowIndicator);
+        }
+
+        for (Group roomPlant : roomPlants) {
+            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), roomPlant);
+            translateTransition.setByY(800);
+
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), roomPlant);
+            rotateTransition.setByAngle(360);
+
+            ParallelTransition plantTransition = new ParallelTransition(translateTransition, rotateTransition);
+            parallelTransition.getChildren().add(plantTransition);
+        }
+
+        for (Rectangle slotZone : slotZones) {
+            roomView.getChildren().remove(slotZone);
+        }
+
+        parallelTransition.setOnFinished(event -> {
+            for (Group roomPlant : roomPlants) {
+                roomView.getChildren().remove(roomPlant);
+            }
+            arrowIndicators.clear();
+            roomPlants.clear();
+            slotZones.clear();
+
+            spawnUserPottedPlants();
+        });
+
+        parallelTransition.play();
+    }
+
+    private void resetAllMouseEvents() {
+
+        for (Group roomPlant : roomPlants) {
+            roomPlant.setOnMouseClicked(null);
+            roomPlant.setOnMousePressed(null);
+            roomPlant.setOnMouseDragged(null);
+            roomPlant.setOnMouseReleased(null);
+
+            setupMouseEvents(roomPlant);
+        }
+
+
     }
 
     /**
@@ -348,6 +423,10 @@ public class RoomController {
 
             plant1.getProperties().put("SlotIndex", plant2SlotIndex);
             plant2.getProperties().put("SlotIndex", plant1SlotIndex);
+
+            setupMouseEvents(plant1);
+            setupMouseEvents(plant2);
+            System.out.println("Switched plant locations.");
         }
     }
 
@@ -379,6 +458,7 @@ public class RoomController {
             plant.setLayoutY(newSlot.getY());
             plant.getProperties().put("SlotIndex", newLocationIndex);
             plant.getProperties().put("Slot", newSlot);
+
         }
     }
 

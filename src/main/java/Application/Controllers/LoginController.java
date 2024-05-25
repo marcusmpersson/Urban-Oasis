@@ -153,6 +153,7 @@ public class LoginController implements Initializable {
     public void signIn(MouseEvent mouseEvent) throws IOException {
         boolean loginAttemptSuccessful = clientController.loginAttempt(email.getText(), password.getText());
 
+
         if (!loginAttemptSuccessful) {
             wrongLogin.setOpacity(1);
             displayMessage(wrongLogin);

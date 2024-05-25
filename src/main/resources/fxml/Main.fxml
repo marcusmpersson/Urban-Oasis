@@ -138,6 +138,15 @@
                   <Image url="@../rooms/roomDaytime.jpg" />
                </image>
             </ImageView>
+            <ImageView fx:id="resetButton" cache="true" fitHeight="44.0" fitWidth="94.0" layoutX="-3.0" layoutY="14.0"
+                       onMouseClicked="#resetRoom">
+               <image>
+                  <Image url="@../icons/resetRoomButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
          </children>
       </Group>
       <Group fx:id="menuBar" layoutX="-50.0">
@@ -146,7 +155,7 @@
                <children>
                   <ImageView id="roomButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../RoomButton.png" />
+                        <Image url="@../icons/roomButton.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -154,7 +163,7 @@
                   </ImageView>
                   <ImageView id="storeButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToStoreView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../StoreButton.png" />
+                        <Image url="@../icons/shopButton.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -162,7 +171,7 @@
                   </ImageView>
                   <ImageView id="inventoryButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../InventoryButton.png" />
+                        <Image url="@../icons/inventoryButton.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -178,10 +187,17 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="returnButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="7.0" onMouseClicked="#switchToLoginScene" onMouseEntered="#handleMouseEntered"
-                       onMouseExited="#handleMouseExited">
+            <ImageView fx:id="returnButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="7.0" onMouseClicked="#switchToLoginScene" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                <image>
                   <Image url="@../returnButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="soundButton" cache="true" fitHeight="27.0" fitWidth="28.0" layoutX="139.0" layoutY="11.0" onMouseClicked="#handleMusicButton" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+               <image>
+                  <Image url="@../icons/soundON.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="DEFAULT" />
