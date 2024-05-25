@@ -1,6 +1,6 @@
 package main.java.Application.Controllers;
 
-import Controllers.Controller;
+import controller.Controller;
 import entities.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -359,6 +359,7 @@ public class RoomController {
      */
     public void updatePlantLocation(Group plant, int newLocationIndex) {
         if (roomPlants.contains(plant)) {
+
             List<PlacementSlot> slots = user.getRoom(0).getSlots();
             PlacementSlot newSlot = slots.get(newLocationIndex);
             PlacementSlot oldSlot = (PlacementSlot) plant.getProperties().get("Slot");

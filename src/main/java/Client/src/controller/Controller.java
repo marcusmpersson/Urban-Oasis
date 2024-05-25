@@ -71,8 +71,8 @@ public class Controller {
         inventory.addItem(deco2);
 
         // make potted plants
-        Pot pot = ItemBuilder.buildPot(PotType.POT_STRIPED_BLUE);
-        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.ARROWHEAD_PLANT);
+        Pot pot = ItemBuilder.buildPot(PotType.ROUND_POT_STRIPED_GREEN);
+        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.ROSE_PLANT);
         plantTop.raiseAge(440);
         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
 
@@ -219,13 +219,13 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        /*boolean success = loginHandler.login(email, password);
+        boolean success = loginHandler.login(email, password);
         if (success) {
             loadGame(currentUser);
         }
-        return success;*/
-        loadGame(currentUser);
-        return true;
+        return success;
+        //loadGame(currentUser);
+        //return true;
     }
 
     /**

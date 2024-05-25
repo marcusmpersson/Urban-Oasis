@@ -35,13 +35,10 @@ public class LoginController implements Initializable {
     private Controller clientController;
     private Transitions transitions;
     private Parent root;
-
     @FXML
     private Group mainLoginFrame;
-
     @FXML
     private Group registerFrame;
-
     @FXML
     private TextField email;
 

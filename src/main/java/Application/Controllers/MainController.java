@@ -1,6 +1,6 @@
 package main.java.Application.Controllers;
 
-import Controllers.Controller;
+import controller.Controller;
 import entities.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,6 +33,7 @@ public class MainController implements Initializable {
     private Scene scene;
     private boolean isLoggedIn;
     private Transitions transitions = new Transitions();
+    private StoreController storeController;
     private WidgetHandler widgetHandler;
     @FXML
     private Group storeView;
@@ -59,6 +60,7 @@ public class MainController implements Initializable {
         startBackgroundTimeChecker();
 
         new RoomController(roomView, user);
+  //      new StoreController(storeView);
     }
 
     /**
@@ -88,6 +90,7 @@ public class MainController implements Initializable {
     public void switchToStoreView(MouseEvent mouseEvent) {
         roomView.setOpacity(0);
         storeView.setOpacity(1);
+
     }
 
     /**
