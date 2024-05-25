@@ -13,11 +13,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.Controllers.MainController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Application.Controllers.MainController">
    <children>
       <ImageView id="backgroundImage" cache="true" fitHeight="824.0" fitWidth="1161.0" opacity="0.9">
          <image>
-
             <Image url="@../loginbackground.png" />
          </image>
          <cursor>
@@ -75,7 +74,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <Group id="SeedsTab" layoutX="21.0" layoutY="96.0">
+            <Group fx:id="SeedsTab" layoutX="21.0" layoutY="96.0">
                <children>
                   <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0" opacity="0.3">
                      <image>

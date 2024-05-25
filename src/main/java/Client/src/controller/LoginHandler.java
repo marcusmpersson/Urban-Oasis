@@ -72,7 +72,7 @@ public class LoginHandler {
         } catch(IOException | JsonSyntaxException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     /**

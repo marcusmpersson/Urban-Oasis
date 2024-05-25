@@ -1,4 +1,4 @@
-package Application.Controllers;
+package main.java.Application.Controllers;
 
 import controller.LocalFileHandler;
 import entities.*;
@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import Application.Boundary.WidgetView;
+import main.java.Application.Boundary.WidgetView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package Application.Controllers;
+package main.java.Application.Controllers;
 
 import controller.Controller;
 import entities.*;
@@ -7,8 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
-import Application.Boundary.PlantInformationPopup;
-import Application.Boundary.RoomPlants;
+import main.java.Application.Boundary.PlantInformationPopup;
+import main.java.Application.Boundary.RoomPlants;
 
 import java.util.*;
 import java.util.List;

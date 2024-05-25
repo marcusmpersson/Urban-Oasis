@@ -8,9 +8,9 @@ import enums.DecoType;
 import enums.PotType;
 import enums.Rarity;
 import enums.Species;
-import Application.Controllers.MainController;
-import Application.Controllers.SoundEffectHandler;
-import Application.Controllers.WidgetHandler;
+import main.java.Application.Controllers.MainController;
+import main.java.Application.Controllers.SoundEffectHandler;
+import main.java.Application.Controllers.WidgetHandler;
 
 import java.util.ArrayList;
 

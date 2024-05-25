@@ -1,4 +1,4 @@
-package Application.Controllers;
+package main.java.Application.Controllers;
 
 import controller.Controller;
 import entities.User;
@@ -37,8 +37,12 @@ public class MainController implements Initializable {
     private WidgetHandler widgetHandler;
 
     @FXML
-    private ImageView SeedsButtonList;
+    private Group SeedsTab;
 
+
+    @FXML
+    private ImageView SeedsButtonList;
+    @FXML
     private ScrollPane storeScrollPane;
     @FXML
     private Group storeView;
@@ -50,6 +54,7 @@ public class MainController implements Initializable {
     private TilePane shopPane;
     @FXML
     private ImageView returnButton;
+
     private Controller clientController;
     private User user;
 
@@ -65,7 +70,7 @@ public class MainController implements Initializable {
         startBackgroundTimeChecker();
 
         new RoomController(roomView, user);
-        new StoreController(storeView)
+        //new StoreController(storeView)
     }
 
     /**
@@ -83,6 +88,7 @@ public class MainController implements Initializable {
     public void switchToRoomView(MouseEvent mouseEvent) {
         storeView.setOpacity(0);
         roomView.setOpacity(1);
+        roomView.toFront();
     }
 
 
@@ -93,8 +99,10 @@ public class MainController implements Initializable {
      * @param mouseEvent the mouse event triggering the switch
      */
     public void switchToStoreView(MouseEvent mouseEvent) {
-        roomView.setVisible(false);
-        storeView.setVisible(true);
+        roomView.setOpacity(0);
+        storeView.setOpacity(1);
+        storeView.toFront();
+        SeedsTab.toFront();
     }
 
     /**
