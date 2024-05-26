@@ -6,6 +6,7 @@
                                          #151A2F 75%,
                                          #1D2035 100%);
 }
+
 .borderColor{
     -fx-background-color: #131528;
     -fx-font-family: 'Pixeloid Sans';
@@ -46,4 +47,8 @@
 
 .glow {
     -fx-effect: dropshadow(gaussian, rgba(0, 255, 0, 0.8), 10, 0.5, 0, 0);
+}
+
+.purpleGlow {
+    -fx-effect: dropshadow(gaussian, rgba(128, 0, 128, 0.8), 10, 0.5, 0, 0);
 }

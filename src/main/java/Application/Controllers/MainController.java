@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.Application.Animations.Transitions;
 
@@ -31,6 +32,13 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     public ImageView resetButton;
+
+    @FXML
+    public Text priceText;
+    @FXML
+    public ImageView purchaseItemButton;
+    @FXML
+    public Text userCoins;
     private Stage stage;
     private Scene scene;
     private boolean isLoggedIn;
@@ -63,11 +71,13 @@ public class MainController implements Initializable {
         isLoggedIn = true;
         clientController = Controller.getInstance();
         user = clientController.getTestUser();
+        roomView.toFront();
         switchToRoomView(null);
         startBackgroundTimeChecker();
+        updateUserCoins();
 
         roomController = new RoomController(roomView, user);
-        new StoreController(storeView, shopPane);
+        storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton);
     }
 
     /**
@@ -85,6 +95,8 @@ public class MainController implements Initializable {
     public void switchToRoomView(MouseEvent mouseEvent) {
         storeView.setOpacity(0);
         roomView.setOpacity(1);
+        roomView.toFront();
+        storeView.toBack();
     }
 
 
@@ -97,7 +109,8 @@ public class MainController implements Initializable {
     public void switchToStoreView(MouseEvent mouseEvent) {
         roomView.setOpacity(0);
         storeView.setOpacity(1);
-
+        storeView.toFront();
+        roomView.toBack();
     }
 
     /**
@@ -224,5 +237,21 @@ public class MainController implements Initializable {
 
     public void resetRoom (MouseEvent event) {
         roomController.resetRoom();
+    }
+
+    public void showStoreSeeds () {
+        storeController.showCategory("Seeds");
+    }
+
+    public void showStorePots () {
+        storeController.showCategory("Pots");
+    }
+
+    public void showStoreDecos () {
+        storeController.showCategory("Decos");
+    }
+
+    public void updateUserCoins() {
+        userCoins.setText(String.valueOf(user.getShopCurrency()));
     }
 }
