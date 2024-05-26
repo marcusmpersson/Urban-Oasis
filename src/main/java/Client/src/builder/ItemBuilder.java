@@ -30,28 +30,29 @@ public class ItemBuilder {
     public static Pot buildPot(PotType type) {
         switch (type) {
             case POT_LILAC:
-                return new Pot("Pot (lilac)", "pots/pot_lilac.png", 100, PotType.POT_LILAC,
+                return new Pot("Lilac", "pots/pot_lilac.png", 100, PotType.POT_LILAC,
                         "Simple but vibrant lilac plant pot. Material: fired clay, painted");
             case POT_ORANGE:
-                return new Pot("Pot (orange)", "pots/pot_orange.png", 100, PotType.POT_ORANGE,
+                return new Pot("Orange", "pots/pot_orange.png", 100, PotType.POT_ORANGE,
                         "A classic orange plant pot. Material: fired clay");
             case POT_STRIPED_BLUE:
-                return new Pot("Pot (blue striped)", "pots/pot_striped_blue.png", 200, PotType.POT_STRIPED_BLUE,
+                return new Pot("Blue Striped", "pots/pot_striped_blue.png", 200, PotType.POT_STRIPED_BLUE,
                         "A vibrant striped blue pot. Material: painted ceramic");
             case POT_POLKA_PINK:
-                return new Pot("Pot (polka pink)", "pots/pot_polka_pink.png", 200, PotType.POT_POLKA_PINK,
+                return new Pot("Polka Pink", "pots/pot_polka_pink.png", 200, PotType.POT_POLKA_PINK,
                         "Polka dotted pot to give life to your room. Material: epoxy coated clay");
             case ROUND_POT_CLAY:
-                return new Pot("Round Pot (clay)", "pots/round_pot_clay.png", 100, PotType.ROUND_POT_CLAY,
+                return new Pot("Clay", "pots/round_pot_clay.png", 100, PotType.ROUND_POT_CLAY,
                         "A classic round pot. Material: fired clay");
             case ROUND_POT_GOLDEN:
-                return new Pot("Round Pot (golden)", "pots/round_pot_golden.png", 200, PotType.ROUND_POT_CLAY,
+                return new Pot("Golden", "pots/round_pot_golden.png", 200, PotType.ROUND_POT_CLAY,
                         "A luxurious golden pot for your very special plants. Material: gold coated clay");
             case ROUND_POT_STRIPED_GREEN:
-                return new Pot("Round Pot (green striped)", "pots/round_pot_striped_green.png", 200, PotType.ROUND_POT_STRIPED_GREEN,
+                return new Pot("Green Striped", "pots/round_pot_striped_green.png", 200,
+                        PotType.ROUND_POT_STRIPED_GREEN,
                         "Green striped pot to add texture to your place. Material: painted ceramic");
             case ROUND_POT_RED:
-                return new Pot("Round Pot (red)", "pots/round_pot_red.png", 100, PotType.ROUND_POT_RED,
+                return new Pot("Red", "pots/round_pot_red.png", 100, PotType.ROUND_POT_RED,
                         "Round pot with a deep red shade. Material: fired clay, painted");
         }
 

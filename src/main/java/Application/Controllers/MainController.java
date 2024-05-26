@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -46,13 +47,13 @@ public class MainController implements Initializable {
     private TilePane shopPane;
     @FXML
     private ImageView returnButton;
-
     @FXML
     private ImageView soundButton;
     private Controller clientController;
     private User user;
-
     private RoomController roomController;
+    @FXML
+    private ScrollPane scrollPane;
 
     /**
      * This method runs as soon as the Main view opens up.
@@ -66,7 +67,7 @@ public class MainController implements Initializable {
         startBackgroundTimeChecker();
 
         roomController = new RoomController(roomView, user);
-  //      new StoreController(storeView);
+        new StoreController(storeView, shopPane);
     }
 
     /**
