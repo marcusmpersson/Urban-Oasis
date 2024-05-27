@@ -6,59 +6,87 @@ import entities.Deco;
 import entities.Pot;
 import entities.Seed;
 import entities.ShopItem;
-import javafx.animation.FadeTransition;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.util.Duration;
+import main.java.Application.Boundary.Store;
 
 import java.util.ArrayList;
 
+/**
+ * StoreController class manages the store's items and interactions.
+ * It handles displaying items, purchasing items, and showing item details.
+ *
+ * Author: Mouhammed Fakhro
+ */
 public class StoreController {
 
+    // Instances
     private ItemBuilder itemBuilder = new ItemBuilder();
     private Controller controller = Controller.getInstance();
+    private MainController mainController;
+    private Store storeContent;
+
+    // UI Components
     private TilePane shopPane;
+    private Group plantInformationPopup;
+    private Group storeView;
+    private Group selectedItem;
+    private ImageView purchaseItemButton;
+    private ImageView closePopupButton;
+    private Text priceText;
+
+    // Item Lists
     private ArrayList<Group> seedItems = new ArrayList<>();
     private ArrayList<Group> potItems = new ArrayList<>();
     private ArrayList<Group> decoItems = new ArrayList<>();
 
+    // Shop Items
     private ArrayList<Seed> shopSeeds = controller.getShopSeeds();
     private ArrayList<Pot> shopPots = controller.getShopPots();
     private ArrayList<Deco> shopDecos = controller.getShopDecos();
-    private Group selectedItem;
-    private ImageView purchaseItemButton;
-    private Text priceText;
-    private Group storeView;
-    private MainController mainController;
 
-    public StoreController (MainController mainController, Group storeView, TilePane shopPane, Text priceText, ImageView purchaseItemButton) {
+    // State
+    private boolean plantInformationPopupIsOpened = false;
+
+    /**
+     * Constructor for StoreController.
+     *
+     * @param mainController the main controller instance
+     * @param storeView the root view of the store
+     * @param shopPane the pane containing shop items
+     * @param priceText the text displaying the item price
+     * @param purchaseItemButton the button for purchasing items
+     * @param plantInformationPopup the popup for displaying plant information
+     * @param closePopupButton the button for closing the popup
+     */
+    public StoreController(MainController mainController, Group storeView, TilePane shopPane, Text priceText, ImageView purchaseItemButton, Group plantInformationPopup, ImageView closePopupButton) {
         this.mainController = mainController;
         this.storeView = storeView;
         this.shopPane = shopPane;
         this.priceText = priceText;
+        this.plantInformationPopup = plantInformationPopup;
         this.purchaseItemButton = purchaseItemButton;
+        this.closePopupButton = closePopupButton;
+        this.storeContent = new Store(this, storeView, shopPane, plantInformationPopup);
+
         populateShopArrays();
         showCategory("Seeds");
         purchaseButtonClick();
+        setupDetections();
     }
 
+    /**
+     * Sets up the purchase button click behavior.
+     */
     private void purchaseButtonClick() {
         purchaseItemButton.setOnMouseEntered(event -> {
-            if (!purchaseItemButton.getStyleClass().contains("purpleGlow")) {
-                purchaseItemButton.getStyleClass().add("purpleGlow");
-            }
+            storeContent.addButtonGlow(purchaseItemButton);
         });
         purchaseItemButton.setOnMouseExited(event -> {
-            purchaseItemButton.getStyleClass().remove("purpleGlow");
+            storeContent.removeButtonGlow(purchaseItemButton);
         });
-
-
 
         purchaseItemButton.setOnMouseClicked(event -> {
             if (selectedItem != null) {
@@ -73,58 +101,54 @@ public class StoreController {
                     success = controller.purchaseDeco(index);
                 }
 
-                purchaseEffect(success);
+                storeContent.purchaseResponseEffect(success);
                 mainController.updateUserCoins();
             }
-
         });
     }
 
+    /**
+     * Sets up the close button click behavior.
+     */
+    private void setupDetections() {
+        closePopupButton.setOnMouseClicked(event -> {
+            storeContent.animatePopupFrame(false);
+            plantInformationPopupIsOpened = false;
+        });
+    }
+
+    /**
+     * Closes the store's running content.
+     */
+    public void closeStoreRunningContent() {
+        storeContent.animatePopupFrame(false);
+        plantInformationPopupIsOpened = false;
+        storeView.setEffect(null);
+    }
+
+    /**
+     * Populates the shop item arrays.
+     */
     private void populateShopArrays() {
         for (Seed seed : shopSeeds) {
-            Group seedItem = createItemView(seed.imageFilePath, seed.getPrice(), seed.getName());
+            Group seedItem = storeContent.createItemView(seed.imageFilePath, seed.getPrice(), seed.getName(), "Seeds");
             seedItems.add(seedItem);
         }
         for (Pot pot : shopPots) {
-            Group potItem = createItemView(pot.imageFilePath, pot.getPrice(), pot.getName());
+            Group potItem = storeContent.createItemView(pot.imageFilePath, pot.getPrice(), pot.getName(), "Pots");
             potItems.add(potItem);
         }
         for (Deco deco : shopDecos) {
-            Group decoItem = createItemView(deco.imageFilePath, deco.getPrice(), deco.getName());
+            Group decoItem = storeContent.createItemView(deco.imageFilePath, deco.getPrice(), deco.getName(), "Deco");
             decoItems.add(decoItem);
         }
     }
 
-    private void purchaseEffect(boolean success) {
-        Image image;
-        if (success) {
-            image = new Image(getClass().getClassLoader().getResource("dancingcat.gif").toString());
-        } else {
-            image = new Image(getClass().getClassLoader().getResource("nomoney.gif").toString());
-        }
-        ImageView imageView = new ImageView(image);
-        imageView.setScaleY(0.35);
-        imageView.setScaleX(0.35);
-        imageView.setLayoutX(225);
-        imageView.setLayoutY(200);
-        storeView.getChildren().add(imageView);
-
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), imageView);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), imageView);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setDelay(Duration.seconds(1));
-
-        fadeIn.setOnFinished(event -> fadeOut.play());
-
-        fadeOut.setOnFinished(event -> storeView.getChildren().remove(imageView));
-
-        fadeIn.play();
-    }
-
+    /**
+     * Shows the items of a specific category.
+     *
+     * @param category the category to show
+     */
     public void showCategory(String category) {
         ArrayList<Group> items;
         if (category.equals("Seeds")) {
@@ -136,7 +160,7 @@ public class StoreController {
         }
 
         shopPane.getChildren().clear();
-        makeAllCategoriesInvisible();
+        storeContent.makeAllCategoriesInvisible(seedItems, potItems, decoItems);
 
         for (Group item : items) {
             item.setVisible(true);
@@ -144,108 +168,66 @@ public class StoreController {
         }
     }
 
-    private void makeAllCategoriesInvisible() {
-        for (Group seed : seedItems) {
-            seed.setVisible(false);
+    /**
+     * Handles item click events.
+     *
+     * @param item the item that was clicked
+     */
+    private void itemClick(Group item) {
+        selectedItem = item;
+        storeContent.removeGlowFromAllItems(seedItems, potItems, decoItems);
+        if (!selectedItem.getStyleClass().contains("purpleGlow")) {
+            selectedItem.getStyleClass().add("purpleGlow");
         }
-        for (Group pot : potItems) {
-            pot.setVisible(false);
-        }
-        for (Group deco : decoItems) {
-            deco.setVisible(false);
-        }
+        storeContent.addButtonGlow(selectedItem);
+        storeContent.displayPrice(selectedItem, priceText);
     }
 
-    private Group createItemView(String itemImagePath, double price, String name) {
-        Group container = new Group();
-
-        Image backgroundImage = new Image(getClass().getClassLoader().getResource("itemBackground.png").toString());
-        ImageView background = new ImageView(backgroundImage);
-        background.setFitHeight(192);
-        background.setFitWidth(198);
-
-        Image itemImage = new Image(getClass().getClassLoader().getResource(itemImagePath).toString());
-        ImageView itemImageView = new ImageView(itemImage);
-        itemImageView.setFitHeight(90);
-        itemImageView.setFitWidth(90);
-        itemImageView.setLayoutX(52);
-        itemImageView.setLayoutY(30);
-
-        Text itemName = new Text(name);
-        itemName.setWrappingWidth(150);
-        itemName.setFill(Color.WHITE);
-        itemName.setFont(Font.font("Pixeloid Sans", 15));
-        itemName.setTextAlignment(TextAlignment.CENTER);
-        itemName.setLayoutX(27);
-        itemName.setLayoutY(145);
-
-        Group buttonContainer = new Group();
-        buttonContainer.setLayoutX(38);
-        buttonContainer.setLayoutY(173);
-
-        Image buttonImage = new Image(getClass().getClassLoader().getResource("priceBackground.png").toString());
-        ImageView buttonImageView = new ImageView(buttonImage);
-        buttonImageView.setFitWidth(136);
-        buttonImageView.setFitHeight(26);
-        buttonImageView.setLayoutX(-7);
-        buttonImageView.setLayoutY(-15);
-
-        Text priceText = new Text(String.valueOf(price));
-        priceText.setWrappingWidth(122);
-        priceText.setFill(Color.WHITE);
-        priceText.setFont(Font.font("Pixeloid Sans", 15));
-        priceText.setTextAlignment(TextAlignment.CENTER);
-        priceText.setLayoutX(1);
-        priceText.setLayoutY(4);
-
-        /*
-        Image coinImage = new Image(getClass().getClassLoader().getResource("icons/currency.png").toString());
-        ImageView coin = new ImageView(coinImage);
-        coin.setPreserveRatio(true);
-        coin.setScaleX(0.1);
-        coin.setScaleY(0.1);
-        coin.setLayoutX(-5);
-        coin.setLayoutY(-150);
-         */
-
-        Image infoImage = new Image(getClass().getClassLoader().getResource("icons/info3.png").toString());
-        ImageView info = new ImageView(infoImage);
-        info.setScaleX(0.1);
-        info.setScaleY(0.1);
-        info.setLayoutY(-300);
-        info.setLayoutX(-10);
-
-        buttonContainer.getChildren().addAll(buttonImageView, priceText, info);
-
-        container.getChildren().addAll(background, itemImageView, buttonContainer, itemName);
-        container.setVisible(false);
-        shopPane.getChildren().add(container);
-
-        setupItemClicks(container);
-
-        return container;
-    }
-
-    private void setupItemClicks(Group item) {
+    /**
+     * Sets up item clicks for a specific item and info button.
+     *
+     * @param item the item to set up clicks for
+     * @param infoButton the info button to set up clicks for
+     */
+    public void setupItemClicks(Group item, ImageView infoButton) {
         item.setOnMouseClicked(event -> {
-            removeGlowFromAllItems();
-            if (!item.getStyleClass().contains("purpleGlow")) {
-                item.getStyleClass().add("purpleGlow");
+            if (!this.plantInformationPopupIsOpened) {
+                itemClick(item);
             }
-            selectedItem = item;
-            displayPrice(item);
+        });
+
+        infoButton.setOnMouseClicked(event -> {
+            if (!this.plantInformationPopupIsOpened) {
+                selectedItem = (Group) infoButton.getProperties().get("Parent");
+                itemClick(selectedItem);
+                plantInformationPopup.toFront();
+                storeContent.animatePopupFrame(true);
+                plantInformationPopupIsOpened = true;
+                storeContent.plantInformationPopupIsOpened(selectedItem);
+            }
         });
     }
 
+    /**
+     * Gets the index of the selected item.
+     *
+     * @param item the selected item
+     * @return the index of the selected item
+     */
     private int getIndexOfSelectedItem(Group item) {
         ArrayList<Group> array = getItemTypeArrayFromButton(item);
         if (array != null) {
             return array.indexOf(item);
         }
-        return  -1;
+        return -1;
     }
 
-
+    /**
+     * Gets the array of items for a specific button.
+     *
+     * @param button the button to get the item array for
+     * @return the array of items
+     */
     private ArrayList<Group> getItemTypeArrayFromButton(Group button) {
         if (seedItems.contains(button)) {
             return seedItems;
@@ -256,7 +238,13 @@ public class StoreController {
         }
     }
 
-    private String getItemTypeFromButton(Group button) {
+    /**
+     * Gets the item type for a specific button.
+     *
+     * @param button the button to get the item type for
+     * @return the item type
+     */
+    public String getItemTypeFromButton(Group button) {
         if (potItems.contains(button)) {
             return "Pots";
         } else if (seedItems.contains(button)) {
@@ -266,7 +254,13 @@ public class StoreController {
         }
     }
 
-    private ShopItem getObjectFromButton(Group button) {
+    /**
+     * Gets the ShopItem object for a specific button.
+     *
+     * @param button the button to get the ShopItem for
+     * @return the ShopItem object
+     */
+    public ShopItem getObjectFromButton(Group button) {
         if (seedItems.contains(button)) {
             return shopSeeds.get(seedItems.indexOf(button));
         } else if (potItems.contains(button)) {
@@ -275,22 +269,4 @@ public class StoreController {
             return shopDecos.get(decoItems.indexOf(button));
         }
     }
-
-    private void displayPrice(Group item) {
-        ShopItem itemObject = getObjectFromButton(item);
-        priceText.setText(String.valueOf(itemObject.getPrice()));
-    }
-
-    private void removeGlowFromAllItems() {
-        for (Group seed : seedItems) {
-            seed.getStyleClass().remove("purpleGlow");
-        }
-        for (Group pot : potItems) {
-            pot.getStyleClass().remove("purpleGlow");
-        }
-        for (Group deco : decoItems) {
-            deco.getStyleClass().remove("purpleGlow");
-        }
-    }
-
 }

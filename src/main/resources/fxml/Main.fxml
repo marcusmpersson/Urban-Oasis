@@ -219,5 +219,40 @@
             </ImageView>
          </children>
       </Group>
+      <Group fx:id="plantInformationPopup" layoutX="425.0" layoutY="1000.0">
+         <children>
+            <ImageView cache="true" fitHeight="523.0" fitWidth="425.0">
+               <image>
+                  <Image url="@../plantInformationPopup.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <Text id="plantName" fill="WHITE" layoutX="23.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plant Name" wrappingWidth="185.99998474121094">
+               <font>
+                  <Font name="Pixeloid Sans" size="28.0" />
+               </font>
+            </Text>
+            <Text id="plantDescription" fill="WHITE" layoutX="23.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plant Description" wrappingWidth="331.77783203125">
+               <font>
+                  <Font name="Pixeloid Sans" size="19.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="closePopupButton" cache="true" fitHeight="48.0" fitWidth="47.0" layoutX="387.0" layoutY="-11.0">
+               <image>
+                  <Image url="@../closePopupButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <Text id="price" fill="#ffd512" layoutX="23.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price: " wrappingWidth="331.77783203125">
+               <font>
+                  <Font name="Pixeloid Sans" size="19.0" />
+               </font>
+            </Text>
+         </children>
+      </Group>
    </children>
 </AnchorPane>

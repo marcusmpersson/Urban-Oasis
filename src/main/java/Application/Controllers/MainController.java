@@ -39,6 +39,12 @@ public class MainController implements Initializable {
     public ImageView purchaseItemButton;
     @FXML
     public Text userCoins;
+
+    @FXML
+    public Group plantInformationPopup;
+
+    @FXML
+    public ImageView closePopupButton;
     private Stage stage;
     private Scene scene;
     private boolean isLoggedIn;
@@ -71,13 +77,15 @@ public class MainController implements Initializable {
         isLoggedIn = true;
         clientController = Controller.getInstance();
         user = clientController.getTestUser();
+        roomController = new RoomController(roomView, user);
+        storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton, plantInformationPopup, closePopupButton);
+
         roomView.toFront();
-        switchToRoomView(null);
+
+        switchToRoomView();
         startBackgroundTimeChecker();
         updateUserCoins();
 
-        roomController = new RoomController(roomView, user);
-        storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton);
     }
 
     /**
@@ -90,13 +98,13 @@ public class MainController implements Initializable {
     /**
      * Switches to the room view.
      *
-     * @param mouseEvent the mouse event triggering the switch
      */
-    public void switchToRoomView(MouseEvent mouseEvent) {
+    public void switchToRoomView() {
         storeView.setOpacity(0);
         roomView.setOpacity(1);
         roomView.toFront();
         storeView.toBack();
+        storeController.closeStoreRunningContent();
     }
 
 
@@ -104,9 +112,8 @@ public class MainController implements Initializable {
     /**
      * Switches to the store view.
      *
-     * @param mouseEvent the mouse event triggering the switch
      */
-    public void switchToStoreView(MouseEvent mouseEvent) {
+    public void switchToStoreView() {
         roomView.setOpacity(0);
         storeView.setOpacity(1);
         storeView.toFront();
@@ -159,7 +166,10 @@ public class MainController implements Initializable {
         }
     }
 
-
+    private void updateBackgroundTasks(String timeOfDay) {
+        updateRoomBackground(timeOfDay);
+        roomController.updateAllPottedPlantImages();
+    }
 
     /**
      * Determines the time of day based on the given time.
@@ -187,8 +197,7 @@ public class MainController implements Initializable {
             while (isLoggedIn) {
                 LocalTime currentTime = LocalTime.now();
                 String timeOfDay = getTimeOfDay(currentTime);
-                Platform.runLater(() -> updateRoomBackground(timeOfDay));
-                // method that updates plant images
+                Platform.runLater(() -> updateBackgroundTasks(timeOfDay));
 
                 try {
                     Thread.sleep(5000);

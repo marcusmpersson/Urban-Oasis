@@ -69,6 +69,13 @@ public class RoomController {
         return roomGuiContent.generateRoomPlants(plantFilePath, potFilePath, posX, posY);
     }
 
+    private void updatePlantAndPotImages(Group plantButton, PottedPlant pottedPlant) {
+        String plantFilePath = pottedPlant.getPlantTop().getImageFilePath();
+        String potFilePath = pottedPlant.getPot().getImageFilePath();
+
+        roomGuiContent.updatePlantandPotImages(plantButton, plantFilePath, potFilePath);
+    }
+
     /**
      * Spawns user potted plants in their respective slots.
      */
@@ -103,6 +110,15 @@ public class RoomController {
 
                 roomPlants.add(plantContainer);
                 setupMouseEvents(plantContainer);
+            }
+        }
+    }
+
+    public void updateAllPottedPlantImages() {
+        for (Group plantButton : roomPlants) {
+            PottedPlant pottedPlant = (PottedPlant) plantButton.getProperties().get("PottedPlant");
+            if (pottedPlant != null) {
+                updatePlantAndPotImages(plantButton, pottedPlant);
             }
         }
     }

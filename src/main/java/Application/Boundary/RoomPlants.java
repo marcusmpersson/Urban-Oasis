@@ -67,6 +67,22 @@ public class RoomPlants {
         return plantContainer;
     }
 
+    public void updatePlantandPotImages(Group plantButton, String plantFilePath, String potFilePath) {
+
+        ImageView plantImageView = (ImageView) plantButton.lookup("#PlantImage");
+        ImageView potImageView = (ImageView) plantButton.lookup("#PotImage");
+
+        if (plantImageView != null) {
+            Image newPlantImage = new Image(getClass().getClassLoader().getResource(plantFilePath).toString());
+            plantImageView.setImage(newPlantImage);
+        }
+
+        if (potImageView != null) {
+            Image newPotImage = new Image(getClass().getClassLoader().getResource(potFilePath).toString());
+            potImageView.setImage(newPotImage);
+        }
+    }
+
     /**
      * Adds location arrows to the room at specified positions.
      *
