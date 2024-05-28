@@ -8,15 +8,15 @@ use rocket::{
     data::ToByteUnit,
 };
 use std::time::SystemTime;
-use mongodb::bson::{doc, oid::ObjectId};
-use mongodb::bson;
+use mongodb::bson::{doc, Document, oid::ObjectId};
+use mongodb::{bson, Collection};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{DateTime, offset::Utc};
 use std::io::BufReader;
 use std::fs::File as StdFile;
 
 
-use crate::{ database::db::DB, entities::data_models::User };
+use crate::{ database::db::DB, entities::data_models::UserCredentials };
 use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
 use crate::controllers::validators::{check_valid_login, check_valid_signup};
@@ -51,19 +51,19 @@ pub async fn get_inventory(
 pub async fn add_inventory(
     db: &State<DB>,
     user: AuthenticatedUser,
-    user_upload: UserUpload,
+    user_upload: Json<UserUpload>,
 ) -> Response<String> {
     let db: &DB = db as &DB;
 
     let user_info = UserInfo {
         _id: user.id,
-        inventory: user_upload.inventory,
-        rooms: user_upload.rooms,
+        inventory: user_upload.inventory.clone(),
+        rooms: user_upload.rooms.clone(),
         currency: user_upload.currency,
         last_updated: Utc::now().to_string(),
     };
 
-    db.add_inventory(user_info).await.unwrap();
+    db.save_user_info(user_info).await.unwrap();
 
     Ok(SuccessResponse((Status::Ok, "Inventory added".to_string())))
 }
@@ -87,29 +87,31 @@ pub struct UserUpload {
 }
 
 impl DB {
-
     pub async fn fetch_user_info(&self, id: ObjectId) -> mongodb::error::Result<UserInfo> {
-        let collection = self.database.collection("userInfo");
+        let collection: Collection<UserInfo> = self.database.collection("userInfo");
 
         let filter = doc! { "_id": id };
 
-        let user = collection.find_one(filter, None).await.unwrap().unwrap();
-
-        Ok(bson::from_document(user).unwrap())
+        Ok(collection.find_one(filter, None).await.unwrap().unwrap())
     }
 
     pub async fn save_user_info(&self, user_info: UserInfo) -> mongodb::error::Result<()> {
-        let collection = self.database.collection("userInfo");
+        let collection: Collection<UserInfo> = self.database.collection("userInfo");
 
         let filter = doc! { "_id": user_info._id };
 
         let update = doc! { "$set": bson::to_document(&user_info).unwrap() };
 
-        collection.update_one(filter, update, None).await?;
-
+        match collection.find_one(filter.clone(), None).await.unwrap() {
+            Some(_) => {
+                collection.update_one(filter, update, None).await.unwrap();
+            },
+            None => {
+                collection.insert_one(&user_info, None).await.unwrap();
+            }
+        }
         Ok(())
     }
-
 }
 
 

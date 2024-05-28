@@ -11,10 +11,11 @@ use mongodb::bson;
 use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{DateTime, offset::Utc};
 
-use crate::{ database::db::DB, entities::data_models::User };
+use crate::{ database::db::DB, entities::data_models::UserCredentials };
 use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
 use crate::controllers::validators::{check_valid_login, check_valid_signup};
+use crate::entities::data_models::PottedPlant;
 
 
 #[post("/getplant", data="<req_getplant>")]
@@ -30,8 +31,8 @@ pub async fn get_plant(
 }
 
 impl DB {
-    pub async fn fetch_plant(&self, name: &str) -> Result<Plant, mongodb::error::Error> {
-        let collection = self.client.database("plant").collection("plant");
+    pub async fn fetch_plant(&self, name: &str) -> Result<PottedPlant, mongodb::error::Error> {
+        let collection = self.database.collection("plant");
 
         let filter = doc! { "name": name };
 
@@ -50,5 +51,5 @@ pub struct ReqGetPlant {
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct ResGetPlant {
-    pub plant: Plant,
+    pub plant: PottedPlant,
 }
