@@ -256,8 +256,7 @@
       </Group>
       <Group fx:id="inventoryView" layoutX="149.0" opacity="0.0">
          <children>
-            <ImageView fx:id="disposeItem" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="21.0"
-                       layoutY="765.0" opacity="0.3">
+            <ImageView fx:id="disposeItem" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="21.0" layoutY="765.0" opacity="0.3">
                <image>
                   <Image url="@../disposeButton.png" />
                </image>
@@ -270,8 +269,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="plantSeedButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0"
-                       layoutY="765.0" opacity="0.3">
+            <ImageView fx:id="plantSeedButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0" layoutY="765.0" opacity="0.3">
                <image>
                   <Image url="@../plantSeedButton.png" />
                </image>
@@ -282,6 +280,15 @@
             <ImageView fx:id="cancelPlantSeed" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0" layoutY="765.0" opacity="0.0">
                <image>
                   <Image url="@../cancelSeed.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="putInRoomButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0"
+                       layoutY="765.0" opacity="0.0">
+               <image>
+                  <Image url="@../putInRoomButton.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="DEFAULT" />

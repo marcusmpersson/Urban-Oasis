@@ -61,6 +61,9 @@ public class MainController implements Initializable {
     public ImageView plantSeedButton;
     @FXML
     public ImageView disposeItem;
+
+    @FXML
+    public ImageView putInRoomButton;
     private Stage stage;
     private Scene scene;
     private boolean isLoggedIn;
@@ -97,8 +100,8 @@ public class MainController implements Initializable {
         user = clientController.getTestUser();
         roomController = new RoomController(roomView, user);
         storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton, plantInformationPopup, closePopupButton);
-        inventoryController = new InventoryController(clientController, inventoryPane, inventoryView,
-                plantInformationPopup, closePopupButton, plantSeedButton, cancelPlantSeed, disposeItem);
+        inventoryController = new InventoryController(this, clientController, inventoryPane, inventoryView,
+                plantInformationPopup, closePopupButton, plantSeedButton, cancelPlantSeed, disposeItem, putInRoomButton);
 
         roomView.toFront();
 
@@ -203,6 +206,7 @@ public class MainController implements Initializable {
     private void updateBackgroundTasks(String timeOfDay) {
         updateRoomBackground(timeOfDay);
         roomController.updateAllPottedPlantImages();
+        updateUserCoins();
     }
 
     /**
@@ -296,10 +300,6 @@ public class MainController implements Initializable {
 
     public void updateUserCoins() {
         userCoins.setText(String.valueOf(user.getShopCurrency()));
-    }
-
-    public void getUserInventory() {
-
     }
 
     public void showInventorySeeds () {

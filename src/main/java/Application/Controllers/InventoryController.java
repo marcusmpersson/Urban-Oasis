@@ -36,14 +36,19 @@ public class InventoryController {
     private ImageView cancelPlantSeed;
     private ImageView disposeItemButton;
 
+    private ImageView putInRoomButton;
     private boolean isPlanting = false;
     private Seed pickedSeedForPlanting;
     private Pot pickedPotForPlanting;
+    private PottedPlant pickedPottedPlantToPutInRoom;
 
+    private MainController mainController;
 
-    public InventoryController (Controller clientController, TilePane inventoryPane, Group inventoryView,
+    public InventoryController (MainController mainController, Controller clientController, TilePane inventoryPane,
+                                Group inventoryView,
                                 Group plantInformationPopup, ImageView closePopupButton, ImageView plantSeedButton,
-                                ImageView cancelPlantSeed, ImageView disposeItemButton) {
+                                ImageView cancelPlantSeed, ImageView disposeItemButton, ImageView putInRoomButton) {
+        this.mainController = mainController;
         this.inventoryPane = inventoryPane;
         this.inventoryView = inventoryView;
         this.clientController = clientController;
@@ -52,13 +57,15 @@ public class InventoryController {
         this.plantSeedButton = plantSeedButton;
         this.cancelPlantSeed = cancelPlantSeed;
         this.disposeItemButton = disposeItemButton;
+        this.putInRoomButton = putInRoomButton;
 
         inventoryContent = new Inventory(inventoryPane, this, plantInformationPopup, inventoryView);
-            showCategory("Plants");
+        showCategory("Plants");
         setupDetections();
     }
 
     private void startPlanting() {
+        isPlanting = true;
         plantSeedButton.setVisible(false);
         plantSeedButton.setDisable(true);
 
@@ -66,7 +73,6 @@ public class InventoryController {
         cancelPlantSeed.setDisable(false);
         cancelPlantSeed.setOpacity(1);
 
-        isPlanting = true;
         showCategory("Pots");
         System.out.println(selectedItem);
         if (getObjectFromButton(selectedItem) instanceof Seed) {
@@ -105,7 +111,16 @@ public class InventoryController {
             disposeItem();
         });
 
+        putInRoomButton.setOnMouseClicked(event -> {
+            if (getObjectFromButton(selectedItem) instanceof PottedPlant) {
+             pickedPottedPlantToPutInRoom = (PottedPlant) getObjectFromButton(selectedItem);
+             int inventoryIndex = clientController.getInventoryPlants().indexOf(pickedPottedPlantToPutInRoom);
+             clientController.placePlantInRoom(inventoryIndex);
+            }
+        });
+
     }
+
 
     private void selectPotForPlanting() {
         for (Group pot : potItems) {
@@ -114,10 +129,10 @@ public class InventoryController {
                     System.out.println("Sent to client!");
                     pickedPotForPlanting = (Pot) getObjectFromButton(pot);
 
-                    if(pickedSeedForPlanting != null && pickedPotForPlanting != null){
+                    if (pickedSeedForPlanting != null && pickedPotForPlanting != null) {
                         int seedIndex = ownedSeeds.indexOf(pickedSeedForPlanting);
                         int potIndex = ownedPots.indexOf(pickedPotForPlanting);
-                        clientController.plantSeed(potIndex, seedIndex);
+                       // clientController.plantSeed(potIndex, seedIndex);
 
                         cancelPlant();
                     }
@@ -231,11 +246,16 @@ public class InventoryController {
             disposeItemButton.setOpacity(1);
 
             if (getItemTypeFromButton(item).equals("Seeds")) {
-                plantSeedButton.setOpacity(1);
+                plantSeedButton.setVisible(true);
+            } else if (getItemTypeFromButton(item).equals("PottedPlant")) {
+                plantSeedButton.setVisible(false);
+                plantSeedButton.setDisable(true);
+
+                putInRoomButton.setVisible(true);
             } else {
+                putInRoomButton.setVisible(false);
                 plantSeedButton.setOpacity(0.3);
             }
-
         }
         inventoryContent.addButtonGlow(selectedItem);
     }
@@ -303,6 +323,7 @@ public class InventoryController {
                 int index = ownedPottedPlants.indexOf(item);
                 clientController.disposePlantFromInventory(index);
             }
+            mainController.updateUserCoins();
             openInventoryView();
         }
     }
