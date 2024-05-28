@@ -8,14 +8,14 @@ public class Room implements Serializable {
     public ArrayList<String> imageFilePaths;
 
     /** constructor creates a room with given PlacementSlots and given image file-paths. */
-    public Room(ArrayList<PlacementSlot> slots, ArrayList<String> imageFilePaths){
+    public Room(ArrayList<PlacementSlot> slots, ArrayList<String> imageFilePaths) {
         this.slots = slots;
         this.imageFilePaths = imageFilePaths;
     }
 
     /** returns the placement slot at given index.
      * returns null if index is out of bounds. */
-    public PlacementSlot getSlot(int index){
+    public PlacementSlot getSlot(int index) {
         if (index < slots.size()) {
             return slots.get(index);
         }
@@ -31,16 +31,6 @@ public class Room implements Serializable {
             }
         }
         return null;
-    }
-
-    /** method swaps the contents of two slots in the room
-     * (even if they're empty). */
-    public void swapTwoItems (int index1, int index2){
-        Placeable item1 = slots.get(index1).getPlacedItem();
-        Placeable item2 = slots.get(index2).getPlacedItem();
-
-        slots.get(index1).setPlacedItem(item2);
-        slots.get(index2).setPlacedItem(item1);
     }
 
     /** returns a reference to the arraylist containing all PlacementSlots in the room */

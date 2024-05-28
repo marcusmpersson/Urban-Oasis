@@ -6,13 +6,13 @@ public abstract class Item {
     public String descriptionText;
 
     /** constructor assigns price and descriptive text of the item */
-    public Item (int price, String descriptionText){
+    public Item (int price, String descriptionText) {
         this.price = price;
         this.descriptionText = descriptionText;
     }
 
     /** returns price of the item */
-    public int getPrice(){
+    public int getPrice() {
         return this.price;
     }
 

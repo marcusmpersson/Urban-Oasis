@@ -23,7 +23,7 @@ public class Seed extends ShopItem implements Serializable {
 
     /** constructor creates a Seed with given rarity, list of possibilities, name, image filepath,
      * price, and description. Chooses a random species from the list of possibilities. */
-    public Seed(Rarity rarity, ArrayList<Species> possibilities, String name, String imageFilePath, int price, String descriptionText){
+    public Seed(Rarity rarity, ArrayList<Species> possibilities, String name, String imageFilePath, int price, String descriptionText) {
         super(imageFilePath, name, price, descriptionText);
         this.rarity = rarity;
         this.possiblePlants = possibilities;
@@ -31,10 +31,9 @@ public class Seed extends ShopItem implements Serializable {
     }
 
     /** method returns a random species from the list of possible species. */
-    public Species speciesAtRandom(){
+    private Species speciesAtRandom() {
         Random random = new Random();
-        int index = random.nextInt(possiblePlants.size());
-        return this.possiblePlants.get(index);
+        return this.possiblePlants.get(random.nextInt(possiblePlants.size()));
     }
 
     /** method returns the rarity of the seed. */
