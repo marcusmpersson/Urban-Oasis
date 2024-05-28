@@ -11,7 +11,7 @@ use mongodb::bson;
 use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{DateTime, offset::Utc};
 
-use crate::{ database::db::DB, entities::data_models::User };
+use crate::{ database::db::DB, entities::data_models::UserCredentials };
 use crate::auth::token::{ AuthenticatedUser, Claims };
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET};
 use crate::controllers::validators::{check_valid_login, check_valid_signup};

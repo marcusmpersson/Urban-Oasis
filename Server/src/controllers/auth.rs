@@ -5,7 +5,7 @@ use rocket::{
     serde::{json::Json, Serialize, Deserialize},
     State,
 };
-use std::time::SystemTime;
+use std::time::{SystemTime, UNIX_EPOCH};
 use mongodb::bson::{doc, oid::ObjectId};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{DateTime, offset::Utc};
@@ -39,18 +39,24 @@ pub async fn login(
                 return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string())));
             }
 
+            let exp_duration = 4 * 60 * 60; // Token expiration duration in seconds (4 hours)
+            let expiration = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .expect("Time went backwards")
+                .as_secs() + exp_duration;
+
             // Create JWT claims.
             let claims = Claims {
                 sub: u._id,
                 role: "user".to_string(),
-                exp: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 4 * 60 * 60,
+                exp: expiration,
             };
 
             // Encode JWT token.
             let token = encode(
                 &Header::default(),
                 &claims,
-                &EncodingKey::from_secret(JWT_SECRET.as_ref()),
+                &EncodingKey::from_secret(JWT_SECRET.as_bytes()),
             ).unwrap();
 
             // Return success response with token.
@@ -77,7 +83,7 @@ pub async fn register(
             }
 
             // Insert new user into the database.
-            db.insert_user(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
+            db.insert_user_credentials(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
 
             // Return success response.
             Ok(SuccessResponse((Status::Created, "Registered".to_string())))
