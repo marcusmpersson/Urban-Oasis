@@ -256,7 +256,8 @@
       </Group>
       <Group fx:id="inventoryView" layoutX="149.0" opacity="0.0">
          <children>
-            <ImageView id="disposeItem" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="21.0" layoutY="765.0" opacity="0.0">
+            <ImageView fx:id="disposeItem" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="21.0"
+                       layoutY="765.0" opacity="0.3">
                <image>
                   <Image url="@../disposeButton.png" />
                </image>
@@ -270,7 +271,7 @@
                </cursor>
             </ImageView>
             <ImageView fx:id="plantSeedButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0"
-                       layoutY="765.0" opacity="0.0">
+                       layoutY="765.0" opacity="0.3">
                <image>
                   <Image url="@../plantSeedButton.png" />
                </image>
@@ -278,8 +279,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="cancelPlantSeed"  cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0"
-                       layoutY="765.0" opacity="0.0">
+            <ImageView fx:id="cancelPlantSeed" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0" layoutY="765.0" opacity="0.0">
                <image>
                   <Image url="@../cancelSeed.png" />
                </image>
@@ -289,7 +289,7 @@
             </ImageView>
             <HBox alignment="TOP_CENTER" layoutX="5.0" layoutY="7.0" prefHeight="59.0" prefWidth="1003.0" spacing="75.0">
                <children>
-                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" onMouseClicked="#showStoreSeeds">
+                  <ImageView fx:id="inventoryPlantButton" cache="true" fitHeight="43.0" fitWidth="143.0" onMouseClicked="#showInventoryPlants">
                      <image>
                         <Image url="@../plantsInventoryButton.png" />
                      </image>
@@ -300,7 +300,7 @@
                         <Insets top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="590.0" onMouseClicked="#showStorePots">
+                  <ImageView fx:id="inventoryPotButton" cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="590.0" onMouseClicked="#showInventoryPots">
                      <image>
                         <Image url="@../potsButtonNEW.png" />
                      </image>
@@ -311,7 +311,7 @@
                         <Insets top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="736.0" onMouseClicked="#showStoreDecos">
+                  <ImageView fx:id="inventoryDecoButton" cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="736.0" onMouseClicked="#showInventoryDecos">
                      <image>
                         <Image url="@../decosButtonNew.png" />
                      </image>
@@ -322,7 +322,7 @@
                         <Insets top="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="147.0" layoutY="20.0" onMouseClicked="#showStoreSeeds">
+                  <ImageView fx:id="inventorySeedButton" cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="147.0" layoutY="20.0" onMouseClicked="#showInventorySeeds">
                      <image>
                         <Image url="@../seedButtonNew.png" />
                      </image>
@@ -347,9 +347,9 @@
                   </ImageView>
                   <StackPane prefHeight="578.0" prefWidth="970.0">
                      <children>
-                        <ScrollPane fx:id="scrollBar1" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
+                        <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css" vbarPolicy="ALWAYS">
                            <content>
-                              <TilePane fx:id="shopPane1" hgap="30.0" prefHeight="632.0" prefWidth="970.0" vgap="30.0">
+                              <TilePane fx:id="inventoryPane" hgap="30.0" prefHeight="632.0" prefWidth="970.0" vgap="30.0">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>

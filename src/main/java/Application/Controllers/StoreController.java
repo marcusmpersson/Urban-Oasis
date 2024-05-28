@@ -203,7 +203,7 @@ public class StoreController {
                 plantInformationPopup.toFront();
                 storeContent.animatePopupFrame(true);
                 plantInformationPopupIsOpened = true;
-                storeContent.plantInformationPopupIsOpened(selectedItem);
+                storeContent.openPlantInformationPopup(selectedItem);
             }
         });
     }

@@ -140,8 +140,7 @@ public class Store {
      * @param potItems the list of pot items
      * @param decoItems the list of deco items
      */
-    public void makeAllCategoriesInvisible(ArrayList<Group> seedItems, ArrayList<Group> potItems,
-                                           ArrayList<Group> decoItems) {
+    public void makeAllCategoriesInvisible(ArrayList<Group> seedItems, ArrayList<Group> potItems, ArrayList<Group> decoItems) {
         for (Group seed : seedItems) {
             seed.setVisible(false);
         }
@@ -189,7 +188,7 @@ public class Store {
             imageView.setFitWidth(130);
 
             imageView.setLayoutX(55);
-            imageView.setLayoutY(-15);
+            imageView.setLayoutY(0);
         }
     }
 
@@ -294,7 +293,7 @@ public class Store {
      *
      * @param selectedItem the selected item
      */
-    public void plantInformationPopupIsOpened(Group selectedItem) {
+    public void openPlantInformationPopup(Group selectedItem) {
         if (selectedItem != null) {
             ImageView previousImageView = (ImageView) plantInformationPopup.lookup("#ItemImage");
             if (previousImageView != null) {

@@ -51,6 +51,16 @@ public class MainController implements Initializable {
 
     @FXML
     public ImageView inventoryButtonList;
+    public ImageView inventoryPlantButton;
+    public ImageView inventoryPotButton;
+    public ImageView inventoryDecoButton;
+    public ImageView inventorySeedButton;
+    @FXML
+    public ImageView cancelPlantSeed;
+    @FXML
+    public ImageView plantSeedButton;
+    @FXML
+    public ImageView disposeItem;
     private Stage stage;
     private Scene scene;
     private boolean isLoggedIn;
@@ -65,6 +75,9 @@ public class MainController implements Initializable {
     private ImageView roomBackground;
     @FXML
     private TilePane shopPane;
+
+    @FXML
+    private TilePane inventoryPane;
     @FXML
     private ImageView returnButton;
     @FXML
@@ -73,9 +86,6 @@ public class MainController implements Initializable {
     private User user;
     private RoomController roomController;
     private InventoryController inventoryController;
-    @FXML
-    private ScrollPane scrollPane;
-
 
     /**
      * This method runs as soon as the Main view opens up.
@@ -87,7 +97,8 @@ public class MainController implements Initializable {
         user = clientController.getTestUser();
         roomController = new RoomController(roomView, user);
         storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton, plantInformationPopup, closePopupButton);
-        inventoryController = new InventoryController();
+        inventoryController = new InventoryController(clientController, inventoryPane, inventoryView,
+                plantInformationPopup, closePopupButton, plantSeedButton, cancelPlantSeed, disposeItem);
 
         roomView.toFront();
 
@@ -125,6 +136,7 @@ public class MainController implements Initializable {
         inventoryView.toFront();
         roomView.toBack();
         storeView.toBack();
+        inventoryController.openInventoryView();
     }
 
 
@@ -284,5 +296,25 @@ public class MainController implements Initializable {
 
     public void updateUserCoins() {
         userCoins.setText(String.valueOf(user.getShopCurrency()));
+    }
+
+    public void getUserInventory() {
+
+    }
+
+    public void showInventorySeeds () {
+        inventoryController.showCategory("Seeds");
+    }
+
+    public void showInventoryDecos () {
+        inventoryController.showCategory("Decos");
+    }
+
+    public void showInventoryPots () {
+        inventoryController.showCategory("Pots");
+    }
+
+    public void showInventoryPlants () {
+        inventoryController.showCategory("Plants");
     }
 }
