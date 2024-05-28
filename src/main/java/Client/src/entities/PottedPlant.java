@@ -11,7 +11,7 @@ public class PottedPlant extends Item implements Placeable, Serializable {
 
     /** constructor creates a PottedPlant with given Pot and PlantTop instances. */
     public PottedPlant(Pot pot, PlantTop plant){
-        super(pot.getPrice() + plant.getPrice(), plant.getDescriptionText());
+        super(pot.getPrice() + plant.getPrice(), plant.getDescriptionText(), plant.getName());
         this.pot = pot;
         this.plant = plant;
     }

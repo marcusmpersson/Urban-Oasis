@@ -17,6 +17,7 @@ public class PlantTop implements Serializable {
     private int age;
     private PottedPlant belongingPottedPlant;
     private String descriptionText;
+    private String name;
 
     /** Constructor, sets instance variables.
      * Initiates age to 0, updates plant stage. */
@@ -28,6 +29,7 @@ public class PlantTop implements Serializable {
         this.basePrice = price;
         this.rarity = rarity;
         this.descriptionText = descriptionText;
+        this.name = this.species.getSpeciesName();
         age = 0;
         updateStage();
     }
@@ -164,6 +166,10 @@ public class PlantTop implements Serializable {
     public Stage getStage() {
         updateStage();
         return stage;
+    }
+
+    public String getName() {
+        return name;
     }
 
     // ------------------------------------------

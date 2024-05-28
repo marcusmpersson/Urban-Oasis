@@ -4,18 +4,11 @@ package entities;
 public class ShopItem extends Item {
 
     public String imageFilePath;
-    public String name;
 
     /** constructor assigns imageFilePath, name, price and description of the ShopItem. */
     public ShopItem(String imageFilePath, String name, int price, String descriptionText){
-        super(price, descriptionText);
+        super(price, descriptionText, name);
         this.imageFilePath = imageFilePath;
-        this.name = name;
-    }
-
-    /** returns the name of this ShopItem */
-    public String getName(){
-        return this.name;
     }
 
     /** returns the image filepath of this ShopItem */
