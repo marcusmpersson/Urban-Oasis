@@ -1,6 +1,5 @@
 package entities;
 
-import Builders.PlantTopBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import enums.Rarity;

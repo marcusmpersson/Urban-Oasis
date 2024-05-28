@@ -85,4 +85,9 @@ public class PottedPlant extends Item implements Placeable, Serializable {
         return filePathArray;
     }
 
+    /** returns plant name */
+    public String getName(){
+        return this.plant.getSpecies().getScientificName();
+    }
+
 }

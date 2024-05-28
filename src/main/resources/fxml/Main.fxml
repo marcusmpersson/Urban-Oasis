@@ -11,11 +11,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1161.0" styleClass="borderColor" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.Application.Controllers.MainController">
    <children>
-      <ImageView id="backgroundImage" cache="true" fitHeight="824.0" fitWidth="1161.0" opacity="0.9">
+      <ImageView id="backgroundImage" cache="true" fitHeight="824.0" fitWidth="1161.0">
          <image>
             <Image url="@../loginbackground.png" />
          </image>
@@ -23,111 +24,6 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
-      <Group id="storeView" fx:id="storeView" layoutX="149.0" opacity="0.0">
-         <children>
-            <ImageView id="backgroundImage" cache="true" fitHeight="73.0" fitWidth="1312.0">
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
-            </ImageView>
-            <HBox alignment="TOP_CENTER" layoutX="5.0" layoutY="7.0" prefHeight="59.0" prefWidth="1302.0" spacing="150.0">
-               <children>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0">
-                     <image>
-                        <Image url="@../SEEDSButton.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                     <HBox.margin>
-                        <Insets top="10.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="590.0" layoutY="20.0">
-                     <image>
-                        <Image url="@../SEEDSButton.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                     <HBox.margin>
-                        <Insets top="10.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="33.0" fitWidth="143.0" layoutX="736.0" layoutY="10.0">
-                     <image>
-                        <Image url="@../SEEDSButton.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                     <HBox.margin>
-                        <Insets top="10.0" />
-                     </HBox.margin>
-                  </ImageView>
-               </children>
-            </HBox>
-            <Group layoutX="21.0" layoutY="96.0">
-               <children>
-                  <ImageView id="backgroundImage" cache="true" fitHeight="716.0" fitWidth="977.0">
-                     <image>
-                        <Image url="@../storeBigRectangle.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                  </ImageView>
-                  <StackPane prefHeight="521.0" prefWidth="663.0">
-                     <children>
-                        <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="712.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
-                           <content>
-                              <TilePane fx:id="shopPane" hgap="30.0" prefHeight="712.0" prefWidth="970.0" vgap="30.0">
-                                 <children>
-                                    <Group layoutX="284.0" layoutY="-3.0">
-                                       <children>
-                                          <ImageView id="backgroundImage" cache="true" fitHeight="192.0" fitWidth="198.0" layoutY="28.0">
-                                             <image>
-                                                <Image url="@../itemBackground.png" />
-                                             </image>
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor>
-                                          </ImageView>
-                                          <Group layoutX="38.0" layoutY="173.0">
-                                             <children>
-                                                <ImageView id="backgroundImage" cache="true" fitHeight="26.0" fitWidth="136.0" layoutX="-7.0">
-                                                   <image>
-                                                      <Image url="@../priceBackground.png" />
-                                                   </image>
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor>
-                                                </ImageView>
-                                                <Text fill="WHITE" layoutX="1.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1.000" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="122.27778625488281" />
-                                             </children>
-                                          </Group>
-                                          <Text fill="WHITE" layoutX="31.0" layoutY="153.0" scaleX="1.2" scaleY="1.2" strokeType="OUTSIDE" strokeWidth="0.0" text="sus" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="136.44445776939392" />
-                                       </children>
-                                    </Group>
-                                 </children>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <padding>
-                                    <Insets left="15.0" top="15.0" />
-                                 </padding>
-                              </TilePane>
-                           </content>
-                           <StackPane.margin>
-                              <Insets />
-                           </StackPane.margin>
-                        </ScrollPane>
-                     </children>
-                  </StackPane>
-               </children>
-            </Group>
-         </children>
-      </Group>
       <Group fx:id="roomView" layoutX="149.0" layoutY="-5.0">
          <children>
             <ImageView fx:id="roomBackground" cache="true" fitHeight="830.0" fitWidth="1032.0" layoutX="-17.0">
@@ -138,6 +34,14 @@
                   <Image url="@../rooms/roomDaytime.jpg" />
                </image>
             </ImageView>
+            <ImageView fx:id="resetButton" cache="true" fitHeight="44.0" fitWidth="94.0" layoutX="-3.0" layoutY="14.0" onMouseClicked="#resetRoom">
+               <image>
+                  <Image url="@../icons/resetRoomButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
          </children>
       </Group>
       <Group fx:id="menuBar" layoutX="-50.0">
@@ -146,7 +50,7 @@
                <children>
                   <ImageView id="roomButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToRoomView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../RoomButton.png" />
+                        <Image url="@../icons/roomButton.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -154,15 +58,15 @@
                   </ImageView>
                   <ImageView id="storeButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToStoreView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../StoreButton.png" />
+                        <Image url="@../icons/shopButton.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </ImageView>
-                  <ImageView id="inventoryButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+                  <ImageView fx:id="inventoryButtonList" cache="true" fitHeight="60.0" fitWidth="60.0" onMouseClicked="#switchToInventoryView" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                      <image>
-                        <Image url="@../InventoryButton.png" />
+                        <Image url="@../icons/inventoryButton.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -178,8 +82,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="returnButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="7.0" onMouseClicked="#switchToLoginScene" onMouseEntered="#handleMouseEntered"
-                       onMouseExited="#handleMouseExited">
+            <ImageView fx:id="returnButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="7.0" onMouseClicked="#switchToLoginScene" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
                <image>
                   <Image url="@../returnButton.png" />
                </image>
@@ -187,6 +90,289 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
+            <ImageView fx:id="soundButton" cache="true" fitHeight="27.0" fitWidth="28.0" layoutX="139.0" layoutY="11.0" onMouseClicked="#handleMusicButton" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+               <image>
+                  <Image url="@../icons/soundON.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <Text fx:id="userCoins" fill="WHITE" layoutX="100.0" layoutY="798.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="77.11111068725586">
+               <font>
+                  <Font name="Pixeloid Sans" size="20.0" />
+               </font>
+            </Text>
+            <ImageView cache="true" fitHeight="27.0" fitWidth="28.0" layoutX="63.0" layoutY="778.0">
+               <image>
+                  <Image url="@../icons/currency.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Group>
+      <Group fx:id="storeView" layoutX="149.0" opacity="0.0">
+         <children>
+            <ImageView fx:id="purchaseItemButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="21.0" layoutY="765.0">
+               <image>
+                  <Image url="@../purchaseButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView id="backgroundImage" cache="true" fitHeight="73.0" fitWidth="1008.0">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <HBox alignment="TOP_CENTER" layoutX="5.0" layoutY="7.0" prefHeight="59.0" prefWidth="1003.0" spacing="150.0">
+               <children>
+                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" onMouseClicked="#showStoreSeeds">
+                     <image>
+                        <Image url="@../seedButtonNew.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="590.0" onMouseClicked="#showStorePots">
+                     <image>
+                        <Image url="@../potsButtonNEW.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="736.0" onMouseClicked="#showStoreDecos">
+                     <image>
+                        <Image url="@../decosButtonNew.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+            </HBox>
+            <Group layoutX="21.0" layoutY="96.0">
+               <children>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="641.0" fitWidth="977.0">
+                     <image>
+                        <Image url="@../storeBigRectangle.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <StackPane prefHeight="578.0" prefWidth="970.0">
+                     <children>
+                        <ScrollPane fx:id="scrollBar" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css">
+                           <content>
+                              <TilePane fx:id="shopPane" hgap="30.0" prefHeight="632.0" prefWidth="970.0" vgap="30.0">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" top="15.0" />
+                                 </padding>
+                              </TilePane>
+                           </content>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </ScrollPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </Group>
+            <ImageView cache="true" fitHeight="48.0" fitWidth="199.0" layoutX="755.0" layoutY="760.0">
+               <image>
+                  <Image url="@../priceBackgroundBig.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <Text fx:id="priceText" fill="WHITE" layoutX="818.0" layoutY="795.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="80.11111068725586">
+               <font>
+                  <Font name="Pixeloid Sans" size="30.0" />
+               </font>
+            </Text>
+            <ImageView cache="true" fitHeight="37.0" fitWidth="39.0" layoutX="696.0" layoutY="765.0">
+               <image>
+                  <Image url="@../icons/currency.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+         </children>
+      </Group>
+      <Group fx:id="plantInformationPopup" layoutX="425.0" layoutY="1000.0">
+         <children>
+            <ImageView cache="true" fitHeight="523.0" fitWidth="425.0">
+               <image>
+                  <Image url="@../plantInformationPopup.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <Text id="plantName" fill="WHITE" layoutX="23.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plant Name" wrappingWidth="185.99998474121094">
+               <font>
+                  <Font name="Pixeloid Sans" size="28.0" />
+               </font>
+            </Text>
+            <Text id="plantDescription" fill="WHITE" layoutX="23.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plant Description" wrappingWidth="331.77783203125">
+               <font>
+                  <Font name="Pixeloid Sans" size="19.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="closePopupButton" cache="true" fitHeight="48.0" fitWidth="47.0" layoutX="387.0" layoutY="-11.0">
+               <image>
+                  <Image url="@../closePopupButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <Text id="price" fill="#ffd512" layoutX="23.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price: " wrappingWidth="331.77783203125">
+               <font>
+                  <Font name="Pixeloid Sans" size="19.0" />
+               </font>
+            </Text>
+         </children>
+      </Group>
+      <Group fx:id="inventoryView" layoutX="149.0" opacity="0.0">
+         <children>
+            <ImageView fx:id="disposeItem" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="21.0" layoutY="765.0" opacity="0.3">
+               <image>
+                  <Image url="@../disposeButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView id="backgroundImage" cache="true" fitHeight="73.0" fitWidth="1008.0">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="plantSeedButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0" layoutY="765.0" opacity="0.3">
+               <image>
+                  <Image url="@../plantSeedButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="cancelPlantSeed" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0" layoutY="765.0" opacity="0.0">
+               <image>
+                  <Image url="@../cancelSeed.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="putInRoomButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0"
+                       layoutY="765.0" opacity="0.0">
+               <image>
+                  <Image url="@../putInRoomButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+            <HBox alignment="TOP_CENTER" layoutX="5.0" layoutY="7.0" prefHeight="59.0" prefWidth="1003.0" spacing="75.0">
+               <children>
+                  <ImageView fx:id="inventoryPlantButton" cache="true" fitHeight="43.0" fitWidth="143.0" onMouseClicked="#showInventoryPlants">
+                     <image>
+                        <Image url="@../plantsInventoryButton.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="inventoryPotButton" cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="590.0" onMouseClicked="#showInventoryPots">
+                     <image>
+                        <Image url="@../potsButtonNEW.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="inventoryDecoButton" cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="736.0" onMouseClicked="#showInventoryDecos">
+                     <image>
+                        <Image url="@../decosButtonNew.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="inventorySeedButton" cache="true" fitHeight="43.0" fitWidth="143.0" layoutX="147.0" layoutY="20.0" onMouseClicked="#showInventorySeeds">
+                     <image>
+                        <Image url="@../seedButtonNew.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+            </HBox>
+            <Group layoutX="21.0" layoutY="96.0">
+               <children>
+                  <ImageView id="backgroundImage" cache="true" fitHeight="641.0" fitWidth="977.0">
+                     <image>
+                        <Image url="@../storeBigRectangle.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <StackPane prefHeight="578.0" prefWidth="970.0">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="970.0" styleClass="transparent-scrollpane" stylesheets="@../style.css" vbarPolicy="ALWAYS">
+                           <content>
+                              <TilePane fx:id="inventoryPane" hgap="30.0" prefHeight="632.0" prefWidth="970.0" vgap="30.0">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="30.0" top="15.0" />
+                                 </padding>
+                              </TilePane>
+                           </content>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </ScrollPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </Group>
          </children>
       </Group>
    </children>

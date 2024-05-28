@@ -1,13 +1,13 @@
 package main.java.Application.Controllers;
 
-import Controllers.LocalFileHandler;
+import controller.LocalFileHandler;
 import entities.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import main.java.Application.Boundary.WidgetView;
+import main.java.Application.Boundary.Widget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +21,11 @@ import java.util.Map;
  */
 public class WidgetHandler {
 
-    private ArrayList<WidgetEntity> widgets;
-    private LocalFileHandler localFileHandler;
-    private Map<String, StageData> stageDataMap;
+    private ArrayList<WidgetEntity> widgets = new ArrayList<>();
+    private LocalFileHandler localFileHandler = new LocalFileHandler();
+    private Map<String, StageData> stageDataMap = new HashMap<>();
+    private ArrayList<Stage> uiStages = new ArrayList<>();
     private RoomController roomController;
-    private ArrayList<Stage> uiStages;
 
     /**
      * Constructor for WidgetHandler.
@@ -33,10 +33,6 @@ public class WidgetHandler {
      * @param roomController the room controller
      */
     public WidgetHandler(RoomController roomController) {
-        this.widgets = new ArrayList<>();
-        this.localFileHandler = new LocalFileHandler();
-        this.stageDataMap = new HashMap<>();
-        this.uiStages = new ArrayList<>();
         this.roomController = roomController;
     }
 
@@ -51,7 +47,7 @@ public class WidgetHandler {
         String potImageFilePath = pottedPlant.getPot().getImageFilePath();
         String currentWaterLevel = roomController.getCurrentWaterLevel(pottedPlant);
 
-        WidgetView widgetView = new WidgetView(this);
+        Widget widgetView = new Widget(this);
         StackPane root = widgetView.setWidget(new Image(plantImageFilePath), new Image(potImageFilePath), currentWaterLevel);
         Stage stage = widgetView.getStage();
 
@@ -103,7 +99,7 @@ public class WidgetHandler {
     public void removeWidget(Stage stage) {
         stage.close();
         PottedPlant pottedPlant = (PottedPlant) stage.getProperties().get("PottedPlant");
-        roomController.removeWidgetGlow(pottedPlant);
+        roomController.removeRoomPlantGlow(pottedPlant);
     }
 
     /**

@@ -1,7 +1,6 @@
 package entities;
 
-import Builders.ItemBuilder;
-import enums.DecoType;
+import builder.ItemBuilder;
 import enums.Rarity;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class Shop {
         pots.addAll(ItemBuilder.buildAllPots());
 
         // add decorations to shop
-        decos.add(ItemBuilder.buildDeco(DecoType.TERRARIUM));
+        decos.addAll(ItemBuilder.buildAllDecos());
     }
 
     /** Method creates new instance of the selected Seed type and returns it. */
@@ -59,5 +58,20 @@ public class Shop {
     /** returns the size of decos arraylist */
     public int getDecosSize() {
         return decos.size();
+    }
+
+    /** returns arraylist of all pots in the shop */
+    public ArrayList<Pot> getPots() {
+        return pots;
+    }
+
+    /** returns arraylist of all seeds in the shop */
+    public ArrayList<Seed> getSeeds() {
+        return seeds;
+    }
+
+    /** returns arraylist of all decos in the shop */
+    public ArrayList<Deco> getDecos() {
+        return decos;
     }
 }
