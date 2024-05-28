@@ -16,6 +16,7 @@ use crate::auth::token::{AuthenticatedUser, Claims}; // Importing local authenti
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET}; // Importing secret keys.
 use crate::controllers::validators::{check_valid_login, check_valid_signup}; // Importing local validator functions.
 
+
 /// Handler for the login route.
 #[post("/login", data="<req_sign_in>")]
 pub async fn login(
