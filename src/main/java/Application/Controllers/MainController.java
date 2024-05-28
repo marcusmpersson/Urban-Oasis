@@ -45,6 +45,12 @@ public class MainController implements Initializable {
 
     @FXML
     public ImageView closePopupButton;
+
+    @FXML
+    public Group inventoryView;
+
+    @FXML
+    public ImageView inventoryButtonList;
     private Stage stage;
     private Scene scene;
     private boolean isLoggedIn;
@@ -66,8 +72,10 @@ public class MainController implements Initializable {
     private Controller clientController;
     private User user;
     private RoomController roomController;
+    private InventoryController inventoryController;
     @FXML
     private ScrollPane scrollPane;
+
 
     /**
      * This method runs as soon as the Main view opens up.
@@ -79,6 +87,7 @@ public class MainController implements Initializable {
         user = clientController.getTestUser();
         roomController = new RoomController(roomView, user);
         storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton, plantInformationPopup, closePopupButton);
+        inventoryController = new InventoryController();
 
         roomView.toFront();
 
@@ -101,10 +110,21 @@ public class MainController implements Initializable {
      */
     public void switchToRoomView() {
         storeView.setOpacity(0);
+        inventoryView.setOpacity(0);
         roomView.setOpacity(1);
         roomView.toFront();
         storeView.toBack();
+        inventoryView.toBack();
         storeController.closeStoreRunningContent();
+    }
+
+    public void switchToInventoryView() {
+        storeView.setOpacity(0);
+        roomView.setOpacity(0);
+        inventoryView.setOpacity(1);
+        inventoryView.toFront();
+        roomView.toBack();
+        storeView.toBack();
     }
 
 
@@ -115,8 +135,10 @@ public class MainController implements Initializable {
      */
     public void switchToStoreView() {
         roomView.setOpacity(0);
+        inventoryView.setOpacity(0);
         storeView.setOpacity(1);
         storeView.toFront();
+        inventoryView.toBack();
         roomView.toBack();
     }
 

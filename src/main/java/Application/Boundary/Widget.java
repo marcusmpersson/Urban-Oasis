@@ -22,7 +22,7 @@ import main.java.Application.Controllers.WidgetHandler;
  *
  * Author: Mouhammed Fakhro
  */
-public class WidgetView {
+public class Widget {
 
     private Rectangle roundedRectangle;
     private HBox menuBar;
@@ -37,7 +37,7 @@ public class WidgetView {
      *
      * @param widgetHandler the widget handler
      */
-    public WidgetView(WidgetHandler widgetHandler) {
+    public Widget (WidgetHandler widgetHandler) {
         this.widgetHandler = widgetHandler;
     }
 

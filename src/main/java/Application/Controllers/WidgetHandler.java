@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import main.java.Application.Boundary.WidgetView;
+import main.java.Application.Boundary.Widget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class WidgetHandler {
         String potImageFilePath = pottedPlant.getPot().getImageFilePath();
         String currentWaterLevel = roomController.getCurrentWaterLevel(pottedPlant);
 
-        WidgetView widgetView = new WidgetView(this);
+        Widget widgetView = new Widget(this);
         StackPane root = widgetView.setWidget(new Image(plantImageFilePath), new Image(potImageFilePath), currentWaterLevel);
         Stage stage = widgetView.getStage();
 

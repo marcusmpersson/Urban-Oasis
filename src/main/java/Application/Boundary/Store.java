@@ -241,16 +241,6 @@ public class Store {
         priceText.setLayoutX(1);
         priceText.setLayoutY(4);
 
-        /*
-        Image coinImage = new Image(getClass().getClassLoader().getResource("icons/currency.png").toString());
-        ImageView coin = new ImageView(coinImage);
-        coin.setPreserveRatio(true);
-        coin.setScaleX(0.1);
-        coin.setScaleY(0.1);
-        coin.setLayoutX(-5);
-        coin.setLayoutY(-150);
-         */
-
         Image infoImage = new Image(getClass().getClassLoader().getResource("icons/info3.png").toString());
         ImageView info = new ImageView(infoImage);
         info.setScaleX(0.1);
