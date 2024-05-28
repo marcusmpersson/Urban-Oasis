@@ -132,43 +132,44 @@ public class ItemBuilder {
     }
 
     private static Deco buildBuddha() {
-        String desc = "";
+        String desc = "Innumerable representations of Buddha are venerated and decorate spaces all around the world.\" + \"" +
+                "This brass Buddha statue shines in reddish and golden hues.";
         String filepath = "decos/buddha.png";
         return new Deco("Mini Buddha Statue", filepath, 600, desc, DecoType.BUDDHA);
     }
 
     private static Deco buildGeode() {
-        String desc = "";
+        String desc = "Minerals make beautiful decorations. This is a Brazilian agate geode in vibrant green and blue shades.";
         String filepath = "decos/geode.png";
         return new Deco("Geode stone (turquoise)", filepath, 2000, desc, DecoType.GEODE);
     }
 
     private static Deco buildGlobeBlue() {
-        String desc = "";
+        String desc = "Earth globes have transcended time as a classic of decorations and can be found in many styles and colors.";
         String filepath = "decos/globe_blue.png";
         return new Deco("Globe (blue)", filepath, 300, desc, DecoType.GLOBE_BLUE);
     }
 
     private static Deco buildGlobeGray() {
-        String desc = "";
+        String desc = "Earth globes have transcended time as a classic of decorations and can be found in many styles and colors.";
         String filepath = "decos/globe_gray.png";
         return new Deco("Globe (Gray)", filepath, 300, desc, DecoType.GLOBE_GRAY);
     }
 
     private static Deco buildGlobeYellowPink() {
-        String desc = "";
+        String desc = "Earth globes have transcended time as a classic of decorations and can be found in many styles and colors.";
         String filepath = "decos/globe_yellow_pink.png";
         return new Deco("Globe (yellow/pink)", filepath, 400, desc, DecoType.GLOBE_YELLOW_PINK);
     }
 
     private static Deco buildMusicBox() {
-        String desc = "";
+        String desc = "Simple wooden music box decorated with hand-painted patterns and dancing ballerina.";
         String filepath = "decos/music_box.png";
         return new Deco("Music Box", filepath, 800, desc, DecoType.MUSIC_BOX);
     }
 
     private static Deco buildOldClock() {
-        String desc = "";
+        String desc = "Vintage German clock ornamented in gold.";
         String filepath = "decos/old_clock.png";
         return new Deco("Old Clock", filepath, 1400, desc, DecoType.OLD_CLOCK);
     }

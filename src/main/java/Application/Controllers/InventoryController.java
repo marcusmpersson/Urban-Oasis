@@ -69,12 +69,12 @@ public class InventoryController {
         isPlanting = true;
         showCategory("Pots");
         System.out.println(selectedItem);
-        selectPotForPlanting();
         if (getObjectFromButton(selectedItem) instanceof Seed) {
             pickedSeedForPlanting = (Seed) getObjectFromButton(selectedItem);
         }
+        selectPotForPlanting();
+        cancelPlant();
         // force pot view
-
     }
     private void cancelPlant() {
         plantSeedButton.setVisible(true);
@@ -101,6 +101,10 @@ public class InventoryController {
             cancelPlant();
         });
 
+        disposeItemButton.setOnMouseClicked(event -> {
+            disposeItem();
+        });
+
     }
 
     private void selectPotForPlanting() {
@@ -109,10 +113,19 @@ public class InventoryController {
                 pot.setOnMouseClicked(event -> {
                     System.out.println("Sent to client!");
                     pickedPotForPlanting = (Pot) getObjectFromButton(pot);
+
+                    if(pickedSeedForPlanting != null && pickedPotForPlanting != null){
+                        int seedIndex = ownedSeeds.indexOf(pickedSeedForPlanting);
+                        int potIndex = ownedPots.indexOf(pickedPotForPlanting);
+                        clientController.plantSeed(potIndex, seedIndex);
+
+                        cancelPlant();
+                    }
                 });
             }
         }
     }
+
 
     public void openInventoryView() {
         deselectItem();
@@ -178,11 +191,11 @@ public class InventoryController {
             decoItems.add(decoItem);
         }
         for (PottedPlant plant : ownedPottedPlants) {
-            Group decoItem = inventoryContent.createItemView(plant.getPlantTop().getImageFilePath(),
+            Group plantItem = inventoryContent.createItemView(plant.getPlantTop().getImageFilePath(),
                     plant.getPot().getImageFilePath(),
                     plant.getPrice(),
-                    plant.getName(), "Deco");
-            decoItems.add(decoItem);
+                    plant.getName(), "PottedPlant");
+            plantItems.add(plantItem);
         }
     }
 
@@ -270,9 +283,27 @@ public class InventoryController {
         });
     }
 
+    public void disposeItem(){
+        if(selectedItem != null){
+            Item item = getObjectFromButton(selectedItem);
 
-
-    private void updateInventoryWithUserItems() {
-
+            if(item instanceof Seed){
+                int index = ownedSeeds.indexOf(item);
+                clientController.disposeSeedFromInventory(index);
+            }
+            else if(item instanceof Pot){
+                int index = ownedPots.indexOf(item);
+                clientController.disposePotFromInventory(index);
+            }
+            else if(item instanceof Deco){
+                int index = ownedDecos.indexOf(item);
+                clientController.disposeDecoFromInventory(index);
+            }
+            else if(item instanceof PottedPlant){
+                int index = ownedPottedPlants.indexOf(item);
+                clientController.disposePlantFromInventory(index);
+            }
+            openInventoryView();
+        }
     }
 }
