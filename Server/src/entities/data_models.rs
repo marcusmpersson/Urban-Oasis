@@ -3,12 +3,18 @@ use serde::{Deserialize, Serialize}; // Importing traits for serializing and des
 
 /// Represents a user in the system.
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct User {
+pub struct UserCredentials {
     pub _id: ObjectId, // Unique identifier for the user.
     pub email: String, // Email address of the user.
     pub username: String, // Username chosen by the user.
     pub password: String, // User's password (should be stored securely).
     pub created_at: String, // Timestamp of when the user account was created.
+}
+
+/// Represents user save information in the system.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct UserInfo {
+    pub _id: ObjectId, // Unique identifier for the user.
     pub rooms: Vec<Room>, // List of rooms associated with the user.
     pub currency: i32, // Amount of in-game currency the user has.
     pub inventory: Inventory, // User's inventory of items.
