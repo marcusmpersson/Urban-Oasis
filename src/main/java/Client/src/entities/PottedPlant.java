@@ -71,23 +71,23 @@ public class PottedPlant extends Item implements Placeable, Serializable {
         return plant;
     }
 
+    /** returns plant name */
+    public String getName(){
+        return this.plant.getSpecies().getScientificName();
+    }
+
     // ------------------------------------------
     // MOST LIKELY WILL NEVER BE USED:
     // ------------------------------------------
 
     /** method returns an arraylist containing the plantTop image (index 0)
      * and pot image (index 1) */
-    public ArrayList<String> getImagesFilePaths(){
+    public ArrayList<String> getImagesFilePaths() {
         ArrayList<String> filePathArray = new ArrayList<>();
         filePathArray.add(plant.getImageFilePath());
         filePathArray.add(pot.getImageFilePath());
 
         return filePathArray;
-    }
-
-    /** returns plant name */
-    public String getName(){
-        return this.plant.getSpecies().getScientificName();
     }
 
 }

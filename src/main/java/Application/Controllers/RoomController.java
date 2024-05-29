@@ -1,6 +1,6 @@
 package main.java.Application.Controllers;
 
-import Controllers.Controller;
+import controller.Controller;
 import entities.*;
 import javafx.scene.Group;
 import javafx.scene.Node;

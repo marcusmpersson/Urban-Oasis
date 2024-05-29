@@ -1,6 +1,6 @@
 package main.java.Application.Controllers;
 
-import Controllers.Controller;
+import controller.Controller;
 import entities.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
