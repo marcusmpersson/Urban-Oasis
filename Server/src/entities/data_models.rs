@@ -24,7 +24,7 @@ pub struct UserInfo {
 /// Represents the inventory of a user.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Inventory {
-    pub pottedPlants: Vec<PottedPlant>,
+    pub potted_plants: Vec<PottedPlant>,
     pub pots: Vec<Pot>,
     pub seeds: Vec<Seed>,
     pub decorations: Vec<Deco>,
@@ -34,7 +34,7 @@ impl Inventory {
     /// Creates a new, empty inventory.
     pub fn new() -> Inventory {
         Inventory {
-            pottedPlants: vec![], // Initialize with an empty list of potted plants.
+            potted_plants: vec![], // Initialize with an empty list of potted plants.
             pots: vec![], // Initialize with an empty list of pots.
             seeds: vec![], // Initialize with an empty list of seeds.
             decorations: vec![], // Initialize with an empty list of decorations.
@@ -46,21 +46,21 @@ impl Inventory {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Room {
     pub slots: Vec<PlacementSlot>, // List of slots available for placing items in the room.
-    pub imageFilePaths: Vec<String>, // File paths to images representing the room.
+    pub image_file_paths: Vec<String>, // File paths to images representing the room.
 }
 
 /// Represents the health statistics of a plant.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct HealthStat {
-    pub overallMood: i32, // Overall mood of the plant.
-    pub waterLevel: i32, // Water level of the plant.
-    pub envSatisfaction: i32, // Satisfaction level with the environment.
+    pub overall_mood: i32, // Overall mood of the plant.
+    pub water_level: i32, // Water level of the plant.
+    pub env_satisfaction: i32, // Satisfaction level with the environment.
 }
 
 /// Represents the top part of a plant with image file paths.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlantTop {
-    pub imageFilePaths: Vec<String>, // File paths to images representing the plant's top.
+    pub image_file_paths: Vec<String>, // File paths to images representing the plant's top.
 }
 
 /// Represents a generic item with a price.
@@ -72,8 +72,8 @@ pub struct Item {
 /// Represents a seed with associated shop item details and plant species information.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Seed {
-    pub shopItem: ShopItem, // Shop item details of the seed.
-    pub possiblePlants: Vec<Species>, // List of possible plant species that can grow from the seed.
+    pub shop_item: ShopItem, // Shop item details of the seed.
+    pub possible_plants: Vec<Species>, // List of possible plant species that can grow from the seed.
     pub rarity: Rarity, // Rarity level of the seed.
     pub species: Species, // Specific species of the seed.
 }
@@ -89,15 +89,15 @@ pub struct ShopItem {
 /// Represents a decoration with shop item details and placement information.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Deco {
-    pub shopItem: ShopItem, // Shop item details of the decoration.
-    pub placedAt: PlacementSlot, // Placement slot where the decoration is placed.
-    pub decoType: DecoType, // Type of the decoration.
+    pub shop_item: ShopItem, // Shop item details of the decoration.
+    pub placed_at: PlacementSlot, // Placement slot where the decoration is placed.
+    pub deco_type: DecoType, // Type of the decoration.
 }
 
 /// Represents a slot where an item can be placed.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PlacementSlot {
-    pub environment: Enviroment, // Environment type of the slot.
+    pub environment: Environment, // Environment type of the slot.
     pub x: i32, // X coordinate of the slot.
     pub y: i32, // Y coordinate of the slot.
     pub taken: bool, // Indicates if the slot is already taken by an item.
@@ -106,9 +106,9 @@ pub struct PlacementSlot {
 /// Represents a pot with shop item details and placement information.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Pot {
-    pub shopItem: ShopItem, // Shop item details of the pot.
-    pub potType: PotType, // Type of the pot.
-    pub placedAt: PlacementSlot, // Placement slot where the pot is placed.
+    pub shop_item: ShopItem, // Shop item details of the pot.
+    pub pot_type: PotType, // Type of the pot.
+    pub placed_at: PlacementSlot, // Placement slot where the pot is placed.
 }
 
 /// Represents a potted plant with item details and placement information.
@@ -117,63 +117,63 @@ pub struct PottedPlant {
     pub item: Item, // General item details of the potted plant.
     pub pot: Pot, // Pot in which the plant is placed.
     pub plant: PlantTop, // Top part of the plant.
-    pub placementSlot: PlacementSlot, // Placement slot where the potted plant is placed.
+    pub placement_slot: PlacementSlot, // Placement slot where the potted plant is placed.
 }
 
 /// Enum representing different types of environments.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum Enviroment {
-    SHADE, // Shade environment.
-    HALF_SHADE, // Half-shade environment.
-    SUNNY, // Sunny environment.
-    HUMID, // Humid environment.
+pub enum Environment {
+    Shade,
+    HalfShade,
+    Sunny,
+    Humid,
 }
 
 /// Enum representing different rarity levels of items.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Rarity {
-    COMMOM, // Common rarity.
-    RARE, // Rare rarity.
-    EPIC, // Epic rarity.
-    LEGENDARY, // Legendary rarity.
+    COMMON,
+    RARE,
+    EPIC,
+    LEGENDARY,
 }
 
 /// Enum representing different types of decorations.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum DecoType {
-    TERRARIUM, // Terrarium decoration.
-    BUDDHA, // Buddha decoration.
-    GEODE, // Geode decoration.
-    GLOBE_BLUE, // Blue globe decoration.
-    GLOBE_GRAY, // Gray globe decoration.
-    GLOBE_YELLOW_PINK, // Yellow and pink globe decoration.
-    MUSIC_BOX, // Music box decoration.
-    OLD_CLOCK, // Old clock decoration.
+    Terrarium,
+    Buddha,
+    Geode,
+    GlobeBlue,
+    GlobeGray,
+    GlobeYellowPink,
+    MusicBox,
+    OldClock,
 }
 
 /// Enum representing different types of pots.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum PotType {
-    POT_LILAC, // Lilac pot.
-    POT_ORANGE, // Orange pot.
-    POT_POLKA_PINK, // Polka dot pink pot.
-    POT_STRIPED_BLUE, // Striped blue pot.
-    ROUND_POT_CLAY, // Round clay pot.
-    ROUND_POT_GOLDEN, // Round golden pot.
-    ROUND_POT_RED, // Round red pot.
-    ROUND_POT_STRIPED_GREEN, // Round striped green pot.
+    PotLilac,
+    PotOrange,
+    PotPolkaPink,
+    PotStripedBlue,
+    RoundPotClay,
+    RoundPotGolden,
+    RoundPotRed,
+    RoundPotStripedGreen,
 }
 
 /// Enum representing different species of plants.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Species {
-    CACTUS, // Cactus plant.
-    PARLOR_PALM, // Parlor palm plant.
-    ARROWHEAD_PLANT, // Arrowhead plant.
-    SWORD_FERN, // Sword fern plant.
-    COFFEE_PLANT, // Coffee plant.
-    PINEAPPLE_PLANT, // Pineapple plant.
-    ORCHID, // Orchid plant.
-    CHILI_PEPPER, // Chili pepper plant.
-    ROSE_PLANT, // Rose plant.
+    Cactus,
+    ParlorPalm,
+    ArrowheadPlant,
+    SwordFern,
+    CoffeePlant,
+    PineapplePlant,
+    Orchid,
+    ChiliPepper,
+    RosePlant,
 }
