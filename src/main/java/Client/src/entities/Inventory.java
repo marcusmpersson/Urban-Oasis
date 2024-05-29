@@ -10,27 +10,19 @@ public class Inventory implements Serializable {
 
     @SerializedName("pottedplant")
     @Expose
-    private ArrayList<PottedPlant> pottedPlants;
+    private ArrayList<PottedPlant> pottedPlants = new ArrayList<>();;
     @SerializedName("pots")
     @Expose
-    private ArrayList<Pot> pots;
+    private ArrayList<Pot> pots = new ArrayList<>();;
     @SerializedName("seeds")
     @Expose
-    private ArrayList<Seed> seeds;
+    private ArrayList<Seed> seeds = new ArrayList<>();;
     @SerializedName("Decorations")
     @Expose
-    private ArrayList<Deco> decorations;
-
-    /** constructor creates a new empty inventory with separate lists for different item types */
-    public Inventory(){
-        pottedPlants = new ArrayList<>();
-        pots = new ArrayList<>();
-        seeds = new ArrayList<>();
-        decorations = new ArrayList<>();
-    }
+    private ArrayList<Deco> decorations = new ArrayList<>();;
 
     /** method receives an item and places it in the correct category in the inventory */
-    public void addItem(Item item){
+    public void addItem(Item item) {
         if (item instanceof PottedPlant){
             pottedPlants.add((PottedPlant)item);
         }
@@ -59,13 +51,12 @@ public class Inventory implements Serializable {
     public PottedPlant getPottedPlantAt(int index) {
         if (index < pottedPlants.size()) {
             return pottedPlants.get(index);
-        } else {
-            return null;
         }
+        return null;
     }
 
     /** removes the PottedPlant at given index */
-    public synchronized void removePottedPlantAt(int index) {
+    public void removePottedPlantAt(int index) {
         synchronized (pottedPlants) {
             if (index < pottedPlants.size()) {
                 pottedPlants.remove(index);
@@ -87,9 +78,8 @@ public class Inventory implements Serializable {
     public Pot getPotAt(int index) {
         if (index < pots.size()) {
             return pots.get(index);
-        } else {
-            return null;
         }
+        return null;
     }
 
     /** removes the Pot at given index */
@@ -114,9 +104,8 @@ public class Inventory implements Serializable {
         synchronized (seeds) {
             if (index < seeds.size()) {
                 return seeds.get(index);
-            } else {
-                return null;
             }
+            return null;
         }
     }
 
@@ -142,9 +131,8 @@ public class Inventory implements Serializable {
         synchronized (decorations) {
             if (index < decorations.size()) {
                 return decorations.get(index);
-            } else {
-                return null;
             }
+            return null;
         }
     }
 

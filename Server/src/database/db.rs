@@ -5,7 +5,7 @@ use mongodb::bson::{doc, document::Document, oid::ObjectId, Bson, extjson::de::E
 use mongodb::{Client, Collection, Database, options::ClientOptions};
 use rocket::fairing::AdHoc;
 
-use crate::entities::data_models::User; // Importing the User data model.
+use crate::entities::data_models::UserCredentials; // Importing the User data model.
 use crate::private_cons::URL_DB; // Importing the database URL from a private constants module.
 
 const DB_NAME: &str = "test"; // Defining a constant for the database name.

@@ -23,7 +23,7 @@ public class PlantTop implements Serializable {
     /** Constructor, sets instance variables.
      * Initiates age to 0, updates plant stage. */
     public PlantTop (ArrayList<String> imageFilePaths, Species species, int price,
-                     Rarity rarity, String descriptionText){
+                     Rarity rarity, String descriptionText) {
         this.imageFilePaths = imageFilePaths;
         this.species= species;
         this.healthStat= new HealthStat();
@@ -40,7 +40,7 @@ public class PlantTop implements Serializable {
     // ------------------------------------------
 
     /** checks age of plant, updates STAGE if needed. Checks if plant has died */
-    public synchronized void updateStage(){
+    public synchronized void updateStage() {
 
         if (this.stage != Stage.DEAD) {
             // the plant would be "planted" for 20 minutes:
@@ -64,7 +64,7 @@ public class PlantTop implements Serializable {
     }
 
     /** if plant isn't dead, raises age of plant by given amount, updates stage */
-    public void raiseAge(int amount){
+    public void raiseAge(int amount) {
         if (this.stage != Stage.DEAD) {
             age += amount;
             updateStage();
@@ -94,8 +94,10 @@ public class PlantTop implements Serializable {
     public void updateEnvSatisfaction(int amount) {
         if (this.stage != Stage.DEAD) {
             // if placed at desired environment, raise satisfaction
-            if (belongingPottedPlant.getPlacedAt().getEnvironment()
-                    == species.getPreferredEnvironment()) {
+            if (
+                    belongingPottedPlant.getPlacedAt().getEnvironment()
+                    == species.getPreferredEnvironment())
+            {
                 healthStat.raiseEnvSatisfaction(amount);
             }
             // otherwise, lower satisfaction
@@ -191,7 +193,7 @@ public class PlantTop implements Serializable {
     // ------------------------------------------
 
     /** saves a reference to the belonging PottedPlant */
-    public void setBelongingPottedPlant (PottedPlant belongingPottedPlant){
+    public void setBelongingPottedPlant (PottedPlant belongingPottedPlant) {
         this.belongingPottedPlant = belongingPottedPlant;
     }
 

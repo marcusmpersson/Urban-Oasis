@@ -5,16 +5,16 @@ use rocket::{
     serde::{json::Json, Serialize, Deserialize},
     State,
 };
-use std::time::SystemTime;
+use std::time::{SystemTime, UNIX_EPOCH};
 use mongodb::bson::{doc, oid::ObjectId};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use chrono::{DateTime, offset::Utc};
 use mongodb::bson;
 
-use crate::{database::db::DB, entities::data_models::{User, Inventory}}; // Importing local crate modules.
+use crate::{database::db::DB, entities::data_models::{UserCredentials, Inventory}}; // Importing local crate modules.
 use crate::auth::token::{AuthenticatedUser, Claims}; // Importing local authentication token module.
 use crate::private_cons::{JWT_SECRET, REFRESH_SECRET}; // Importing secret keys.
-use crate::controllers::validators::{check_valid_login, check_valid_signup}; // Importing validation functions.
+use crate::controllers::validators::{check_valid_login, check_valid_signup}; // Importing local validator functions.
 
 
 /// Handler for the login route.
@@ -26,7 +26,7 @@ pub async fn login(
     let db: &DB = db as &DB;
 
     // Fetch user by email.
-    let u: User = match db.fetch_user(&req_sign_in.email).await.unwrap() {
+    let u: UserCredentials = match db.fetch_user(&req_sign_in.email).await.unwrap() {
         Some(u) => u,
         None => return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string()))),
     };
@@ -39,18 +39,24 @@ pub async fn login(
                 return Err(ErrorResponse((Status::Unauthorized, "Invalid credentials".to_string())));
             }
 
+            let exp_duration = 4 * 60 * 60; // Token expiration duration in seconds (4 hours)
+            let expiration = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .expect("Time went backwards")
+                .as_secs() + exp_duration;
+
             // Create JWT claims.
             let claims = Claims {
                 sub: u._id,
                 role: "user".to_string(),
-                exp: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs() + 4 * 60 * 60,
+                exp: expiration,
             };
 
             // Encode JWT token.
             let token = encode(
                 &Header::default(),
                 &claims,
-                &EncodingKey::from_secret(JWT_SECRET.as_ref()),
+                &EncodingKey::from_secret(JWT_SECRET.as_bytes()),
             ).unwrap();
 
             // Return success response with token.
@@ -77,7 +83,7 @@ pub async fn register(
             }
 
             // Insert new user into the database.
-            db.insert_user(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
+            db.insert_user_credentials(&req_sign_up.email, &req_sign_up.password, &req_sign_up.username).await.unwrap();
 
             // Return success response.
             Ok(SuccessResponse((Status::Created, "Registered".to_string())))
@@ -102,7 +108,7 @@ pub async fn me(
     let db = db as &DB;
 
     // Fetch user by ID.
-    let u: User = db.fetch_user_by_id(user.id).await.unwrap();
+    let u: UserCredentials = db.fetch_user_by_id(user.id).await.unwrap();
 
     // Return user's email and username.
     Ok(SuccessResponse((
@@ -159,10 +165,10 @@ pub async fn email(
     let db = db as &DB;
 
     // Check if email already exists.
-    let u: User = match db.fetch_user(&req_email.email).await.unwrap() {
-        Some(_) => return Err(ErrorResponse((Status::Conflict, "Email already exists".to_string()))),
-        None => return Ok(SuccessResponse((Status::Ok, "Email available".to_string()))),
-    };
+    return match db.fetch_user(&req_email.email).await.unwrap() {
+        Some(_) => Err(ErrorResponse((Status::Conflict, "Email already exists".to_string()))),
+        None => Ok(SuccessResponse((Status::Ok, "Email available".to_string()))),
+    }
 }
 
 /// Handler to check if a username is available for registration.
@@ -174,10 +180,10 @@ pub async fn username(
     let db = db as &DB;
 
     // Check if username already exists.
-    let u: User = match db.fetch_user(&req_username.username).await.unwrap() {
-        Some(_) => return Err(ErrorResponse((Status::Conflict, "Username already exists".to_string()))),
-        None => return Ok(SuccessResponse((Status::Ok, "Username available".to_string()))),
-    };
+    return match db.fetch_user(&req_username.username).await.unwrap() {
+        Some(_) => Err(ErrorResponse((Status::Conflict, "Username already exists".to_string()))),
+        None => Ok(SuccessResponse((Status::Ok, "Username available".to_string()))),
+    }
 }
 
 /// Struct representing the sign-in request payload.
@@ -228,23 +234,23 @@ pub struct ReqUsername {
 
 impl DB {
     /// Fetch user by email from the database.
-    async fn fetch_user(&self, email: &str) -> mongodb::error::Result<Option<User>> {
-        let collection_user = self.database.collection::<User>("users");
+    async fn fetch_user(&self, email: &str) -> mongodb::error::Result<Option<UserCredentials>> {
+        let collection_user = self.database.collection::<UserCredentials>("userCredentials");
 
         Ok(collection_user.find_one(bson::doc! { "email": email }, None).await.unwrap())
     }
 
     /// Fetch user by ID from the database.
-    async fn fetch_user_by_id(&self, id: ObjectId) -> Result<User, String> {
+    async fn fetch_user_by_id(&self, id: ObjectId) -> Result<UserCredentials, String> {
         let filter = doc! { "id": id };
-        let user = self.database.collection("users").find_one(filter, None).await.unwrap().unwrap();
+        let user = self.database.collection("userCredentials").find_one(filter, None).await.unwrap().unwrap();
 
         Ok(mongodb::bson::from_document(user).unwrap())
     }
 
     /// Insert a new user into the database.
-    async fn insert_user(&self, email: &str, password: &str, username: &str) -> Result<(), String> {
-        let user = User {
+    async fn insert_user_credentials(&self, email: &str, password: &str, username: &str) -> Result<(), String> {
+        let user = UserCredentials {
             _id: ObjectId::new(),
             email: email.to_string(),
             password: hash(password, DEFAULT_COST).unwrap(),
@@ -252,13 +258,9 @@ impl DB {
 
                 .to_string(),
             created_at: DateTime::<Utc>::from(SystemTime::now()).format("%Y-%m-%d %H:%M:%S").to_string(),
-            currency: 0,
-            inventory: Inventory::new(),
-            last_updated: DateTime::<Utc>::from(SystemTime::now()).format("%Y-%m-%d %H:%M:%S").to_string(),
-            rooms: vec![],
         };
 
-        self.database.collection("users").insert_one(mongodb::bson::to_document(&user).unwrap(), None).await.unwrap();
+        self.database.collection("userCredentials").insert_one(mongodb::bson::to_document(&user).unwrap(), None).await.unwrap();
         Ok(())
     }
 
@@ -267,13 +269,13 @@ impl DB {
         let filter = doc! { "id": id };
         let update = doc! { "$set": { "email": email, "password": password, "username": username } };
 
-        self.database.collection::<User>("users").update_one(filter, update, None).await.unwrap();
+        self.database.collection::<UserCredentials>("userCredentials").update_one(filter, update, None).await.unwrap();
         Ok(())
     }
 
     /// Delete user from the database.
     async fn delete_user(&self, id: ObjectId) -> mongodb::error::Result<()> {
-        self.database.collection::<User>("users").delete_one(doc! { "id": id }, None).await;
+        self.database.collection::<UserCredentials>("userCredentials").delete_one(doc! { "id": id }, None).await;
         Ok(())
     }
 }

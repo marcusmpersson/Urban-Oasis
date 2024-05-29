@@ -15,7 +15,7 @@ public class Deco extends ShopItem implements Placeable, Serializable {
     }
 
     /** returns the DecoType of this deco. */
-    public DecoType getDecoType(){
+    public DecoType getDecoType() {
         return type;
     }
 

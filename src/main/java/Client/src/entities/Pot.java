@@ -14,13 +14,13 @@ public class Pot extends ShopItem implements Placeable, Serializable {
     private PlacementSlot placedAt;
 
     /** constructor assigns imageFilePath, name, price, type, and description of the Pot. */
-    public Pot (String name, String imageFilePath, int price, PotType type, String descriptionText){
+    public Pot (String name, String imageFilePath, int price, PotType type, String descriptionText) {
         super(imageFilePath, name, price, descriptionText);
         this.type = type;
     }
 
     /** returns the PotType of this Pot. */
-    public PotType getPotType(){
+    public PotType getPotType() {
         return type;
     }
 

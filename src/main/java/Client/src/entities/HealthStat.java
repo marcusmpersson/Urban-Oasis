@@ -9,8 +9,8 @@ public class HealthStat implements Serializable {
 
     /** constructor sets all starting health bars to 50 and calculates overall mood */
     public HealthStat() {
-        this.waterLevel = 50;
-        this.envSatisfaction = 50;
+        waterLevel = 50;
+        envSatisfaction = 50;
         calculateOverallMood();
     }
 
@@ -28,14 +28,7 @@ public class HealthStat implements Serializable {
      * If plant doesn't need watering, watering raises the level by 20%
      * Re-calculates overall mood. */
     public void water() {
-        //if water level is below 100%, watering it should put it to 100%
-        if (waterLevel < 90){
-            waterLevel = 100;
-        }
-        // otherwise, should raise by 20%
-        else if (waterLevel >= 100 ) {
-            waterLevel += 20;
-        }
+        waterLevel += 20;
         calculateOverallMood();
     }
 
@@ -63,7 +56,7 @@ public class HealthStat implements Serializable {
     /** method lowers environment satisfaction by given amount, limited down to 0.
      * Re-calculates overall mood.
      * @param amount the amount to be lowered */
-    public void lowerEnvSatisfaction(int amount){
+    public void lowerEnvSatisfaction(int amount) {
         if (envSatisfaction > 0) {
             this.envSatisfaction -= amount;
             calculateOverallMood();

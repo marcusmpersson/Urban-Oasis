@@ -36,7 +36,7 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
             // Decode the token using the JWT secret and validation settings.
             let data = decode::<Claims>(
                 token,
-                &DecodingKey::from_secret(JWT_SECRET.as_ref()),
+                &DecodingKey::from_secret(JWT_SECRET.as_bytes()),
                 &Validation::new(jsonwebtoken::Algorithm::HS256),
             );
 
@@ -45,7 +45,10 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
                 // If successful, extract the claims.
                 Ok(c) => c.claims,
                 // If there's an error, return an unauthorized error outcome.
-                Err(_) => return Outcome::Failure((Status::Unauthorized, "Invalid token".to_string())),
+                Err(err) => {
+                    println!("Token error: {:?}", err);
+                    return Outcome::Error((Status::Unauthorized, "Invalid token".to_string()))
+                }
             };
 
             // Return a successful outcome with the authenticated user's ID.
@@ -53,7 +56,7 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
 
         } else {
             // If no token is provided, return an unauthorized error outcome.
-            Outcome::Failure((Status::Unauthorized, "No token provided".to_string()))
+            Outcome::Error((Status::Unauthorized, "No token provided".to_string()))
         }
     }
 }

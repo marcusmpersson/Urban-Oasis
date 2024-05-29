@@ -1,18 +1,17 @@
 #[macro_use] 
 extern crate rocket;
 use rocket::http::Status;
-use crate::controller::SuccessResponse;
-use crate::controller::Response;
 use fairings::cors::{Cors, options};
 use mongodb::{
     bson::{Document, doc},
     Client,
     Collection
 };
+use crate::controllers::{Response, SuccessResponse};
 
 use crate::database::db::init;
 
-mod controller;
+mod controllers;
 mod auth;
 mod database;
 mod entities;
@@ -33,11 +32,17 @@ async fn rocket() -> _ {
         .mount("/", routes![options])
         .mount("/", routes![index])
         .mount("/auth", routes![
-            controller::auth::login,
-            controller::auth::register,
-            controller::auth::logout,
-            controller::auth::me,
-            controller::auth::username,
-            controller::auth::email],
+            controllers::auth::login,
+            controllers::auth::register,
+            controllers::auth::logout,
+            controllers::auth::me,
+            controllers::auth::username,
+            controllers::auth::email],
+        )
+        .mount(
+            "/user",
+            routes![
+                controllers::routes::user::get_inventory,
+                controllers::routes::user::add_inventory],
         )
 }

@@ -14,6 +14,11 @@ import main.java.Application.Controllers.WidgetHandler;
 
 import java.util.ArrayList;
 
+/**
+ * client controller class that handles communication between backend and frontend controllers.
+ * @author Rana Noorzadeh
+ * @author Christian Storck
+ * */
 public class Controller {
 
     private GameHandler gameHandler;
@@ -35,7 +40,7 @@ public class Controller {
         weatherUpdater = new WeatherUpdater(this);
         soundEffectHandler = new SoundEffectHandler();
 
-        currentUser = generateTestUser();
+        currentUser = getTestUser();
     }
 
     /** returns singleton instance of controller */
@@ -46,8 +51,8 @@ public class Controller {
         return instance;
     }
 
-    public User generateTestUser() {
-
+    /** generates and returns a test user */
+    public User getTestUser() {
         // room
         ArrayList<Room> rooms = new ArrayList<>();
         Room room = RoomBuilder.buildCommonRoom();
@@ -111,10 +116,6 @@ public class Controller {
 
         // user
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
-    }
-
-    public User getTestUser() {
-        return currentUser;
     }
 
     /** method initiates a default User item for a newly signed-up account,
