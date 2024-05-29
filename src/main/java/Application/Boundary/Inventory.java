@@ -142,7 +142,7 @@ public class Inventory {
             }
 
             if (itemNameText != null && itemDescriptionText != null && itemPriceText != null) {
-                //itemNameText.setText(item.getName());
+                itemNameText.setText(item.getName());
                 itemDescriptionText.setText(item.getDescriptionText());
                 itemPriceText.setText("Price: " + String.valueOf(item.getPrice()));
                 if (itemDescriptionText.getText().isEmpty()) {
