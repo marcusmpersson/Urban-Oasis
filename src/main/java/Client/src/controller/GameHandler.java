@@ -189,7 +189,6 @@ public class GameHandler {
         }
     }
 
-
     /** removes Placeable item from given slot at given room,
      *  places item back in the inventory
      * */
@@ -295,16 +294,6 @@ public class GameHandler {
 
             currentUser.getInventory().removePottedPlantAt(index);
         }
-    }
-
-    /** method places an item back in the inventory. Clears the slot.
-     * @param roomIndex index of the room
-     * @param placementIndex index of the slot */
-    public void placeItemBackInInventory(int roomIndex, int placementIndex) {
-        Placeable placedItem = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
-
-        currentUser.getInventory().addItem((Item)placedItem);
-        currentUser.getRoom(roomIndex).getSlot(placementIndex).clear();
     }
 
     /* ---------------------------------
