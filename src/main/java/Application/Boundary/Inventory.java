@@ -102,14 +102,20 @@ public class Inventory {
             imageView.setFitHeight(145);
             imageView.setFitWidth(145);
 
-            imageView.setLayoutX(250);
-            imageView.setLayoutY(40);
+            imageView.setLayoutX(230);
+            imageView.setLayoutY(60);
         } else if (itemType.equals("Deco")) {
-            imageView.setFitHeight(160);
-            imageView.setFitWidth(160);
+            imageView.setFitHeight(125);
+            imageView.setFitWidth(125);
 
-            imageView.setLayoutX(260);
-            imageView.setLayoutY(25);
+            imageView.setLayoutX(230);
+            imageView.setLayoutY(60);
+        } else if(itemType.equals("PottedPlant")) {
+            imageView.setFitHeight(125);
+            imageView.setFitWidth(125);
+
+            imageView.setLayoutX(250);
+            imageView.setLayoutY(60);
         }
     }
 
@@ -213,7 +219,7 @@ public class Inventory {
 
         plantImagesContainer.getChildren().addAll(plantImageView, potImageView);
 
-        plantImagesContainer.setLayoutY(50);
+        plantImagesContainer.setLayoutY(100);
         plantImagesContainer.setLayoutX(50);
 
         Text itemName = new Text(name);
@@ -222,7 +228,7 @@ public class Inventory {
         itemName.setFont(Font.font("Pixeloid Sans", 15));
         itemName.setTextAlignment(TextAlignment.CENTER);
         itemName.setLayoutX(27);
-        itemName.setLayoutY(145);
+        itemName.setLayoutY(180);
 
         Group buttonContainer = new Group();
         buttonContainer.setLayoutX(38);
