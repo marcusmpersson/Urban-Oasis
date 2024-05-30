@@ -27,6 +27,7 @@ public class PlantInformationPopup {
     private static final double RECTANGLE_HEIGHT = 300;
     private static final double IMAGE_BUTTON_SIZE = 20;
     private Button waterLevelButton;
+    private Button healthStatButton;
     private RoomController roomController;
     private Group informationRectangle;
 
@@ -71,18 +72,25 @@ public class PlantInformationPopup {
         textPane.setPrefSize(RECTANGLE_WIDTH, RECTANGLE_HEIGHT * 0.2);
 
         // Buttons
-        Button waterButton = createButton("Water", 0.2);
-        Button takeOutButton = createButton("Take Out As Widget", 0.4);
-        Button removeFromRoomButton = createButton("Remove from Room", 0.6);
-        waterLevelButton = createButton("Water Level: 0/100", 0.8);
+        Button waterButton = createButton("Water", 0.1);
+        Button takeOutButton = createButton("Place Desktop Widget", 0.25);
+        Button removeFromRoomButton = createButton("Remove from Room", 0.4);
+        waterLevelButton = createButton("Water Level: 0/100", 0.6);
+        healthStatButton = createButton("Health: 0/100" , 0.8);
 
         waterButton.setOnMouseClicked(event -> {
             String level = roomController.waterPottedPlant();
+            String health = roomController.getCurrentHealthLevel();
             updateWaterLevelText(level);
+            updateHealthLevelText(health);
         });
 
         takeOutButton.setOnMouseClicked(event -> {
             roomController.takeOutPottedPlant();
+        });
+
+        removeFromRoomButton.setOnMouseClicked(event -> {
+            roomController.removeItemFromSlot();
         });
 
         // Close button setup with larger clickable area
@@ -100,7 +108,7 @@ public class PlantInformationPopup {
         closeButtonGroup.setLayoutX(RECTANGLE_WIDTH - IMAGE_BUTTON_SIZE - 10);
         closeButtonGroup.setLayoutY(0);
 
-        informationRectangle.getChildren().addAll(rectangle, textPane, waterButton, takeOutButton, removeFromRoomButton, waterLevelButton,
+        informationRectangle.getChildren().addAll(rectangle, textPane, waterButton, takeOutButton, removeFromRoomButton, waterLevelButton,healthStatButton,
                 closeButtonGroup);
 
         informationRectangle.setTranslateX(1000);
@@ -124,6 +132,10 @@ public class PlantInformationPopup {
      */
     public void updateWaterLevelText(String level) {
         waterLevelButton.setText("Water Level: " + level + "/100");
+    }
+
+    public void updateHealthLevelText(String level){
+        healthStatButton.setText("Health: " + level + "/100");
     }
 
     /**

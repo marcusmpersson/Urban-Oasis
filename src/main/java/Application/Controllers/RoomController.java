@@ -1,6 +1,7 @@
 package main.java.Application.Controllers;
 
 import controller.Controller;
+import controller.GameHandler;
 import entities.*;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
@@ -28,9 +29,10 @@ public class RoomController {
     private Room room;
     private WidgetHandler widgetHandler = new WidgetHandler(this);
     private User user;
+    private GameHandler gameHandler;
     private RoomPlants roomGuiContent;
     private Group plantInformationView;
-    private PlantInformationPopup plantInformationPopup = new PlantInformationPopup(this);
+    private PlantInformationPopup plantInformationPopup;
     private Boolean isPlantDetailsFrameOpened = false;
     private PottedPlant selectedPottedPlant;
     private Group selectedPottedPlantButton;
@@ -49,9 +51,11 @@ public class RoomController {
         this.user = user;
         this.room = user.getRoom(0);
         this.roomGuiContent = new RoomPlants(roomView);
+        gameHandler = new GameHandler(this.user);
+        spawnUserPottedPlants();
+        plantInformationPopup = new PlantInformationPopup(this);
         this.plantInformationView = plantInformationPopup.getInformationRectangle();
 
-        spawnUserPottedPlants();
     }
 
     /**
@@ -142,6 +146,7 @@ public class RoomController {
 
                 PottedPlant currentPlant = getPottedPlantFromGroup(group);
                 plantInformationPopup.updateWaterLevelText(getCurrentWaterLevel(currentPlant));
+                plantInformationPopup.updateHealthLevelText(getCurrentHealthLevel());
             }
         });
 
@@ -274,6 +279,18 @@ public class RoomController {
         }
     }
 
+    public void removeItemFromSlot(){
+        if (isPlantDetailsFrameOpened && selectedPottedPlant != null) {
+            if (selectedPottedPlantButton != null && !"IsWidget".equals(selectedPottedPlantButton.getId())) {
+                int placementIndex = (int) selectedPottedPlantButton.getProperties().get("SlotIndex");
+
+                System.out.println("Vi skickar");
+                gameHandler.removeItemFromSlot(0, placementIndex);
+                System.out.println("We sent " + placementIndex);
+            }
+        }
+    }
+
     public void resetRoom() {
         ParallelTransition parallelTransition = new ParallelTransition();
 
@@ -395,6 +412,10 @@ public class RoomController {
      */
     public String getCurrentWaterLevel(PottedPlant pottedPlant) {
         return String.valueOf(selectedPottedPlant.getPlantTop().getHealthStat().getWaterLevel());
+    }
+
+    public String getCurrentHealthLevel(){
+        return String.valueOf(selectedPottedPlant.getPlantTop().getHealthStat().getOverallMood());
     }
 
     /**
@@ -560,5 +581,8 @@ public class RoomController {
             }
         }
         return null;
+    }
+    public PottedPlant getSelectedPottedPlant() {
+        return selectedPottedPlant;
     }
 }
