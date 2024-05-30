@@ -84,10 +84,10 @@ public class RoomController {
      * Spawns user potted plants in their respective slots.
      */
     private void spawnUserPottedPlants() {
-        System.out.println("spawned new plants");
-        List<PlacementSlot> slots = user.getRoom(0).getSlots();
+        List<PlacementSlot> slots = room.getSlots();
 
         for (int i = 0; i < slots.size(); i++) {
+
             int posX = slots.get(i).getX();
             int posY = slots.get(i).getY();
 
@@ -112,6 +112,7 @@ public class RoomController {
                 plantContainer.getProperties().put("StageId", UUID.randomUUID().toString());
                 plantContainer.toFront();
 
+                System.out.println("SLOT: " + i);
                 roomPlants.add(plantContainer);
                 setupMouseEvents(plantContainer);
             }
@@ -298,7 +299,7 @@ public class RoomController {
                 Controller clientController = Controller.getInstance();
                 clientController.removeItemFromSlot(placementIndex);
                 roomView.getChildren().remove(selectedPottedPlantButton);
-
+                roomPlants.remove(selectedPottedPlantButton);
             }
         }
     }

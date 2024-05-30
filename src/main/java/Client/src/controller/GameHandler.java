@@ -195,6 +195,7 @@ public class GameHandler {
      * */
     public void removeItemFromSlot(int roomIndex, int placementIndex) {
 
+        System.out.println("SLOT TO REMOVE: " + placementIndex);
         // if valid index for both
         if ((roomIndex < currentUser.getRoomsArray().size() && roomIndex >= 0)
                 && (placementIndex < currentUser.getRoom(roomIndex).getSlots().size() &&

@@ -302,7 +302,6 @@ public class MainController implements Initializable {
 
     public void updateUserCoins() {
         userCoins.setText(String.valueOf(user.getShopCurrency()));
-        System.out.println(user.getShopCurrency());
     }
 
     public void showInventorySeeds () {

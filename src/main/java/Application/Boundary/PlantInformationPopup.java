@@ -91,6 +91,8 @@ public class PlantInformationPopup {
 
         removeFromRoomButton.setOnMouseClicked(event -> {
             roomController.removeItemFromSlot();
+            animatePopupFramePosition(informationRectangle, 1200, informationRectangle.getTranslateY());
+            roomController.setMenuOpened(false);
         });
 
         // Close button setup with larger clickable area
