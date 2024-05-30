@@ -1,5 +1,7 @@
 package entities;
 
+import enums.Stage;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -87,6 +89,9 @@ public class PottedPlant extends Item implements Placeable, Serializable {
 
     /** returns plant name */
     public String getName(){
+        if (this.plant.getStage() == Stage.PLANTED){
+            return "Mystery Plant";
+        }
         return this.plant.getSpecies().getSpeciesName();
     }
 

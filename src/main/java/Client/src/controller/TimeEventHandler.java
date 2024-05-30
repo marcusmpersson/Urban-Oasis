@@ -30,12 +30,15 @@ public class TimeEventHandler {
      * joins all running threads, finally nulls them */
     public void stopAllThreads() {
         threadsAreRunning = false;
-        try {
-            gameThread.join();
-            autoSaveThread.join();
+        gameHandler.updateUserLastUpdatedTime(LocalDateTime.now());
+        Controller.getInstance().saveGame();
 
-        } catch(InterruptedException e) {
-            System.out.println("TimeEventHandler: joining threads was interrupted.");
+        try {
+            gameThread.interrupt();
+            autoSaveThread.interrupt();
+
+        } catch(Exception e) {
+            System.out.println("TimeEventHandler: interruption unsuccessful ");
 
         } finally {
             gameThread = null;
@@ -92,8 +95,7 @@ public class TimeEventHandler {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-               // controller.saveGame();
-                
+
                 // save the game
                 Controller.getInstance().saveGame();
             }

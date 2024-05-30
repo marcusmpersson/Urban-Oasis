@@ -31,7 +31,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
                <image>
-                  <Image url="@../rooms/roomDaytime.jpg" />
+                  <Image url="@../rooms/commonRoom/daytime.png" />
                </image>
             </ImageView>
             <ImageView fx:id="resetButton" cache="true" fitHeight="44.0" fitWidth="94.0" layoutX="-3.0" layoutY="14.0" onMouseClicked="#resetRoom">

@@ -251,7 +251,8 @@ public class Controller {
      * is saved and then finally we try to log out.
      */
     public void logoutAttempt() {
-        //gameHandler.stopTimer();
+        gameHandler.stopTimer();
+        saveGame();
         gameHandler = null;
         soundEffectHandler.stopBackgroundMusic();
         //widgetHandler.updateLocalFile(currentUser.getUsername());
@@ -377,7 +378,7 @@ public class Controller {
     /** plants a seed in a pot, creates a PottedPlant, places in inventory */
     public void plantSeed(int inventoryPotIndex, int inventorySeedIndex) {
         gameHandler.plantSeed(inventoryPotIndex, inventorySeedIndex);
-        //playPlantingSound();
+        playPlantingSound();
     }
 
     public ArrayList<PlacementSlot> getUserSlots() {
