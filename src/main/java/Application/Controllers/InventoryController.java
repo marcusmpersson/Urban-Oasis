@@ -109,15 +109,16 @@ public class InventoryController {
         });
 
         putInRoomButton.setOnMouseClicked(event -> {
+            System.out.println(selectedItem);
             if (getObjectFromButton(selectedItem) instanceof PottedPlant) {
-             pickedPottedPlantToPutInRoom = (PottedPlant) getObjectFromButton(selectedItem);
-             int inventoryIndex = clientController.getInventoryPlants().indexOf(pickedPottedPlantToPutInRoom);
-             clientController.placePlantInRoom(inventoryIndex);
+                 pickedPottedPlantToPutInRoom = (PottedPlant) getObjectFromButton(selectedItem);
+                 int inventoryIndex = clientController.getInventoryPlants().indexOf(pickedPottedPlantToPutInRoom);
+                 clientController.placePlantInRoom(inventoryIndex);
+                 clientController.disposePlantFromInventory(inventoryIndex);
 
-             populateOwnedItemsArray();
-             updateInventoryButtons();
-
-
+                 inventoryPane.getChildren().remove(selectedItem);
+                 populateOwnedItemsArray();
+                 updateInventoryButtons();
             }
         });
     }
@@ -255,13 +256,19 @@ public class InventoryController {
                 plantSeedButton.setDisable(false);
                 plantSeedButton.toFront();
 
-            } else if (getItemTypeFromButton(item).equals("PottedPlant")) {
+            } else if (getItemTypeFromButton(item).equals("Plants")) {
                 plantSeedButton.setVisible(false);
                 plantSeedButton.setDisable(true);
+
+                putInRoomButton.setDisable(false);
                 putInRoomButton.setVisible(true);
+                putInRoomButton.setOpacity(1);
+                putInRoomButton.toFront();
             } else {
                 putInRoomButton.setVisible(false);
+                putInRoomButton.setDisable(true);
                 plantSeedButton.setOpacity(0.3);
+                plantSeedButton.setDisable(false);
             }
         }
         inventoryContent.addButtonGlow(selectedItem);

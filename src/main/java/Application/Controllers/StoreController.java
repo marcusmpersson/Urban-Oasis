@@ -2,10 +2,7 @@ package main.java.Application.Controllers;
 
 import builder.ItemBuilder;
 import controller.Controller;
-import entities.Deco;
-import entities.Pot;
-import entities.Seed;
-import entities.ShopItem;
+import entities.*;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -42,6 +39,8 @@ public class StoreController {
     private ArrayList<Group> potItems = new ArrayList<>();
     private ArrayList<Group> decoItems = new ArrayList<>();
 
+    private User user;
+
     // Shop Items
     private ArrayList<Seed> shopSeeds = controller.getShopSeeds();
     private ArrayList<Pot> shopPots = controller.getShopPots();
@@ -61,8 +60,10 @@ public class StoreController {
      * @param plantInformationPopup the popup for displaying plant information
      * @param closePopupButton the button for closing the popup
      */
-    public StoreController(MainController mainController, Group storeView, TilePane shopPane, Text priceText, ImageView purchaseItemButton, Group plantInformationPopup, ImageView closePopupButton) {
+    public StoreController(MainController mainController, User user,Group storeView, TilePane shopPane, Text priceText,
+                           ImageView purchaseItemButton, Group plantInformationPopup, ImageView closePopupButton) {
         this.mainController = mainController;
+        this.user = user;
         this.storeView = storeView;
         this.shopPane = shopPane;
         this.priceText = priceText;
@@ -74,6 +75,7 @@ public class StoreController {
         populateShopArrays();
         showCategory("Seeds");
         purchaseButtonClick();
+        storeContent.displayPrice(user.getShopCurrency(), priceText);
     }
 
     /**
@@ -103,6 +105,7 @@ public class StoreController {
                 storeContent.purchaseResponseEffect(success);
                 mainController.updateUserCoins();
             }
+            storeContent.displayPrice(user.getShopCurrency(), priceText);
         });
     }
     public void animatePopupFrame(boolean bool) {
@@ -174,7 +177,7 @@ public class StoreController {
             selectedItem.getStyleClass().add("purpleGlow");
         }
         storeContent.addButtonGlow(selectedItem);
-        storeContent.displayPrice(selectedItem, priceText);
+        storeContent.displayPrice(user.getShopCurrency(), priceText);
     }
 
     /**

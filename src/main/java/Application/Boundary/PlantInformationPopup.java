@@ -39,6 +39,7 @@ public class PlantInformationPopup {
     public PlantInformationPopup(RoomController roomController) {
         this.roomController = roomController;
         this.informationRectangle = generateInformationRectangle();
+        this.informationRectangle.toFront();
         closeInfoPopupFrame();
     }
 
@@ -81,7 +82,7 @@ public class PlantInformationPopup {
 
         waterButton.setOnMouseClicked(event -> {
             String level = roomController.waterPottedPlant();
-            String health = roomController.getCurrentHealthLevel();
+            String health = roomController.getSatisfactionLevelForPopup();
             updateWaterLevelText(level);
             updateHealthLevelText(health);
         });
@@ -138,7 +139,8 @@ public class PlantInformationPopup {
     }
 
     public void updateHealthLevelText(String level){
-        healthStatButton.setText("Health: " + level + "/100");
+        healthStatButton.setText("Environment: " + level + "/100");
+        healthStatButton.setWrapText(true);
     }
 
     /**
