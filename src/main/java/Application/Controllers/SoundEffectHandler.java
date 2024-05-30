@@ -8,17 +8,15 @@ import java.io.File;
 public class SoundEffectHandler {
 
     private Clip backgroundMusic;
-    private String songPath;
     private boolean musicPlaying;
 
     public SoundEffectHandler() {
         musicPlaying = false;
-        updateBackgroundMusic();
     }
 
     public void startBackgroundMusic() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(songPath));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/sounds/defaultMusic.wav"));
             backgroundMusic = AudioSystem.getClip();
             backgroundMusic.open(audioInputStream);
             musicPlaying = true;
@@ -33,25 +31,6 @@ public class SoundEffectHandler {
     public void stopBackgroundMusic() {
         musicPlaying = false;
         backgroundMusic.stop();
-    }
-
-    public void updateBackgroundMusic() {
-        songPath = "src/main/resources/sounds/defaultMusic.wav";
-
-        /*
-        if (sunrise time) {
-            songPath = "resources/sounds/sunrise.mp3";
-        } else if (night time){
-            songPath = "resources/sounds/night.mp3";
-        } else if (sunset time){
-            songPath = "resources/sounds/sunset.mp3";
-        }
-         */
-
-        if (musicPlaying) {
-            stopBackgroundMusic();
-            startBackgroundMusic();
-        }
     }
 
     public boolean musicIsPlaying() {

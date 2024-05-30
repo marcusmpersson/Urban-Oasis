@@ -273,6 +273,7 @@ public class RoomController {
                 }
             });
 
+            isDraggingBooleanTask.setDaemon(true);
             isDraggingBooleanTask.start();
         });
     }

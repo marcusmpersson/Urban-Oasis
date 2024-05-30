@@ -22,15 +22,6 @@ public class PottedPlant extends Item implements Placeable, Serializable {
     // SETTERS
     // ------------------------------------------
 
-    /** Method used when changing the pot of a PottedPlant.
-     * Swaps the current pot with a new one.
-     * Returns reference to the old pot */
-    public Pot swapPot(Pot pot) {
-        Pot oldPot = this.pot;
-        this.pot = pot;
-        return oldPot;
-    }
-
     /** sets the PlacementSlot of this potted plant. */
     @Override
     public void setPlacedAt(PlacementSlot slot) {

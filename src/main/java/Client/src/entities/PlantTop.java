@@ -131,6 +131,9 @@ public class PlantTop implements Serializable {
     // ------------------------------------------
 
     public String getDescriptionText() {
+        if (this.stage == Stage.PLANTED){
+            return "this is a planted "+this.rarity.toString()+" seed waiting to sprout!";
+        }
         return descriptionText;
     }
 

@@ -251,10 +251,12 @@ public class Controller {
      * is saved and then finally we try to log out.
      */
     public void logoutAttempt() {
-        gameHandler.stopTimer();
-        saveGame();
-        gameHandler = null;
         soundEffectHandler.stopBackgroundMusic();
+
+        gameHandler.stopTimer();
+        //saveGame();
+        gameHandler = null;
+
         //widgetHandler.updateLocalFile(currentUser.getUsername());
         //clientConnection.saveUser(currentUser);
         //clientConnection.logout();
@@ -561,9 +563,6 @@ public class Controller {
         soundEffectHandler.startBackgroundMusic();
     }
 
-    public void updateBackgroundMusic() {
-        soundEffectHandler.updateBackgroundMusic();
-    }
 
     public boolean musicIsPlaying() {
         return soundEffectHandler.musicIsPlaying();
