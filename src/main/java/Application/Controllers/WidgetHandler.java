@@ -45,7 +45,7 @@ public class WidgetHandler {
     public void setWidget(PottedPlant pottedPlant, String stageId) {
         String plantImageFilePath = pottedPlant.getPlantTop().getImageFilePath();
         String potImageFilePath = pottedPlant.getPot().getImageFilePath();
-        String currentWaterLevel = roomController.getCurrentWaterLevel(pottedPlant);
+        String currentWaterLevel = roomController.getWaterLevelForWidget(pottedPlant);
 
         Widget widgetView = new Widget(this);
         StackPane root = widgetView.setWidget(new Image(plantImageFilePath), new Image(potImageFilePath), currentWaterLevel);

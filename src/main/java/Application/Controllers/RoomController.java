@@ -134,14 +134,24 @@ public class RoomController {
         }
     }
 
-    public void updateAvailablePlants() {
-        List<PlacementSlot> slots = user.getRoom(0).getSlots();
-        for (PlacementSlot slot : slots) {
-            if (slot.checkSlotTaken()) {
-                System.out.println(slot.getX() + " " + slot.getY());
-            }
+    public String getWaterLevelForWidget(PottedPlant pottedPlant) {
+        return String.valueOf(clientController.getWaterLevelOf(pottedPlant));
+    }
 
+    public String getSatisfactionLevelForPopup() {
+        return String.valueOf(clientController.getEnvironmentLevelOf(selectedPottedPlant));
+    }
+
+
+    public void updateAvailablePlants() {
+        for (Group roomPlant : roomPlants) {
+            roomView.getChildren().remove(roomPlant);
         }
+        arrowIndicators.clear();
+        roomPlants.clear();
+        slotZones.clear();
+
+        spawnUserPottedPlants();
 
     }
 
@@ -154,15 +164,15 @@ public class RoomController {
         // Mouse click for the plant. It should open up the menu and update the content with correct water level
         // information.
         group.setOnMouseClicked(event -> {
+
             if (!isPlantDetailsFrameOpened && !isDragging) {
                 plantInformationPopup.openInfoPopupFrame();
 
                 setMenuOpened(true);
                 setSelectedPottedPlant(group);
 
-                PottedPlant currentPlant = getPottedPlantFromGroup(group);
-                plantInformationPopup.updateWaterLevelText(getCurrentWaterLevel(currentPlant));
-                plantInformationPopup.updateHealthLevelText(getCurrentHealthLevel());
+                plantInformationPopup.updateWaterLevelText(String.valueOf(clientController.getWaterLevelOf(selectedPottedPlant)));
+                plantInformationPopup.updateHealthLevelText(String.valueOf(clientController.getEnvironmentLevelOf(selectedPottedPlant)));
             }
         });
 
@@ -301,6 +311,7 @@ public class RoomController {
                 int placementIndex = (int) selectedPottedPlantButton.getProperties().get("SlotIndex");
 
                 clientController.removeItemFromSlot(placementIndex);
+
                 roomView.getChildren().remove(selectedPottedPlantButton);
                 roomPlants.remove(selectedPottedPlantButton);
             }
@@ -341,20 +352,6 @@ public class RoomController {
         });
 
         parallelTransition.play();
-    }
-
-    private void resetAllMouseEvents() {
-
-        for (Group roomPlant : roomPlants) {
-            roomPlant.setOnMouseClicked(null);
-            roomPlant.setOnMousePressed(null);
-            roomPlant.setOnMouseDragged(null);
-            roomPlant.setOnMouseReleased(null);
-
-            setupMouseEvents(roomPlant);
-        }
-
-
     }
 
     /**
@@ -420,19 +417,7 @@ public class RoomController {
         }
     }
 
-    /**
-     * Gets the current water level of the specified potted plant.
-     *
-     * @param pottedPlant the potted plant
-     * @return the water level
-     */
-    public String getCurrentWaterLevel(PottedPlant pottedPlant) {
-        return String.valueOf(selectedPottedPlant.getPlantTop().getHealthStat().getWaterLevel());
-    }
 
-    public String getCurrentHealthLevel(){
-        return String.valueOf(selectedPottedPlant.getPlantTop().getHealthStat().getOverallMood());
-    }
 
     /**
      * Waters the selected potted plant and updates the image.
@@ -441,8 +426,8 @@ public class RoomController {
      */
     public String waterPottedPlant() {
         if (isPlantDetailsFrameOpened && selectedPottedPlant != null) {
-            selectedPottedPlant.getPlantTop().water();
-            String currentWaterLevel = getCurrentWaterLevel(selectedPottedPlant);
+            clientController.waterPlant(selectedPottedPlant);
+            String currentWaterLevel = String.valueOf(clientController.getWaterLevelOf(selectedPottedPlant));
             updatePlantImage(selectedPottedPlantButton, selectedPottedPlant);
             widgetHandler.updatePlantImage(selectedPottedPlant);
             return currentWaterLevel;

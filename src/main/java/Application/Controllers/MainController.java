@@ -98,7 +98,8 @@ public class MainController implements Initializable {
         isLoggedIn = true;
         clientController = Controller.getInstance();
         user = clientController.getCurrentUser();
-        storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton, plantInformationPopup, closePopupButton);
+        storeController = new StoreController(this, user,storeView, shopPane, priceText, purchaseItemButton,
+                plantInformationPopup, closePopupButton);
         inventoryController = new InventoryController(this, clientController, inventoryPane, inventoryView,
                 plantInformationPopup, closePopupButton, plantSeedButton, cancelPlantSeed, disposeItem, putInRoomButton);
         roomController = new RoomController(roomView, user, clientController, inventoryController);

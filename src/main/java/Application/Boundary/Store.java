@@ -353,11 +353,9 @@ public class Store {
     /**
      * Displays the price of an item.
      *
-     * @param item the item to display the price for
      * @param priceText the text node to display the price
      */
-    public void displayPrice(Group item, Text priceText) {
-        ShopItem itemObject = storeController.getObjectFromButton(item);
-        priceText.setText(String.valueOf(itemObject.getPrice()));
+    public void displayPrice(int currentAmount, Text priceText) {
+        priceText.setText(String.valueOf(currentAmount));
     }
 }
