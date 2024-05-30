@@ -239,7 +239,8 @@
                   <Font name="Pixeloid Sans" size="19.0" />
                </font>
             </Text>
-            <ImageView fx:id="closePopupButton" cache="true" fitHeight="48.0" fitWidth="47.0" layoutX="387.0" layoutY="-11.0">
+            <ImageView fx:id="closePopupButton" cache="true" fitHeight="48.0" fitWidth="47.0" layoutX="387.0"
+                       layoutY="-11.0" onMouseClicked="#closePopupFrame">
                <image>
                   <Image url="@../closePopupButton.png" />
                </image>

@@ -116,6 +116,7 @@ public class MainController implements Initializable {
      */
     public void cleanup() {
         isLoggedIn = false;
+        clientController.logoutAttempt();
     }
 
     /**
@@ -130,6 +131,7 @@ public class MainController implements Initializable {
         storeView.toBack();
         inventoryView.toBack();
         storeController.closeStoreRunningContent();
+        roomController.updateAvailablePlants();
     }
 
     public void switchToInventoryView() {
@@ -300,6 +302,7 @@ public class MainController implements Initializable {
 
     public void updateUserCoins() {
         userCoins.setText(String.valueOf(user.getShopCurrency()));
+        System.out.println(user.getShopCurrency());
     }
 
     public void showInventorySeeds () {
@@ -316,5 +319,11 @@ public class MainController implements Initializable {
 
     public void showInventoryPlants () {
         inventoryController.showCategory("Plants");
+    }
+
+
+    public void closePopupFrame () {
+        inventoryController.animatePopupFrame(false);
+        storeController.animatePopupFrame(false);
     }
 }

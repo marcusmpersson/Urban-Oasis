@@ -94,6 +94,7 @@ public class Store {
             GaussianBlur blur = new GaussianBlur(30);
             storeView.setEffect(blur);
         } else {
+            System.out.println("tried to removing blur.");
             storeView.setEffect(null);
         }
     }

@@ -74,7 +74,6 @@ public class StoreController {
         populateShopArrays();
         showCategory("Seeds");
         purchaseButtonClick();
-        setupDetections();
     }
 
     /**
@@ -106,16 +105,11 @@ public class StoreController {
             }
         });
     }
-
-    /**
-     * Sets up the close button click behavior.
-     */
-    private void setupDetections() {
-        closePopupButton.setOnMouseClicked(event -> {
-            storeContent.animatePopupFrame(false);
-            plantInformationPopupIsOpened = false;
-        });
+    public void animatePopupFrame(boolean bool) {
+        storeContent.animatePopupFrame(bool);
+        plantInformationPopupIsOpened = bool;
     }
+
 
     /**
      * Closes the store's running content.

@@ -1,7 +1,6 @@
 package main.java.Application.Boundary;
 
 import entities.Item;
-import entities.ShopItem;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -111,8 +110,6 @@ public class Inventory {
 
             imageView.setLayoutX(260);
             imageView.setLayoutY(25);
-        } else {
-            // plant
         }
     }
 
@@ -152,9 +149,7 @@ public class Inventory {
         }
     }
 
-    public Group createItemView(String itemImagePath, String itemImagePath2, double price, String name, String itemType) {
-        Group container = new Group();
-
+    private void setUpItemsImages(Group container, String itemImagePath, double price, String name, String itemType) {
         Image backgroundImage = new Image(getClass().getClassLoader().getResource("itemBackground.png").toString());
         ImageView background = new ImageView(backgroundImage);
         background.setFitHeight(192);
@@ -192,6 +187,73 @@ public class Inventory {
 
         inventoryController.setupItemClicks(container, info);
 
+    }
+
+    public void setUpPottedPlantImages(Group container, String itemImagePath, String itemImagePath2, String name) {
+        Image backgroundImage = new Image(getClass().getClassLoader().getResource("itemBackground.png").toString());
+        ImageView background = new ImageView(backgroundImage);
+        background.setFitHeight(192);
+        background.setFitWidth(198);
+
+        Group plantImagesContainer = new Group();
+
+        Image plantImage = new Image(getClass().getClassLoader().getResource(itemImagePath).toString());
+        ImageView plantImageView = new ImageView(plantImage);
+        plantImageView.setId("PlantImage");
+
+        Image potImage = new Image(getClass().getClassLoader().getResource(itemImagePath2).toString());
+        ImageView potImageView = new ImageView(potImage);
+        potImageView.setId("PotImage");
+
+        plantImageView.setFitHeight(100);
+        plantImageView.setFitWidth(100);
+        potImageView.setFitHeight(60);
+        potImageView.setFitWidth(100);
+
+        plantImageView.setLayoutY(potImageView.getLayoutY() - plantImageView.getFitHeight());
+
+        plantImagesContainer.getChildren().addAll(plantImageView, potImageView);
+
+        plantImagesContainer.setLayoutY(50);
+        plantImagesContainer.setLayoutX(50);
+
+        Text itemName = new Text(name);
+        itemName.setWrappingWidth(150);
+        itemName.setFill(Color.WHITE);
+        itemName.setFont(Font.font("Pixeloid Sans", 15));
+        itemName.setTextAlignment(TextAlignment.CENTER);
+        itemName.setLayoutX(27);
+        itemName.setLayoutY(145);
+
+        Group buttonContainer = new Group();
+        buttonContainer.setLayoutX(38);
+        buttonContainer.setLayoutY(173);
+
+        Image infoImage = new Image(getClass().getClassLoader().getResource("icons/info3.png").toString());
+        ImageView info = new ImageView(infoImage);
+        info.setScaleX(0.1);
+        info.setScaleY(0.1);
+        info.setLayoutY(-300);
+        info.setLayoutX(-10);
+        info.getProperties().put("Parent", container);
+
+        buttonContainer.getChildren().addAll(info);
+
+        container.getChildren().addAll(background, plantImagesContainer, buttonContainer, itemName);
+        container.setVisible(false);
+        inventoryPane.getChildren().add(container);
+
+        inventoryController.setupItemClicks(container, info);
+    }
+
+    public Group createItemView(String itemImagePath, String itemImagePath2, double price, String name, String itemType) {
+        Group container = new Group();
+        if (itemType.equals("PottedPlant")) {
+            setUpPottedPlantImages(container, itemImagePath, itemImagePath2, name);
+        } else {
+            setUpItemsImages(container, itemImagePath, price, name, itemType);
+        }
+
         return container;
     }
 
@@ -200,7 +262,6 @@ public class Inventory {
             node.getStyleClass().add("purpleGlow");
         }
     }
-
 
     public void removeGlowFromAllItems(ArrayList<Group> seedItems, ArrayList<Group> potItems,
                                        ArrayList<Group> decoItems, ArrayList<Group> plantItems) {

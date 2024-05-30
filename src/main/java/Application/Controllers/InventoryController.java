@@ -44,10 +44,7 @@ public class InventoryController {
 
     private MainController mainController;
 
-    public InventoryController (MainController mainController, Controller clientController, TilePane inventoryPane,
-                                Group inventoryView,
-                                Group plantInformationPopup, ImageView closePopupButton, ImageView plantSeedButton,
-                                ImageView cancelPlantSeed, ImageView disposeItemButton, ImageView putInRoomButton) {
+    public InventoryController (MainController mainController, Controller clientController, TilePane inventoryPane, Group inventoryView, Group plantInformationPopup, ImageView closePopupButton, ImageView plantSeedButton, ImageView cancelPlantSeed, ImageView disposeItemButton, ImageView putInRoomButton) {
         this.mainController = mainController;
         this.inventoryPane = inventoryPane;
         this.inventoryView = inventoryView;
@@ -65,6 +62,7 @@ public class InventoryController {
     }
 
     private void startPlanting() {
+        System.out.println("clicked");
         isPlanting = true;
         plantSeedButton.setVisible(false);
         plantSeedButton.setDisable(true);
@@ -79,7 +77,6 @@ public class InventoryController {
             pickedSeedForPlanting = (Seed) getObjectFromButton(selectedItem);
         }
         selectPotForPlanting();
-        cancelPlant();
         // force pot view
     }
     private void cancelPlant() {
@@ -93,13 +90,15 @@ public class InventoryController {
         isPlanting = false;
     }
 
-    private void setupDetections() {
-        closePopupButton.setOnMouseClicked(event -> {
-            inventoryContent.animatePopupFrame(false);
-            plantInformationPopupIsOpened = false;
-        });
+    public void animatePopupFrame(boolean bool) {
+        inventoryContent.animatePopupFrame(bool);
+        plantInformationPopupIsOpened = bool;
+    }
 
+    private void setupDetections() {
+        System.out.println("detections on.");
         plantSeedButton.setOnMouseClicked(event -> {
+            System.out.println("clicked on da button");
             startPlanting();
         });
 
@@ -116,9 +115,13 @@ public class InventoryController {
              pickedPottedPlantToPutInRoom = (PottedPlant) getObjectFromButton(selectedItem);
              int inventoryIndex = clientController.getInventoryPlants().indexOf(pickedPottedPlantToPutInRoom);
              clientController.placePlantInRoom(inventoryIndex);
+
+             populateOwnedItemsArray();
+             updateInventoryButtons();
+
+
             }
         });
-
     }
 
 
@@ -126,15 +129,18 @@ public class InventoryController {
         for (Group pot : potItems) {
             if (isPlanting) {
                 pot.setOnMouseClicked(event -> {
-                    System.out.println("Sent to client!");
-                    pickedPotForPlanting = (Pot) getObjectFromButton(pot);
+                    if (isPlanting) {
+                        pickedPotForPlanting = (Pot) getObjectFromButton(pot);
+                        if (pickedSeedForPlanting != null && pickedPotForPlanting != null) {
+                            int seedIndex = ownedSeeds.indexOf(pickedSeedForPlanting);
+                            int potIndex = ownedPots.indexOf(pickedPotForPlanting);
 
-                    if (pickedSeedForPlanting != null && pickedPotForPlanting != null) {
-                        int seedIndex = ownedSeeds.indexOf(pickedSeedForPlanting);
-                        int potIndex = ownedPots.indexOf(pickedPotForPlanting);
-                       // clientController.plantSeed(potIndex, seedIndex);
-
-                        cancelPlant();
+                            clientController.plantSeed(potIndex, seedIndex);
+                            isPlanting = false;
+                            currentCategory = "Seeds";
+                            openInventoryView();
+                            cancelPlant();
+                        }
                     }
                 });
             }
@@ -245,12 +251,17 @@ public class InventoryController {
             selectedItem.getStyleClass().add("purpleGlow");
             disposeItemButton.setOpacity(1);
 
+            System.out.println(getItemTypeFromButton(item));
+
             if (getItemTypeFromButton(item).equals("Seeds")) {
                 plantSeedButton.setVisible(true);
+                plantSeedButton.setOpacity(1);
+                plantSeedButton.setDisable(false);
+                plantSeedButton.toFront();
+
             } else if (getItemTypeFromButton(item).equals("PottedPlant")) {
                 plantSeedButton.setVisible(false);
                 plantSeedButton.setDisable(true);
-
                 putInRoomButton.setVisible(true);
             } else {
                 putInRoomButton.setVisible(false);

@@ -106,6 +106,7 @@ public class Controller {
         plantTop6.raiseAge(18);
         PottedPlant pottedPlant6 = new PottedPlant(pot7, plantTop6);
 
+
         // placing potted plants in room
         room.getSlot(2).setPlacedItem(pottedPlant);
         room.getSlot(9).setPlacedItem(pottedPlant2);
@@ -246,12 +247,12 @@ public class Controller {
      * is saved and then finally we try to log out.
      */
     public void logoutAttempt() {
-        gameHandler.stopTimer();
+        //gameHandler.stopTimer();
         gameHandler = null;
         soundEffectHandler.stopBackgroundMusic();
         //widgetHandler.updateLocalFile(currentUser.getUsername());
-        clientConnection.saveUser(currentUser);
-        clientConnection.logout();
+        //clientConnection.saveUser(currentUser);
+        //clientConnection.logout();
     }
 
     /**
@@ -372,7 +373,7 @@ public class Controller {
     /** plants a seed in a pot, creates a PottedPlant, places in inventory */
     public void plantSeed(int inventoryPotIndex, int inventorySeedIndex) {
         gameHandler.plantSeed(inventoryPotIndex, inventorySeedIndex);
-        playPlantingSound();
+        //playPlantingSound();
     }
 
     /** disposes Pot from inventory.

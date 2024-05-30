@@ -127,6 +127,17 @@ public class RoomController {
         }
     }
 
+    public void updateAvailablePlants() {
+        List<PlacementSlot> slots = user.getRoom(0).getSlots();
+        for (PlacementSlot slot : slots) {
+            if (slot.checkSlotTaken()) {
+                System.out.println(slot.getX() + " " + slot.getY());
+            }
+
+        }
+
+    }
+
     /**
      * Sets up mouse events for a given plant group.
      *
@@ -284,9 +295,10 @@ public class RoomController {
             if (selectedPottedPlantButton != null && !"IsWidget".equals(selectedPottedPlantButton.getId())) {
                 int placementIndex = (int) selectedPottedPlantButton.getProperties().get("SlotIndex");
 
-                System.out.println("Vi skickar");
-                gameHandler.removeItemFromSlot(0, placementIndex);
-                System.out.println("We sent " + placementIndex);
+                Controller clientController = Controller.getInstance();
+                clientController.removeItemFromSlot(placementIndex);
+                roomView.getChildren().remove(selectedPottedPlantButton);
+
             }
         }
     }
