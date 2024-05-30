@@ -24,6 +24,7 @@ import java.util.List;
  * @Author Mouhammed Fakhro
  */
 public class RoomController {
+    private final Controller clientController;
     private ArrayList<Group> roomPlants = new ArrayList<>();
     private Group roomView;
     private Room room;
@@ -40,22 +41,27 @@ public class RoomController {
     private ArrayList<ImageView> arrowIndicators = new ArrayList<>();
     private boolean isDragging = false;
 
+    private InventoryController inventoryController;
+
     /**
      * Constructor for RoomController.
      *
-     * @param roomView the view for the room
-     * @param user the user associated with the room
+     * @param roomView            the view for the room
+     * @param user                the user associated with the room
+     * @param inventoryController
      */
-    public RoomController(Group roomView, User user) {
+    public RoomController(Group roomView, User user, Controller clientController, InventoryController inventoryController) {
+        this.clientController = clientController;
         this.roomView = roomView;
         this.user = user;
         this.room = user.getRoom(0);
         this.roomGuiContent = new RoomPlants(roomView);
+        this.inventoryController = inventoryController;
         gameHandler = new GameHandler(this.user);
         spawnUserPottedPlants();
         plantInformationPopup = new PlantInformationPopup(this);
         this.plantInformationView = plantInformationPopup.getInformationRectangle();
-
+        roomView.getChildren().add(plantInformationView);
     }
 
     /**
@@ -84,7 +90,7 @@ public class RoomController {
      * Spawns user potted plants in their respective slots.
      */
     private void spawnUserPottedPlants() {
-        List<PlacementSlot> slots = room.getSlots();
+        List<PlacementSlot> slots = this.room.getSlots();
 
         for (int i = 0; i < slots.size(); i++) {
 
@@ -149,9 +155,7 @@ public class RoomController {
         // information.
         group.setOnMouseClicked(event -> {
             if (!isPlantDetailsFrameOpened && !isDragging) {
-                Group infoRectangleGroup = plantInformationPopup.generateInformationRectangle();
-                roomView.getChildren().add(infoRectangleGroup);
-                plantInformationPopup.animatePopupFramePosition(infoRectangleGroup, 668, 458);
+                plantInformationPopup.openInfoPopupFrame();
 
                 setMenuOpened(true);
                 setSelectedPottedPlant(group);
@@ -245,7 +249,6 @@ public class RoomController {
                         updatePlantLocation(group, droppingIndex);
                     }
 
-                    Controller clientController = Controller.getInstance();
                     clientController.swapItems(draggingIndex, droppingIndex);
                 } else {
                     updatePlantLocation(group, (Integer) group.getProperties().get("SlotIndex"));
@@ -263,7 +266,7 @@ public class RoomController {
             Thread isDraggingBooleanTask = new Thread(() -> { // we use a thread wait here in order to ensure that
                 // the popup menu does not appear when dropping a plant after dragging it.
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(500);
                     isDragging = false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -296,7 +299,6 @@ public class RoomController {
             if (selectedPottedPlantButton != null && !"IsWidget".equals(selectedPottedPlantButton.getId())) {
                 int placementIndex = (int) selectedPottedPlantButton.getProperties().get("SlotIndex");
 
-                Controller clientController = Controller.getInstance();
                 clientController.removeItemFromSlot(placementIndex);
                 roomView.getChildren().remove(selectedPottedPlantButton);
                 roomPlants.remove(selectedPottedPlantButton);

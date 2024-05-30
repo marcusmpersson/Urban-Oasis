@@ -184,7 +184,6 @@ public class Inventory {
         container.getChildren().addAll(background, itemImageView, buttonContainer, itemName);
         container.setVisible(false);
         inventoryPane.getChildren().add(container);
-
         inventoryController.setupItemClicks(container, info);
 
     }
@@ -273,6 +272,9 @@ public class Inventory {
         }
         for (Group deco : decoItems) {
             deco.getStyleClass().remove("purpleGlow");
+        }
+        for (Group plant : plantItems) {
+            plant.getStyleClass().remove("purpleGlow");
         }
     }
 

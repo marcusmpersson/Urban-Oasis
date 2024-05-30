@@ -119,6 +119,10 @@ public class Controller {
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
     }
 
+    public User getCurrentUser() {
+        return this.currentUser;
+    }
+
     /** method initiates a default User item for a newly signed-up account,
      * adds starter items and values
      * @param username the username of the signed up account
@@ -374,6 +378,10 @@ public class Controller {
     public void plantSeed(int inventoryPotIndex, int inventorySeedIndex) {
         gameHandler.plantSeed(inventoryPotIndex, inventorySeedIndex);
         //playPlantingSound();
+    }
+
+    public ArrayList<PlacementSlot> getUserSlots() {
+        return currentUser.getRoom(0).getSlots();
     }
 
     /** disposes Pot from inventory.

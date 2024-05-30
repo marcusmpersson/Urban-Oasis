@@ -96,9 +96,7 @@ public class InventoryController {
     }
 
     private void setupDetections() {
-        System.out.println("detections on.");
         plantSeedButton.setOnMouseClicked(event -> {
-            System.out.println("clicked on da button");
             startPlanting();
         });
 
@@ -251,8 +249,6 @@ public class InventoryController {
             selectedItem.getStyleClass().add("purpleGlow");
             disposeItemButton.setOpacity(1);
 
-            System.out.println(getItemTypeFromButton(item));
-
             if (getItemTypeFromButton(item).equals("Seeds")) {
                 plantSeedButton.setVisible(true);
                 plantSeedButton.setOpacity(1);
@@ -291,7 +287,7 @@ public class InventoryController {
         } else if (decoItems.contains(button)){
             return "Decos";
         } else {
-            return "Plant";
+            return "Plants";
         }
     }
 

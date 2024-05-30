@@ -97,11 +97,11 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isLoggedIn = true;
         clientController = Controller.getInstance();
-        user = clientController.getTestUser();
-        roomController = new RoomController(roomView, user);
+        user = clientController.getCurrentUser();
         storeController = new StoreController(this, storeView, shopPane, priceText, purchaseItemButton, plantInformationPopup, closePopupButton);
         inventoryController = new InventoryController(this, clientController, inventoryPane, inventoryView,
                 plantInformationPopup, closePopupButton, plantSeedButton, cancelPlantSeed, disposeItem, putInRoomButton);
+        roomController = new RoomController(roomView, user, clientController, inventoryController);
 
         roomView.toFront();
 
