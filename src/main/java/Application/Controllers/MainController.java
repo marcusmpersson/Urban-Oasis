@@ -31,45 +31,28 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
 
-    public ImageView resetButton;
+    @FXML
+    private Text priceText;
+    @FXML
+    private Text userCoins;
+    @FXML
+    private ImageView purchaseItemButton;
+    @FXML
+    private ImageView closePopupButton;
+    @FXML
+    private ImageView plantSeedButton;
+    @FXML
+    private ImageView cancelPlantSeed;
+    @FXML
+    private ImageView disposeItem;
+    @FXML
+    private ImageView putInRoomButton;
 
+    private ImageView soundButton;
     @FXML
-    public Text priceText;
+    private Group plantInformationPopup;
     @FXML
-    public ImageView purchaseItemButton;
-    @FXML
-    public Text userCoins;
-
-    @FXML
-    public Group plantInformationPopup;
-
-    @FXML
-    public ImageView closePopupButton;
-
-    @FXML
-    public Group inventoryView;
-
-    @FXML
-    public ImageView inventoryButtonList;
-    public ImageView inventoryPlantButton;
-    public ImageView inventoryPotButton;
-    public ImageView inventoryDecoButton;
-    public ImageView inventorySeedButton;
-    @FXML
-    public ImageView cancelPlantSeed;
-    @FXML
-    public ImageView plantSeedButton;
-    @FXML
-    public ImageView disposeItem;
-
-    @FXML
-    public ImageView putInRoomButton;
-    private Stage stage;
-    private Scene scene;
-    private boolean isLoggedIn;
-    private Transitions transitions = new Transitions();
-    private StoreController storeController;
-    private WidgetHandler widgetHandler;
+    private Group inventoryView;
     @FXML
     private Group storeView;
     @FXML
@@ -78,42 +61,41 @@ public class MainController implements Initializable {
     private ImageView roomBackground;
     @FXML
     private TilePane shopPane;
-
     @FXML
     private TilePane inventoryPane;
-    @FXML
-    private ImageView returnButton;
-    @FXML
-    private ImageView soundButton;
+
+    private Stage stage;
+    private Scene scene;
+    private boolean isLoggedIn;
+    private final Transitions transitions = new Transitions();
+    private StoreController storeController;
     private Controller clientController;
     private User user;
     private RoomController roomController;
     private InventoryController inventoryController;
 
     /**
-     * This method runs as soon as the Main view opens up.
+     * Initializes the MainController and sets up the initial view.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         isLoggedIn = true;
         clientController = Controller.getInstance();
         user = clientController.getCurrentUser();
-        storeController = new StoreController(this, user,storeView, shopPane, priceText, purchaseItemButton,
+        storeController = new StoreController(this, user, storeView, shopPane, priceText, purchaseItemButton,
                 plantInformationPopup, closePopupButton);
         inventoryController = new InventoryController(this, clientController, inventoryPane, inventoryView,
-                plantInformationPopup, closePopupButton, plantSeedButton, cancelPlantSeed, disposeItem, putInRoomButton);
+                plantInformationPopup, plantSeedButton, cancelPlantSeed, disposeItem, putInRoomButton);
         roomController = new RoomController(roomView, user, clientController, inventoryController);
 
         roomView.toFront();
-
         switchToRoomView();
         startBackgroundTimeChecker();
         updateUserCoins();
-
     }
 
     /**
-     * Cleans up resources when the application is closed or user logs out.
+     * Cleans up resources when the application is closed or the user logs out.
      */
     public void cleanup() {
         isLoggedIn = false;
@@ -122,12 +104,11 @@ public class MainController implements Initializable {
 
     /**
      * Switches to the room view.
-     *
      */
     public void switchToRoomView() {
-        storeView.setOpacity(0);
-        inventoryView.setOpacity(0);
-        roomView.setOpacity(1);
+        setViewOpacity(storeView, 0);
+        setViewOpacity(inventoryView, 0);
+        setViewOpacity(roomView, 1);
         roomView.toFront();
         storeView.toBack();
         inventoryView.toBack();
@@ -135,26 +116,26 @@ public class MainController implements Initializable {
         roomController.updateAvailablePlants();
     }
 
+    /**
+     * Switches to the inventory view.
+     */
     public void switchToInventoryView() {
-        storeView.setOpacity(0);
-        roomView.setOpacity(0);
-        inventoryView.setOpacity(1);
+        setViewOpacity(storeView, 0);
+        setViewOpacity(roomView, 0);
+        setViewOpacity(inventoryView, 1);
         inventoryView.toFront();
         roomView.toBack();
         storeView.toBack();
         inventoryController.openInventoryView();
     }
 
-
-
     /**
      * Switches to the store view.
-     *
      */
     public void switchToStoreView() {
-        roomView.setOpacity(0);
-        inventoryView.setOpacity(0);
-        storeView.setOpacity(1);
+        setViewOpacity(roomView, 0);
+        setViewOpacity(inventoryView, 0);
+        setViewOpacity(storeView, 1);
         storeView.toFront();
         inventoryView.toBack();
         roomView.toBack();
@@ -188,24 +169,29 @@ public class MainController implements Initializable {
         try {
             switch (timeOfDay) {
                 case "Night":
-                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getNightFilepath()));
+                    imagePath = user.getRoom(0).getNightFilepath();
                     break;
                 case "Sunrise":
-                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunriseFilepath()));
+                    imagePath = user.getRoom(0).getSunriseFilepath();
                     break;
                 case "Sunset":
-                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getSunsetFilepath()));
+                    imagePath = user.getRoom(0).getSunsetFilepath();
                     break;
                 default:
-                    imagePath = String.valueOf(getClass().getClassLoader().getResource(user.getRoom(0).getDaytimeFilepath()));
+                    imagePath = user.getRoom(0).getDaytimeFilepath();
                     break;
             }
-            roomBackground.setImage(new Image(imagePath));
+            roomBackground.setImage(new Image(getClass().getClassLoader().getResource(imagePath).toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Updates background tasks such as room background and user coins.
+     *
+     * @param timeOfDay the current time of day
+     */
     private void updateBackgroundTasks(String timeOfDay) {
         updateRoomBackground(timeOfDay);
         roomController.updateAllPottedPlantImages();
@@ -219,15 +205,14 @@ public class MainController implements Initializable {
      * @return the time of day as a string
      */
     public String getTimeOfDay(LocalTime time) {
-        String timeOfDay = "Night";
         if (time.isAfter(LocalTime.of(5, 0)) && time.isBefore(LocalTime.of(9, 0))) {
-            timeOfDay = "Sunrise";
+            return "Sunrise";
         } else if (time.isAfter(LocalTime.of(9, 0)) && time.isBefore(LocalTime.of(16, 0))) {
-            timeOfDay = "Day";
+            return "Day";
         } else if (time.isAfter(LocalTime.of(16, 0)) && time.isBefore(LocalTime.of(19, 0))) {
-            timeOfDay = "Sunset";
+            return "Sunset";
         }
-        return timeOfDay;
+        return "Night";
     }
 
     /**
@@ -266,6 +251,11 @@ public class MainController implements Initializable {
         cleanup();
     }
 
+    /**
+     * Handles the music button to toggle music on and off.
+     *
+     * @param event the mouse event triggering the toggle
+     */
     public void handleMusicButton(MouseEvent event) {
         if (clientController.musicIsPlaying()) {
             clientController.pauseMusic();
@@ -276,6 +266,12 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Retrieves an Image object from an image file name.
+     *
+     * @param name the name of the image file
+     * @return the Image object
+     */
     private Image getImageFromImageName(String name) {
         URL resourceUrl = getClass().getClassLoader().getResource(name);
         if (resourceUrl == null) {
@@ -285,45 +281,86 @@ public class MainController implements Initializable {
         return new Image(resourceUrl.toString());
     }
 
-    public void resetRoom (MouseEvent event) {
+    /**
+     * Resets the room.
+     *
+     * @param event the mouse event triggering the reset
+     */
+    public void resetRoom(MouseEvent event) {
         roomController.resetRoom();
     }
 
-    public void showStoreSeeds () {
+    /**
+     * Displays the seed items in the store.
+     */
+    public void showStoreSeeds() {
         storeController.showCategory("Seeds");
     }
 
-    public void showStorePots () {
+    /**
+     * Displays the pot items in the store.
+     */
+    public void showStorePots() {
         storeController.showCategory("Pots");
     }
 
-    public void showStoreDecos () {
+    /**
+     * Displays the deco items in the store.
+     */
+    public void showStoreDecos() {
         storeController.showCategory("Decos");
     }
 
+    /**
+     * Updates the user's coin display.
+     */
     public void updateUserCoins() {
         userCoins.setText(String.valueOf(user.getShopCurrency()));
     }
 
-    public void showInventorySeeds () {
+    /**
+     * Displays the seed items in the inventory.
+     */
+    public void showInventorySeeds() {
         inventoryController.showCategory("Seeds");
     }
 
-    public void showInventoryDecos () {
+    /**
+     * Displays the deco items in the inventory.
+     */
+    public void showInventoryDecos() {
         inventoryController.showCategory("Decos");
     }
 
-    public void showInventoryPots () {
+    /**
+     * Displays the pot items in the inventory.
+     */
+    public void showInventoryPots() {
         inventoryController.showCategory("Pots");
     }
 
-    public void showInventoryPlants () {
+    /**
+     * Displays the plant items in the inventory.
+     */
+    public void showInventoryPlants() {
         inventoryController.showCategory("Plants");
     }
 
-
-    public void closePopupFrame () {
+    /**
+     * Closes the popup frame.
+     */
+    public void closePopupFrame() {
         inventoryController.animatePopupFrame(false);
         storeController.animatePopupFrame(false);
+    }
+
+    /**
+     * Sets the opacity of the given view.
+     *
+     * @param view    the view to set opacity for
+     * @param opacity the opacity value
+     */
+    private void setViewOpacity(Node view, double opacity) {
+        view.setOpacity(opacity);
     }
 }

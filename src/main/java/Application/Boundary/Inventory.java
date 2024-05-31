@@ -17,6 +17,13 @@ import main.java.Application.Controllers.InventoryController;
 
 import java.util.ArrayList;
 
+/**
+ * The Inventory class is responsible for managing the display and interactions
+ * with the inventory items in the application. It includes methods to create item views,
+ * animate popup frames, and handle item selections.
+ *
+ * Author: Mouhammed Fakhro
+ */
 public class Inventory {
 
     private TilePane inventoryPane;
@@ -24,6 +31,14 @@ public class Inventory {
     private Group plantInformationPopup;
     private Group inventoryView;
 
+    /**
+     * Constructs an Inventory object.
+     *
+     * @param inventoryPane          the TilePane for displaying inventory items
+     * @param inventoryController    the controller managing the inventory
+     * @param plantInformationPopup  the Group for the plant information popup
+     * @param inventoryView          the Group for the inventory view
+     */
     public Inventory(TilePane inventoryPane, InventoryController inventoryController, Group plantInformationPopup,
                      Group inventoryView) {
         this.inventoryPane = inventoryPane;
@@ -32,11 +47,22 @@ public class Inventory {
         this.inventoryView = inventoryView;
     }
 
+    /**
+     * Creates an ImageView for an item using the provided file path.
+     *
+     * @param itemImageFilePath the file path of the item's image
+     * @return the created ImageView
+     */
     public ImageView createImageViewForItem(String itemImageFilePath) {
         Image itemImage = new Image(getClass().getClassLoader().getResource(itemImageFilePath).toString());
         return new ImageView(itemImage);
     }
 
+    /**
+     * Animates the popup frame to open or close.
+     *
+     * @param open true to open the popup, false to close it
+     */
     public void animatePopupFrame(boolean open) {
         double fromY;
         double toY;
@@ -64,61 +90,74 @@ public class Inventory {
     /**
      * Sets the size and position of an image view in the store.
      *
-     * @param imageView the image view to set the size and position for
-     * @param itemType the type of item
+     * @param imageView the ImageView to set the size and position for
+     * @param itemType  the type of item
      */
     public void setImageViewSizeAndPositionStore(ImageView imageView, String itemType) {
         imageView.setPreserveRatio(true);
-        if (itemType.equals("Seeds")) {
-            imageView.setFitHeight(90);
-            imageView.setFitWidth(90);
-
-            imageView.setLayoutX(55);
-            imageView.setLayoutY(30);
-        } else if (itemType.equals("Pots")) {
-            imageView.setFitHeight(120);
-            imageView.setFitWidth(120);
-
-            imageView.setLayoutX(41);
-            imageView.setLayoutY(45);
-        } else {
-            imageView.setFitHeight(130);
-            imageView.setFitWidth(130);
-
-            imageView.setLayoutX(55);
-            imageView.setLayoutY(0);
+        switch (itemType) {
+            case "Seeds":
+                imageView.setFitHeight(90);
+                imageView.setFitWidth(90);
+                imageView.setLayoutX(55);
+                imageView.setLayoutY(30);
+                break;
+            case "Pots":
+                imageView.setFitHeight(120);
+                imageView.setFitWidth(120);
+                imageView.setLayoutX(41);
+                imageView.setLayoutY(45);
+                break;
+            default:
+                imageView.setFitHeight(130);
+                imageView.setFitWidth(130);
+                imageView.setLayoutX(55);
+                imageView.setLayoutY(0);
+                break;
         }
     }
 
+    /**
+     * Sets the size and position of an image view in the popup.
+     *
+     * @param itemType  the type of item
+     * @param imageView the ImageView to set the size and position for
+     */
     public void setImageViewSizeAndPositionPopup(String itemType, ImageView imageView) {
         imageView.setPreserveRatio(true);
-        if (itemType.equals("Seeds")) {
-            imageView.setFitHeight(125);
-            imageView.setFitWidth(125);
-
-            imageView.setLayoutX(250);
-            imageView.setLayoutY(50);
-        } else if (itemType.equals("Pots")) {
-            imageView.setFitHeight(145);
-            imageView.setFitWidth(145);
-
-            imageView.setLayoutX(230);
-            imageView.setLayoutY(60);
-        } else if (itemType.equals("Deco")) {
-            imageView.setFitHeight(125);
-            imageView.setFitWidth(125);
-
-            imageView.setLayoutX(230);
-            imageView.setLayoutY(60);
-        } else if(itemType.equals("PottedPlant")) {
-            imageView.setFitHeight(125);
-            imageView.setFitWidth(125);
-
-            imageView.setLayoutX(250);
-            imageView.setLayoutY(60);
+        switch (itemType) {
+            case "Seeds":
+                imageView.setFitHeight(125);
+                imageView.setFitWidth(125);
+                imageView.setLayoutX(250);
+                imageView.setLayoutY(50);
+                break;
+            case "Pots":
+                imageView.setFitHeight(145);
+                imageView.setFitWidth(145);
+                imageView.setLayoutX(230);
+                imageView.setLayoutY(60);
+                break;
+            case "Deco":
+                imageView.setFitHeight(125);
+                imageView.setFitWidth(125);
+                imageView.setLayoutX(230);
+                imageView.setLayoutY(60);
+                break;
+            case "PottedPlant":
+                imageView.setFitHeight(125);
+                imageView.setFitWidth(125);
+                imageView.setLayoutX(250);
+                imageView.setLayoutY(60);
+                break;
         }
     }
 
+    /**
+     * Opens the plant information popup for the selected item.
+     *
+     * @param selectedItem the selected item
+     */
     public void openPlantInformationPopup(Group selectedItem) {
         if (selectedItem != null) {
             ImageView previousImageView = (ImageView) plantInformationPopup.lookup("#ItemImage");
@@ -147,7 +186,7 @@ public class Inventory {
             if (itemNameText != null && itemDescriptionText != null && itemPriceText != null) {
                 itemNameText.setText(item.getName());
                 itemDescriptionText.setText(item.getDescriptionText());
-                itemPriceText.setText("Price: " + String.valueOf(item.getPrice()));
+                itemPriceText.setText("Price: " + item.getPrice());
                 if (itemDescriptionText.getText().isEmpty()) {
                     itemDescriptionText.setText("No description available for this item.");
                 }
@@ -155,6 +194,15 @@ public class Inventory {
         }
     }
 
+    /**
+     * Sets up images and properties for inventory items.
+     *
+     * @param container     the container for the item view
+     * @param itemImagePath the file path of the item's image
+     * @param price         the price of the item
+     * @param name          the name of the item
+     * @param itemType      the type of item
+     */
     private void setUpItemsImages(Group container, String itemImagePath, double price, String name, String itemType) {
         Image backgroundImage = new Image(getClass().getClassLoader().getResource("itemBackground.png").toString());
         ImageView background = new ImageView(backgroundImage);
@@ -191,9 +239,16 @@ public class Inventory {
         container.setVisible(false);
         inventoryPane.getChildren().add(container);
         inventoryController.setupItemClicks(container, info);
-
     }
 
+    /**
+     * Sets up images and properties for potted plant items.
+     *
+     * @param container     the container for the item view
+     * @param itemImagePath the file path of the plant's image
+     * @param itemImagePath2 the file path of the pot's image
+     * @param name          the name of the item
+     */
     public void setUpPottedPlantImages(Group container, String itemImagePath, String itemImagePath2, String name) {
         Image backgroundImage = new Image(getClass().getClassLoader().getResource("itemBackground.png").toString());
         ImageView background = new ImageView(backgroundImage);
@@ -251,6 +306,16 @@ public class Inventory {
         inventoryController.setupItemClicks(container, info);
     }
 
+    /**
+     * Creates an item view with the given parameters.
+     *
+     * @param itemImagePath  the file path of the item's image
+     * @param itemImagePath2 the file path of the second item's image (if applicable)
+     * @param price          the price of the item
+     * @param name           the name of the item
+     * @param itemType       the type of item
+     * @return the created Group representing the item view
+     */
     public Group createItemView(String itemImagePath, String itemImagePath2, double price, String name, String itemType) {
         Group container = new Group();
         if (itemType.equals("PottedPlant")) {
@@ -262,12 +327,25 @@ public class Inventory {
         return container;
     }
 
+    /**
+     * Adds a glow effect to the specified node.
+     *
+     * @param node the node to add the glow effect to
+     */
     public void addButtonGlow(Node node) {
         if (!node.getStyleClass().contains("purpleGlow")) {
             node.getStyleClass().add("purpleGlow");
         }
     }
 
+    /**
+     * Removes the glow effect from all items in the specified categories.
+     *
+     * @param seedItems  the seed items
+     * @param potItems   the pot items
+     * @param decoItems  the deco items
+     * @param plantItems the plant items
+     */
     public void removeGlowFromAllItems(ArrayList<Group> seedItems, ArrayList<Group> potItems,
                                        ArrayList<Group> decoItems, ArrayList<Group> plantItems) {
         for (Group seed : seedItems) {
@@ -283,5 +361,4 @@ public class Inventory {
             plant.getStyleClass().remove("purpleGlow");
         }
     }
-
 }

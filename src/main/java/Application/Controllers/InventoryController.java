@@ -9,10 +9,14 @@ import main.java.Application.Boundary.Inventory;
 
 import java.util.ArrayList;
 
+/**
+ * Controller class to manage the inventory view and interactions.
+ * Handles displaying, selecting, planting, and disposing of inventory items.
+ *
+ * Author: Mouhammed Fakhro
+ */
 public class InventoryController {
-
     private TilePane inventoryPane;
-    private Group inventoryView;
     private Controller clientController;
     private ArrayList<Group> seedItems = new ArrayList<>();
     private ArrayList<Group> potItems = new ArrayList<>();
@@ -26,8 +30,6 @@ public class InventoryController {
 
     private Group selectedItem;
     private Group plantInformationPopup;
-
-    private ImageView closePopupButton;
     private boolean plantInformationPopupIsOpened = false;
     private String currentCategory;
     private Inventory inventoryContent;
@@ -35,7 +37,6 @@ public class InventoryController {
     private ImageView plantSeedButton;
     private ImageView cancelPlantSeed;
     private ImageView disposeItemButton;
-
     private ImageView putInRoomButton;
     private boolean isPlanting = false;
     private Seed pickedSeedForPlanting;
@@ -44,13 +45,24 @@ public class InventoryController {
 
     private MainController mainController;
 
-    public InventoryController (MainController mainController, Controller clientController, TilePane inventoryPane, Group inventoryView, Group plantInformationPopup, ImageView closePopupButton, ImageView plantSeedButton, ImageView cancelPlantSeed, ImageView disposeItemButton, ImageView putInRoomButton) {
+    /**
+     * Constructor to initialize the InventoryController.
+     *
+     * @param mainController        the main controller
+     * @param clientController      the client controller
+     * @param inventoryPane         the tile pane for inventory items
+     * @param inventoryView         the group for inventory view
+     * @param plantInformationPopup the group for plant information popup
+     * @param plantSeedButton       the button to plant a seed
+     * @param cancelPlantSeed       the button to cancel planting
+     * @param disposeItemButton     the button to dispose of an item
+     * @param putInRoomButton       the button to put an item in the room
+     */
+    public InventoryController(MainController mainController, Controller clientController, TilePane inventoryPane, Group inventoryView, Group plantInformationPopup, ImageView plantSeedButton, ImageView cancelPlantSeed, ImageView disposeItemButton, ImageView putInRoomButton) {
         this.mainController = mainController;
         this.inventoryPane = inventoryPane;
-        this.inventoryView = inventoryView;
         this.clientController = clientController;
         this.plantInformationPopup = plantInformationPopup;
-        this.closePopupButton = closePopupButton;
         this.plantSeedButton = plantSeedButton;
         this.cancelPlantSeed = cancelPlantSeed;
         this.disposeItemButton = disposeItemButton;
@@ -61,8 +73,10 @@ public class InventoryController {
         setupDetections();
     }
 
+    /**
+     * Starts the planting process.
+     */
     private void startPlanting() {
-        System.out.println("clicked");
         isPlanting = true;
         plantSeedButton.setVisible(false);
         plantSeedButton.setDisable(true);
@@ -72,13 +86,15 @@ public class InventoryController {
         cancelPlantSeed.setOpacity(1);
 
         showCategory("Pots");
-        System.out.println(selectedItem);
         if (getObjectFromButton(selectedItem) instanceof Seed) {
             pickedSeedForPlanting = (Seed) getObjectFromButton(selectedItem);
         }
         selectPotForPlanting();
-        // force pot view
     }
+
+    /**
+     * Cancels the planting process.
+     */
     private void cancelPlant() {
         plantSeedButton.setVisible(true);
         plantSeedButton.setDisable(false);
@@ -90,40 +106,45 @@ public class InventoryController {
         isPlanting = false;
     }
 
+    /**
+     * Animates the popup frame.
+     *
+     * @param bool true to open the popup, false to close it
+     */
     public void animatePopupFrame(boolean bool) {
         inventoryContent.animatePopupFrame(bool);
         plantInformationPopupIsOpened = bool;
     }
 
+    /**
+     * Sets up event handlers for buttons.
+     */
     private void setupDetections() {
-        plantSeedButton.setOnMouseClicked(event -> {
-            startPlanting();
-        });
-
-        cancelPlantSeed.setOnMouseClicked(event -> {
-            cancelPlant();
-        });
-
-        disposeItemButton.setOnMouseClicked(event -> {
-            disposeItem();
-        });
-
-        putInRoomButton.setOnMouseClicked(event -> {
-            System.out.println(selectedItem);
-            if (getObjectFromButton(selectedItem) instanceof PottedPlant) {
-                 pickedPottedPlantToPutInRoom = (PottedPlant) getObjectFromButton(selectedItem);
-                 int inventoryIndex = clientController.getInventoryPlants().indexOf(pickedPottedPlantToPutInRoom);
-                 clientController.placePlantInRoom(inventoryIndex);
-                 clientController.disposePlantFromInventory(inventoryIndex);
-
-                 inventoryPane.getChildren().remove(selectedItem);
-                 populateOwnedItemsArray();
-                 updateInventoryButtons();
-            }
-        });
+        plantSeedButton.setOnMouseClicked(event -> startPlanting());
+        cancelPlantSeed.setOnMouseClicked(event -> cancelPlant());
+        disposeItemButton.setOnMouseClicked(event -> disposeItem());
+        putInRoomButton.setOnMouseClicked(event -> handlePutInRoomButton());
     }
 
+    /**
+     * Handles the put in room button click event.
+     */
+    private void handlePutInRoomButton() {
+        if (getObjectFromButton(selectedItem) instanceof PottedPlant) {
+            pickedPottedPlantToPutInRoom = (PottedPlant) getObjectFromButton(selectedItem);
+            int inventoryIndex = clientController.getInventoryPlants().indexOf(pickedPottedPlantToPutInRoom);
+            clientController.placePlantInRoom(inventoryIndex);
+            clientController.disposePlantFromInventory(inventoryIndex);
 
+            inventoryPane.getChildren().remove(selectedItem);
+            populateOwnedItemsArray();
+            updateInventoryButtons();
+        }
+    }
+
+    /**
+     * Sets up click event handlers for pot items to handle planting.
+     */
     private void selectPotForPlanting() {
         for (Group pot : potItems) {
             if (isPlanting) {
@@ -146,7 +167,9 @@ public class InventoryController {
         }
     }
 
-
+    /**
+     * Opens the inventory view and refreshes the items displayed.
+     */
     public void openInventoryView() {
         deselectItem();
         populateOwnedItemsArray();
@@ -154,20 +177,29 @@ public class InventoryController {
         showCategory(currentCategory);
     }
 
+    /**
+     * Shows items of the specified category in the inventory.
+     *
+     * @param category the category of items to display
+     */
     public void showCategory(String category) {
         if (!isPlanting) {
             deselectItem();
         }
         currentCategory = category;
         ArrayList<Group> items;
-        if (category.equals("Seeds")) {
-            items = seedItems;
-        } else if (category.equals("Pots")) {
-            items = potItems;
-        } else if (category.equals("Decos")) {
-            items = decoItems;
-        } else {
-            items = plantItems;
+        switch (category) {
+            case "Seeds":
+                items = seedItems;
+                break;
+            case "Pots":
+                items = potItems;
+                break;
+            case "Decos":
+                items = decoItems;
+                break;
+            default:
+                items = plantItems;
         }
 
         inventoryPane.getChildren().clear();
@@ -179,6 +211,9 @@ public class InventoryController {
         }
     }
 
+    /**
+     * Populates the owned items arrays from the client controller.
+     */
     private void populateOwnedItemsArray() {
         ownedSeeds = clientController.getInventorySeeds();
         ownedPots = clientController.getInventoryPots();
@@ -186,6 +221,9 @@ public class InventoryController {
         ownedPottedPlants = clientController.getInventoryPlants();
     }
 
+    /**
+     * Clears all button arrays for inventory items.
+     */
     private void clearAllButtonArrays() {
         seedItems.clear();
         potItems.clear();
@@ -193,32 +231,37 @@ public class InventoryController {
         plantItems.clear();
     }
 
-    private void updateInventoryButtons () {
+    /**
+     * Updates the inventory buttons with the owned items.
+     */
+    private void updateInventoryButtons() {
         clearAllButtonArrays();
         for (Seed seed : ownedSeeds) {
-            Group seedItem = inventoryContent.createItemView(seed.imageFilePath, null, seed.getPrice(), seed.getName(),
-                    "Seeds");
+            Group seedItem = inventoryContent.createItemView(seed.imageFilePath, null, seed.getPrice(), seed.getName(), "Seeds");
             seedItems.add(seedItem);
         }
         for (Pot pot : ownedPots) {
-            Group potItem = inventoryContent.createItemView(pot.imageFilePath, null, pot.getPrice(), pot.getName(),
-                    "Pots");
+            Group potItem = inventoryContent.createItemView(pot.imageFilePath, null, pot.getPrice(), pot.getName(), "Pots");
             potItems.add(potItem);
         }
         for (Deco deco : ownedDecos) {
-            Group decoItem = inventoryContent.createItemView(deco.imageFilePath, null, deco.getPrice(), deco.getName(),
-                    "Deco");
+            Group decoItem = inventoryContent.createItemView(deco.imageFilePath, null, deco.getPrice(), deco.getName(), "Deco");
             decoItems.add(decoItem);
         }
         for (PottedPlant plant : ownedPottedPlants) {
-            Group plantItem = inventoryContent.createItemView(plant.getPlantTop().getImageFilePath(),
-                    plant.getPot().getImageFilePath(),
-                    plant.getPrice(),
-                    plant.getName(), "PottedPlant");
+            Group plantItem = inventoryContent.createItemView(plant.getPlantTop().getImageFilePath(), plant.getPot().getImageFilePath(), plant.getPrice(), plant.getName(), "PottedPlant");
             plantItems.add(plantItem);
         }
     }
 
+    /**
+     * Makes all items in the specified categories invisible.
+     *
+     * @param seedItems the seed items
+     * @param potItems  the pot items
+     * @param decoItems the deco items
+     * @param plantItems the plant items
+     */
     public void makeAllCategoriesInvisible(ArrayList<Group> seedItems, ArrayList<Group> potItems, ArrayList<Group> decoItems, ArrayList<Group> plantItems) {
         for (Group seed : seedItems) {
             seed.setVisible(false);
@@ -234,6 +277,9 @@ public class InventoryController {
         }
     }
 
+    /**
+     * Deselects the currently selected item.
+     */
     public void deselectItem() {
         inventoryContent.removeGlowFromAllItems(seedItems, potItems, decoItems, plantItems);
         this.selectedItem = null;
@@ -243,6 +289,11 @@ public class InventoryController {
         cancelPlantSeed.setVisible(false);
     }
 
+    /**
+     * Handles item click events.
+     *
+     * @param item the clicked item
+     */
     private void itemClick(Group item) {
         selectedItem = item;
         inventoryContent.removeGlowFromAllItems(seedItems, potItems, decoItems, plantItems);
@@ -250,30 +301,38 @@ public class InventoryController {
             selectedItem.getStyleClass().add("purpleGlow");
             disposeItemButton.setOpacity(1);
 
-            if (getItemTypeFromButton(item).equals("Seeds")) {
-                plantSeedButton.setVisible(true);
-                plantSeedButton.setOpacity(1);
-                plantSeedButton.setDisable(false);
-                plantSeedButton.toFront();
+            switch (getItemTypeFromButton(item)) {
+                case "Seeds":
+                    plantSeedButton.setVisible(true);
+                    plantSeedButton.setOpacity(1);
+                    plantSeedButton.setDisable(false);
+                    plantSeedButton.toFront();
+                    break;
+                case "Plants":
+                    plantSeedButton.setVisible(false);
+                    plantSeedButton.setDisable(true);
 
-            } else if (getItemTypeFromButton(item).equals("Plants")) {
-                plantSeedButton.setVisible(false);
-                plantSeedButton.setDisable(true);
-
-                putInRoomButton.setDisable(false);
-                putInRoomButton.setVisible(true);
-                putInRoomButton.setOpacity(1);
-                putInRoomButton.toFront();
-            } else {
-                putInRoomButton.setVisible(false);
-                putInRoomButton.setDisable(true);
-                plantSeedButton.setOpacity(0.3);
-                plantSeedButton.setDisable(false);
+                    putInRoomButton.setDisable(false);
+                    putInRoomButton.setVisible(true);
+                    putInRoomButton.setOpacity(1);
+                    putInRoomButton.toFront();
+                    break;
+                default:
+                    putInRoomButton.setVisible(false);
+                    putInRoomButton.setDisable(true);
+                    plantSeedButton.setOpacity(0.3);
+                    plantSeedButton.setDisable(false);
             }
         }
         inventoryContent.addButtonGlow(selectedItem);
     }
 
+    /**
+     * Retrieves the item object from the button.
+     *
+     * @param button the button representing the item
+     * @return the item object
+     */
     public Item getObjectFromButton(Group button) {
         if (seedItems.contains(button)) {
             return ownedSeeds.get(seedItems.indexOf(button));
@@ -286,18 +345,30 @@ public class InventoryController {
         }
     }
 
+    /**
+     * Retrieves the item type from the button.
+     *
+     * @param button the button representing the item
+     * @return the item type as a string
+     */
     public String getItemTypeFromButton(Group button) {
         if (potItems.contains(button)) {
             return "Pots";
         } else if (seedItems.contains(button)) {
             return "Seeds";
-        } else if (decoItems.contains(button)){
+        } else if (decoItems.contains(button)) {
             return "Decos";
         } else {
             return "Plants";
         }
     }
 
+    /**
+     * Sets up click event handlers for inventory items and information buttons.
+     *
+     * @param item       the inventory item
+     * @param infoButton the information button for the item
+     */
     public void setupItemClicks(Group item, ImageView infoButton) {
         item.setOnMouseClicked(event -> {
             if (!this.plantInformationPopupIsOpened) {
@@ -317,23 +388,23 @@ public class InventoryController {
         });
     }
 
-    public void disposeItem(){
-        if(selectedItem != null){
+    /**
+     * Disposes of the currently selected item.
+     */
+    public void disposeItem() {
+        if (selectedItem != null) {
             Item item = getObjectFromButton(selectedItem);
 
-            if(item instanceof Seed){
+            if (item instanceof Seed) {
                 int index = ownedSeeds.indexOf(item);
                 clientController.disposeSeedFromInventory(index);
-            }
-            else if(item instanceof Pot){
+            } else if (item instanceof Pot) {
                 int index = ownedPots.indexOf(item);
                 clientController.disposePotFromInventory(index);
-            }
-            else if(item instanceof Deco){
+            } else if (item instanceof Deco) {
                 int index = ownedDecos.indexOf(item);
                 clientController.disposeDecoFromInventory(index);
-            }
-            else if(item instanceof PottedPlant){
+            } else if (item instanceof PottedPlant) {
                 int index = ownedPottedPlants.indexOf(item);
                 clientController.disposePlantFromInventory(index);
             }
