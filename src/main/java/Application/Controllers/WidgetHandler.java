@@ -157,7 +157,6 @@ public class WidgetHandler {
         WidgetEntity widget = new WidgetEntity((PottedPlant) item, 200, 200);
         widgets.add(widget);
         setWidget((PottedPlant) item, stageId);
-        // TODO: load widget via GUI controller
     }
 
     /**

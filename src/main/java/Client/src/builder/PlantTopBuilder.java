@@ -6,8 +6,11 @@ import enums.Species;
 
 import java.util.ArrayList;
 
+/** Static builder/director class used to build PlantTop items.
+ * @author Rana Noorzadeh */
 public class PlantTopBuilder {
 
+    /** method creates and returns a PlantTop item of given Species */
     public static PlantTop buildPlantTop (Species species){
         switch (species){
             case CACTUS:
@@ -33,6 +36,11 @@ public class PlantTopBuilder {
         return null;
     }
 
+    /* ------------------
+     * inner private methods
+     * ------------------- */
+
+    /** build and returns a cactus */
     private static PlantTop buildCactus() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -48,6 +56,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.CACTUS, 250, Rarity.COMMON, desc);
     }
 
+    /** build and returns a parlor palm */
     private static PlantTop buildPalm() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -62,6 +71,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.PARLOR_PALM, 250, Rarity.COMMON, desc);
     }
 
+    /** build and returns an arrowhead plant */
     private static PlantTop buildArrowheadPlant() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -76,6 +86,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.ARROWHEAD_PLANT, 300, Rarity.COMMON, desc);
     }
 
+    /** build and returns a sword fern */
     private static PlantTop buildSwordFern() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -90,6 +101,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.SWORD_FERN, 350, Rarity.RARE, desc);
     }
 
+    /** build and returns a coffee plant */
     private static PlantTop buildCoffeePlant() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -105,6 +117,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.COFFEE_PLANT, 400, Rarity.RARE, desc);
     }
 
+    /** build and returns a pineapple plant */
     private static PlantTop buildPineapple() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -120,6 +133,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.PINEAPPLE_PLANT, 450, Rarity.EPIC, desc);
     }
 
+    /** build and returns an orchid */
     private static PlantTop buildOrchid() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -134,6 +148,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.ORCHID, 500, Rarity.EPIC, desc);
     }
 
+    /** build and returns a chili pepper */
     private static PlantTop buildChiliPepper() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");
@@ -149,6 +164,7 @@ public class PlantTopBuilder {
         return new PlantTop(imageFilePaths, Species.CHILI_PEPPER, 600, Rarity.LEGENDARY, desc);
     }
 
+    /** build and returns a rose */
     private static PlantTop buildRose() {
         ArrayList<String> imageFilePaths = new ArrayList<>();
         imageFilePaths.add("plants/planted.png");

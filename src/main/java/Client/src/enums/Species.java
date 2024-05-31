@@ -2,6 +2,11 @@ package enums;
 
 public enum Species {
 
+    /** enum class represents the plant species available in the game,
+     * @author Rana Noorzadeh
+     * @author Christian Storck
+     * */
+
     //------------ common ------------
     CACTUS(Environment.SUNNY,"Flowering Cactus", 1),
     PARLOR_PALM(Environment.HALF_SHADE, "Parlor Palm", 3),

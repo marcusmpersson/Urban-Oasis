@@ -6,6 +6,9 @@ import enums.PotType;
 
 import java.io.Serializable;
 
+/** entity class represents a Pot item in the game.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class Pot extends ShopItem implements Placeable, Serializable {
 
     @SerializedName("PotType")

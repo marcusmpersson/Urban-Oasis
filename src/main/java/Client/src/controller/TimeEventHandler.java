@@ -3,6 +3,9 @@ package controller;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/** class keeps track of time and invokes time-based events in the game via GameHandler.
+ * class also auto saves in fixed intervals.
+ * @author Rana Noorzadeh */
 public class TimeEventHandler {
 
     private GameHandler gameHandler;
@@ -17,11 +20,16 @@ public class TimeEventHandler {
     }
 
     /** method sets thread running condition to true.
-     * initiates and starts all thread.*/
+     * initiates and starts all threads.*/
     public void startThreads() {
         gameThread = new GameThread();
+        gameThread.setDaemon(true);
+
         autoSaveThread = new AutoSaveThread();
+        autoSaveThread.setDaemon(true);
+
         threadsAreRunning = true;
+
         gameThread.start();
         autoSaveThread.start();
     }

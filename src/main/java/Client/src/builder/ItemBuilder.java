@@ -10,8 +10,13 @@ import enums.Species;
 
 import java.util.ArrayList;
 
+/** Static builder/director class used to build items in the game other than plants.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz */
+
 public class ItemBuilder {
 
+    /** method creates and returns a Seed item of given Rarity */
     public static Seed buildSeed(Rarity rarity) {
         switch (rarity){
             case COMMON:
@@ -27,6 +32,7 @@ public class ItemBuilder {
         return null;
     }
 
+    /** method creates and returns a Pot item of given PotType */
     public static Pot buildPot(PotType type) {
         switch (type) {
             case POT_LILAC:
@@ -58,6 +64,8 @@ public class ItemBuilder {
         return null;
     }
 
+    /** method creates and returns an arrayList containing all Pots.
+     * Used for populating the game shop */
     public static ArrayList<Pot> buildAllPots(){
         ArrayList<Pot> pots = new ArrayList<>();
 
@@ -73,6 +81,7 @@ public class ItemBuilder {
         return pots;
     }
 
+    /** method creates and returns a Deco item of given DecoType */
     public static Deco buildDeco(DecoType type){
         switch (type){
             case TERRARIUM:
@@ -104,6 +113,8 @@ public class ItemBuilder {
         }
     }
 
+    /** method creates and returns an arrayList containing all Decos.
+     * Used for populating the game shop */
     public static ArrayList<Deco> buildAllDecos(){
         ArrayList<Deco> decos = new ArrayList<>();
 
@@ -123,6 +134,7 @@ public class ItemBuilder {
     * inner private methods
     * ------------------- */
 
+    /** build and returns a terrarium */
     private static Deco buildTerrarium() {
         String desc = "This is a self sustaining moss terrarium that requires no maintenance! " +
                 "Place it anywhere and it will thrive. ";
@@ -130,6 +142,7 @@ public class ItemBuilder {
         return new Deco("Terrarium", filepath, 1000, desc, DecoType.TERRARIUM);
     }
 
+    /** build and returns a mini buddha statue */
     private static Deco buildBuddha() {
         String desc = "Innumerable representations of Buddha are venerated and decorate spaces all around the world.\" + \"" +
                 "This brass Buddha statue shines in reddish and golden hues.";
@@ -137,42 +150,49 @@ public class ItemBuilder {
         return new Deco("Mini Buddha", filepath, 600, desc, DecoType.BUDDHA);
     }
 
+    /** build and returns a geode stone */
     private static Deco buildGeode() {
         String desc = "Minerals make beautiful decorations. This is a Brazilian agate geode in vibrant green and blue shades.";
         String filepath = "decos/geode.png";
         return new Deco("Geode stone ", filepath, 2000, desc, DecoType.GEODE);
     }
 
+    /** build and returns a blue globe */
     private static Deco buildGlobeBlue() {
         String desc = "Earth globes have transcended time as a classic of decorations and can be found in many styles and colors.";
         String filepath = "decos/globe_blue.png";
         return new Deco("Globe (blue)", filepath, 300, desc, DecoType.GLOBE_BLUE);
     }
 
+    /** build and returns a gray globe */
     private static Deco buildGlobeGray() {
         String desc = "Earth globes have transcended time as a classic of decorations and can be found in many styles and colors.";
         String filepath = "decos/globe_gray.png";
         return new Deco("Globe (Gray)", filepath, 300, desc, DecoType.GLOBE_GRAY);
     }
 
+    /** build and returns a yellow/pink globe */
     private static Deco buildGlobeYellowPink() {
         String desc = "Earth globes have transcended time as a classic of decorations and can be found in many styles and colors.";
         String filepath = "decos/globe_yellow_pink.png";
         return new Deco("Globe (yellow)", filepath, 400, desc, DecoType.GLOBE_YELLOW_PINK);
     }
 
+    /** build and returns a music box */
     private static Deco buildMusicBox() {
         String desc = "Simple wooden music box decorated with hand-painted patterns and dancing ballerina.";
         String filepath = "decos/music_box.png";
         return new Deco("Music Box", filepath, 800, desc, DecoType.MUSIC_BOX);
     }
 
+    /** build and returns an old clock */
     private static Deco buildOldClock() {
         String desc = "Vintage German clock ornamented in gold.";
         String filepath = "decos/old_clock.png";
         return new Deco("Old Clock", filepath, 1400, desc, DecoType.OLD_CLOCK);
     }
 
+    /** build and returns a common seed */
     private static Seed commonSeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
         possibleSpecies.add(Species.CACTUS);
@@ -184,6 +204,7 @@ public class ItemBuilder {
                  "This seed package contains the seed of an unknown common and affordable plant.");
     }
 
+    /** build and returns a rare seed */
     private static Seed rareSeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
         possibleSpecies.add(Species.SWORD_FERN);
@@ -194,6 +215,7 @@ public class ItemBuilder {
                 "This seed package contains the seed of an unknown rare and unique plant.");
     }
 
+    /** build and returns an epic seed */
     private static Seed epicSeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
         possibleSpecies.add(Species.PINEAPPLE_PLANT);
@@ -204,6 +226,7 @@ public class ItemBuilder {
                 "This seed package contains the seed of an unknown epic but pricey plant.");
     }
 
+    /** build and returns a legendary seed */
     private static Seed legendarySeed(){
         ArrayList<Species> possibleSpecies = new ArrayList<>();
         possibleSpecies.add(Species.CHILI_PEPPER);

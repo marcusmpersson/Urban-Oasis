@@ -1,8 +1,9 @@
 package enums;
 
 public enum PotType {
-    /** enum class used for builder class */
-    POT_LILAC,
+    /** enum class used for builders, to keep track of different types of Pot items
+     * @author: Rana Noorzadeh
+     * @author: Christian Storck */    POT_LILAC,
     POT_ORANGE,
     POT_POLKA_PINK,
     POT_STRIPED_BLUE,

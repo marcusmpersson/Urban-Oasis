@@ -5,6 +5,10 @@ import enums.Stage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** entity class represents a Potted Plant item in the game.
+ * Class must consist of a PlantTop and a Pot item.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class PottedPlant extends Item implements Placeable, Serializable {
 
     private Pot pot;
@@ -62,20 +66,6 @@ public class PottedPlant extends Item implements Placeable, Serializable {
     /** returns reference to the PlantTop instance in this PottedPlant */
     public PlantTop getPlantTop() {
         return plant;
-    }
-
-    // ------------------------------------------
-    // MOST LIKELY WILL NEVER BE USED:
-    // ------------------------------------------
-
-    /** method returns an arraylist containing the plantTop image (index 0)
-     * and pot image (index 1) */
-    public ArrayList<String> getImagesFilePaths(){
-        ArrayList<String> filePathArray = new ArrayList<>();
-        filePathArray.add(plant.getImageFilePath());
-        filePathArray.add(pot.getImageFilePath());
-
-        return filePathArray;
     }
 
     /** returns plant name */

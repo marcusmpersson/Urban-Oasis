@@ -3,6 +3,9 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** entity class represents the player's room.
+ * @author Rana Noorzadeh
+ * */
 public class Room implements Serializable {
     private ArrayList<PlacementSlot> slots;
     public ArrayList<String> imageFilePaths;
@@ -66,10 +69,6 @@ public class Room implements Serializable {
         }
         return placedItems;
     }
-
-    // ------------------------------------------
-    // MOST LIKELY NOT USED
-    // ------------------------------------------
 
     /** returns a reference to the arraylist containing all image file-paths of the room */
     public ArrayList<String> getImageFilePaths() {

@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/** Class handles all game logic and the game progress of current logged-in user
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz */
 public class GameHandler {
 
     private User currentUser;
@@ -42,7 +45,7 @@ public class GameHandler {
             return true;
         }
         else {
-            controller.popUpMessage("Insufficient funds.");
+            //controller.popUpMessage("Insufficient funds.");
             return false;
         }
     }
@@ -74,37 +77,6 @@ public class GameHandler {
         return false;
     }
 
-    /** method waters the PottedPlant item placed at given index at given room
-     * @param roomIndex index of chosen room
-     * @param placementIndex index of the placement slot item is placed in
-     * */
-    public void waterPlant(int roomIndex, int placementIndex) {
-
-        // if valid index for both
-        if ((roomIndex < currentUser.getRoomsArray().size() && roomIndex >= 0)
-        && (placementIndex < currentUser.getRoom(roomIndex).getSlots().size() &&
-                placementIndex >= 0)){
-
-            Placeable itemPlaced = currentUser.getRoom(roomIndex).getSlot(placementIndex).getPlacedItem();
-
-            if (itemPlaced instanceof PottedPlant) {
-
-                // if not dead prior
-                if (((PottedPlant)itemPlaced).getPlantTop().getStage() != Stage.DEAD) {
-
-                    // water plant
-                    ((PottedPlant) itemPlaced).getPlantTop().water();
-                    controller.playWaterSound();
-
-                    // if now dead, play sound effect
-                    if (((PottedPlant) itemPlaced).getPlantTop().getStage() == Stage.DEAD) {
-                        controller.playDeathSound();
-                    }
-                }
-            }
-        }
-    }
-
     /** receives reference to a PottedPlant and waters it, plays water sound effect
      * checks for death */
     public void waterPlant(PottedPlant plant) {
@@ -117,42 +89,6 @@ public class GameHandler {
         }
     }
 
-    /** method used when drag and dropping a Plant from the inventory to a room slot.
-    /* The PottedPlant is then removed from the inventory. */
-    public void placeInventoryPlantInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
-
-        // place item
-        Placeable placeableItem = currentUser.getInventory().getPottedPlantAt(inventoryIndex);
-        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(placeableItem);
-
-        // remove from inventory
-        currentUser.getInventory().removePottedPlantAt(inventoryIndex);
-    }
-
-    /** method used when drag and dropping a Pot from the inventory to a room slot.
-     /* The Pot is then removed from the inventory. */
-    public void placeInventoryPotInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
-
-        // place item
-        Placeable placeableItem = currentUser.getInventory().getPotAt(inventoryIndex);
-        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(placeableItem);
-
-        // remove from inventory
-        currentUser.getInventory().removePotAt(inventoryIndex);
-    }
-
-    /** method used when drag and dropping a Deco from the inventory to a room slot.
-     /* The Deco is then removed from the inventory. */
-    public void placeInventoryDecoInSlot(int inventoryIndex, int roomIndex, int placementIndex) {
-
-        // place item
-        Placeable placeableItem = currentUser.getInventory().getDecorationAt(inventoryIndex);
-        currentUser.getRoom(roomIndex).getSlot(placementIndex).setPlacedItem(placeableItem);
-
-        // remove from inventory
-        currentUser.getInventory().removeDecorationAt(inventoryIndex);
-    }
-
     /** method places selected plant in the first available slot in the room.
      * if room is full, send error message */
     public void placeInventoryPlantInRoom(int inventoryIndex, int roomIndex) {
@@ -161,7 +97,7 @@ public class GameHandler {
             PottedPlant plant = currentUser.getInventory().getPottedPlantAt(inventoryIndex);
             availableSlot.setPlacedItem(plant);
         } else {
-            controller.popUpMessage("There are no empty slots in the room.");
+            //controller.popUpMessage("There are no empty slots in the room.");
         }
     }
 
@@ -173,7 +109,7 @@ public class GameHandler {
             Pot pot = currentUser.getInventory().getPotAt(inventoryIndex);
             availableSlot.setPlacedItem(pot);
         } else {
-            controller.popUpMessage("There are no empty slots in the room.");
+            //controller.popUpMessage("There are no empty slots in the room.");
         }
     }
 
@@ -185,7 +121,7 @@ public class GameHandler {
             Deco deco = currentUser.getInventory().getDecorationAt(inventoryIndex);
             availableSlot.setPlacedItem(deco);
         } else {
-            controller.popUpMessage("There are no empty slots in the room.");
+            //controller.popUpMessage("There are no empty slots in the room.");
         }
     }
 
@@ -297,7 +233,7 @@ public class GameHandler {
     }
 
     /* ---------------------------------
-     * Time based game events (TimeEventHandler)
+     * Time based game events (called by TimeEventHandler)
      * --------------------------------- */
 
     /** increases currency of user for every placed plant in every room, depending
@@ -412,7 +348,7 @@ public class GameHandler {
 
     /** method compares last saved time for user (since last logout)
      * and applies passage of time to all affected game components */
-    public void updateSinceLast(){
+    public void updateSinceLast() {
         try {
             // get current time
             LocalDateTime now = LocalDateTime.now();
@@ -444,12 +380,9 @@ public class GameHandler {
     }
 
     /* ---------------------------------
-     * getters for Controller
+     * intermediate getters for Controller
      * --------------------------------- */
 
-    public ArrayList<Placeable> getRoomItems(int index) {
-        return currentUser.getRoom(index).getPlacedItems();
-    }
     public ArrayList<PottedPlant> getInventoryPlants() {
         return currentUser.getInventory().getPottedPlants();
     }
@@ -465,15 +398,12 @@ public class GameHandler {
     public ArrayList<String> getRoomImagePaths(int index) {
         return currentUser.getRoom(index).getImageFilePaths();
     }
-
     public ArrayList<Pot> getShopPots() {
         return shop.getPots();
     }
-
     public ArrayList<Seed> getShopSeeds() {
         return shop.getSeeds();
     }
-
     public ArrayList<Deco> getShopDecos() {
         return shop.getDecos();
     }

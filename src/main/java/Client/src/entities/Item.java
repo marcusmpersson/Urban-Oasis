@@ -1,6 +1,8 @@
 package entities;
 
-/** abstract class Item is the superclass of all game items in the player's room, inventory and shop */
+/** abstract class Item is the superclass of all game items in the player's room, inventory and shop
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz */
 public abstract class Item {
     protected int price;
     protected String descriptionText;
