@@ -27,6 +27,7 @@ public class PlantInformationPopup {
     private static final double RECTANGLE_HEIGHT = 300;
     private static final double IMAGE_BUTTON_SIZE = 20;
     private Button waterLevelButton;
+    private Button healthStatButton;
     private RoomController roomController;
     private Group informationRectangle;
 
@@ -38,6 +39,8 @@ public class PlantInformationPopup {
     public PlantInformationPopup(RoomController roomController) {
         this.roomController = roomController;
         this.informationRectangle = generateInformationRectangle();
+        this.informationRectangle.toFront();
+        closeInfoPopupFrame();
     }
 
     /**
@@ -71,18 +74,27 @@ public class PlantInformationPopup {
         textPane.setPrefSize(RECTANGLE_WIDTH, RECTANGLE_HEIGHT * 0.2);
 
         // Buttons
-        Button waterButton = createButton("Water", 0.2);
-        Button takeOutButton = createButton("Take Out As Widget", 0.4);
-        Button removeFromRoomButton = createButton("Remove from Room", 0.6);
-        waterLevelButton = createButton("Water Level: 0/100", 0.8);
+        Button waterButton = createButton("Water", 0.1, true);
+        Button takeOutButton = createButton("Place Desktop Widget", 0.25, true);
+        Button removeFromRoomButton = createButton("Remove from Room", 0.4, true);
+        waterLevelButton = createButton("Water Level: 0/100", 0.6, false);
+        healthStatButton = createButton("Health: 0/100" , 0.8, false);
 
         waterButton.setOnMouseClicked(event -> {
             String level = roomController.waterPottedPlant();
+            String health = roomController.getSatisfactionLevelForPopup();
             updateWaterLevelText(level);
+            updateHealthLevelText(health);
         });
 
         takeOutButton.setOnMouseClicked(event -> {
             roomController.takeOutPottedPlant();
+        });
+
+        removeFromRoomButton.setOnMouseClicked(event -> {
+            roomController.removeItemFromSlot();
+            closeInfoPopupFrame();
+            roomController.setMenuOpened(false);
         });
 
         // Close button setup with larger clickable area
@@ -100,7 +112,7 @@ public class PlantInformationPopup {
         closeButtonGroup.setLayoutX(RECTANGLE_WIDTH - IMAGE_BUTTON_SIZE - 10);
         closeButtonGroup.setLayoutY(0);
 
-        informationRectangle.getChildren().addAll(rectangle, textPane, waterButton, takeOutButton, removeFromRoomButton, waterLevelButton,
+        informationRectangle.getChildren().addAll(rectangle, textPane, waterButton, takeOutButton, removeFromRoomButton, waterLevelButton,healthStatButton,
                 closeButtonGroup);
 
         informationRectangle.setTranslateX(1000);
@@ -109,7 +121,7 @@ public class PlantInformationPopup {
         // Set click handler on the group, not just the image
         closeButtonGroup.setOnMouseClicked(event -> {
             if (!roomController.isDragging()) {
-                animatePopupFramePosition(informationRectangle, 1200, informationRectangle.getTranslateY());
+                closeInfoPopupFrame();
                 roomController.setMenuOpened(false);
             }
         });
@@ -126,6 +138,11 @@ public class PlantInformationPopup {
         waterLevelButton.setText("Water Level: " + level + "/100");
     }
 
+    public void updateHealthLevelText(String level){
+        healthStatButton.setText("Environment: " + level + "/100");
+        healthStatButton.setWrapText(true);
+    }
+
     /**
      * Creates a button with specified text and layout position.
      *
@@ -133,26 +150,36 @@ public class PlantInformationPopup {
      * @param layoutYPercent the vertical position as a percentage of the rectangle height
      * @return the created button
      */
-    private Button createButton(String text, double layoutYPercent) {
+    private Button createButton(String text, double layoutYPercent, boolean background) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #4B0082; -fx-text-fill: white;");
+        if (background) {
+            button.setStyle("-fx-background-color: #4B0082; -fx-text-fill: white;");
+        } else {
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-background-insets: 0; -fx-background-radius: 0;");
+        }
         button.setPrefWidth(RECTANGLE_WIDTH * 0.7);
         button.setLayoutX((RECTANGLE_WIDTH - button.getPrefWidth()) / 2); // Center horizontally
         button.setLayoutY(RECTANGLE_HEIGHT * layoutYPercent); // Set layout Y according to percent
         return button;
     }
 
-    /**
-     * Animates the specified node to a target position.
-     *
-     * @param node the node to animate
-     * @param targetX the target x-coordinate
-     * @param targetY the target y-coordinate
-     */
-    public void animatePopupFramePosition(Group node, double targetX, double targetY) {
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), node);
-        transition.setToX(targetX);
-        transition.setToY(targetY);
+
+    public void openInfoPopupFrame() {
+        double x = 668;
+        double y = 458;
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), informationRectangle);
+        transition.setToX(x);
+        transition.setToY(y);
         transition.play();
     }
+
+    public void closeInfoPopupFrame() {
+        double x = 1200;
+        double y = informationRectangle.getTranslateY();
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), informationRectangle);
+        transition.setToX(x);
+        transition.setToY(y);
+        transition.play();
+    }
+
 }

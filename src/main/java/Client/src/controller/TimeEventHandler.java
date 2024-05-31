@@ -3,6 +3,9 @@ package controller;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/** class keeps track of time and invokes time-based events in the game via GameHandler.
+ * class also auto saves in fixed intervals.
+ * @author Rana Noorzadeh */
 public class TimeEventHandler {
 
     private GameHandler gameHandler;
@@ -17,11 +20,16 @@ public class TimeEventHandler {
     }
 
     /** method sets thread running condition to true.
-     * initiates and starts all thread.*/
+     * initiates and starts all threads.*/
     public void startThreads() {
         gameThread = new GameThread();
+        gameThread.setDaemon(true);
+
         autoSaveThread = new AutoSaveThread();
+        autoSaveThread.setDaemon(true);
+
         threadsAreRunning = true;
+
         gameThread.start();
         autoSaveThread.start();
     }
@@ -30,12 +38,15 @@ public class TimeEventHandler {
      * joins all running threads, finally nulls them */
     public void stopAllThreads() {
         threadsAreRunning = false;
-        try {
-            gameThread.join();
-            autoSaveThread.join();
+        gameHandler.updateUserLastUpdatedTime(LocalDateTime.now());
+        Controller.getInstance().saveGame();
 
-        } catch(InterruptedException e) {
-            System.out.println("TimeEventHandler: joining threads was interrupted.");
+        try {
+            gameThread.interrupt();
+            autoSaveThread.interrupt();
+
+        } catch(Exception e) {
+            System.out.println("TimeEventHandler: interruption unsuccessful ");
 
         } finally {
             gameThread = null;
@@ -56,8 +67,16 @@ public class TimeEventHandler {
                 try {
                     //sleep thread for 1 min, then increase age and currency
                     Thread.sleep(60000);
-                    gameHandler.increaseCurrency(1);
-                    gameHandler.raiseAges(1);
+
+                    // normal mode
+                    // gameHandler.increaseCurrency(1);
+                    // gameHandler.raiseAges(1);
+
+                    //fast mode
+                    gameHandler.increaseCurrency(5);
+                    gameHandler.raiseAges(10);
+                    gameHandler.lowerAllWaterLevels(2, false);
+                    gameHandler.updateEnvSatisfactions(2, false);
                     
                     // check current time
                     // if it's been an hour, update water and environment levels
@@ -65,8 +84,8 @@ public class TimeEventHandler {
                     if (now.isAfter(lastCheckedTime) &&
                             Duration.between(lastCheckedTime, now).toHours() >= 1) {
 
-                        gameHandler.lowerAllWaterLevels(1, false);
-                        gameHandler.updateEnvSatisfactions(1, false);
+                        //gameHandler.lowerAllWaterLevels(1, false);
+                        //gameHandler.updateEnvSatisfactions(1, false);
 
                         // save current time
                         lastCheckedTime = now;
@@ -92,8 +111,7 @@ public class TimeEventHandler {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-               // controller.saveGame();
-                
+
                 // save the game
                 Controller.getInstance().saveGame();
             }

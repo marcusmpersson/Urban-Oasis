@@ -5,6 +5,9 @@ import enums.Rarity;
 
 import java.util.ArrayList;
 
+/** entity class represents the game shop.
+ * @author Rana Noorzadeh
+ * */
 public class Shop {
 
     private ArrayList<Pot> pots;

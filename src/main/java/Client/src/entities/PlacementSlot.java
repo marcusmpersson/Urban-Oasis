@@ -4,6 +4,9 @@ import enums.Environment;
 
 import java.io.Serializable;
 
+/** entity class represents a placement Slot in the player's room.
+ * @author Rana Noorzadeh
+ * */
 public class PlacementSlot implements Serializable {
 
     private Environment environment;

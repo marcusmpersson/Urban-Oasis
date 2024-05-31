@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/** entity class represents a User of the application, containing the user's game progress.
+ * NOTE: user's password is only saved in the database
+ * @author Rana Noorzadeh
+ * */
 public class User implements Serializable {
 
     @SerializedName("username")

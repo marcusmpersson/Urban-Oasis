@@ -7,6 +7,9 @@ import enums.Stage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** entity class represents Plant in the game. This class must be part of a PottedPlant item.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class PlantTop implements Serializable {
 
     private ArrayList<String> imageFilePaths;
@@ -18,6 +21,7 @@ public class PlantTop implements Serializable {
     private int age;
     private PottedPlant belongingPottedPlant;
     private String descriptionText;
+    private String name;
 
     /** Constructor, sets instance variables.
      * Initiates age to 0, updates plant stage. */
@@ -29,6 +33,7 @@ public class PlantTop implements Serializable {
         this.basePrice = price;
         this.rarity = rarity;
         this.descriptionText = descriptionText;
+        this.name = this.species.getSpeciesName();
         age = 0;
         updateStage();
     }
@@ -128,7 +133,11 @@ public class PlantTop implements Serializable {
     // GETTERS
     // ------------------------------------------
 
+    /** returns a description text of the PlantTop */
     public String getDescriptionText() {
+        if (this.stage == Stage.PLANTED){
+            return "this is a planted "+this.rarity.toString()+" seed waiting to sprout!";
+        }
         return descriptionText;
     }
 
@@ -182,18 +191,9 @@ public class PlantTop implements Serializable {
         return stage;
     }
 
-    // ------------------------------------------
-    // SETTERS - mainly for test purposes
-    // ------------------------------------------
-
-    /** saves a reference to the belonging PottedPlant */
-    public void setBelongingPottedPlant (PottedPlant belongingPottedPlant) {
-        this.belongingPottedPlant = belongingPottedPlant;
-    }
-
-    /** sets the current stage of plant */
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    /** returns name of PlantTop's species */
+    public String getName() {
+        return name;
     }
 
 }

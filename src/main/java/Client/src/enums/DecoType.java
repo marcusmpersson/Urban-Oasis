@@ -1,7 +1,9 @@
 package enums;
 
 public enum DecoType {
-    /** enum class used for builder class */
+    /** enum class used for builders, to keep track of different types of Deco items
+     * @author: Rana Noorzadeh
+     * @author: Christian Storck */
     TERRARIUM,
     BUDDHA,
     GEODE,

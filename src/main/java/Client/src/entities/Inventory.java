@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** entity class represents the inventory of a User in the game.
+ * @author Rana Noorzadeh
+ * */
 public class Inventory implements Serializable {
 
     @SerializedName("pottedplant")

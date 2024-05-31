@@ -52,10 +52,10 @@ public class RoomPlants {
         potImageView.setFitHeight(60);
         potImageView.setFitWidth(100);
 
-        potImageView.toBack();
-        plantImageView.toFront();
-
         plantContainer.getChildren().addAll(potImageView, plantImageView);
+
+        plantImageView.toBack();
+        potImageView.toFront();
 
         plantImageView.setLayoutY(potImageView.getLayoutY() - plantImageView.getFitHeight());
 
@@ -65,6 +65,22 @@ public class RoomPlants {
         roomView.getChildren().add(plantContainer);
 
         return plantContainer;
+    }
+
+    public void updatePlantandPotImages(Group plantButton, String plantFilePath, String potFilePath) {
+
+        ImageView plantImageView = (ImageView) plantButton.lookup("#PlantImage");
+        ImageView potImageView = (ImageView) plantButton.lookup("#PotImage");
+
+        if (plantImageView != null) {
+            Image newPlantImage = new Image(getClass().getClassLoader().getResource(plantFilePath).toString());
+            plantImageView.setImage(newPlantImage);
+        }
+
+        if (potImageView != null) {
+            Image newPotImage = new Image(getClass().getClassLoader().getResource(potFilePath).toString());
+            potImageView.setImage(newPotImage);
+        }
     }
 
     /**

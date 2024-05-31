@@ -1,12 +1,17 @@
 package main.java.Application.Controllers;
 
 import controller.Controller;
+import controller.GameHandler;
 import entities.*;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import main.java.Application.Boundary.PlantInformationPopup;
 import main.java.Application.Boundary.RoomPlants;
 
@@ -19,35 +24,46 @@ import java.util.List;
  * @Author Mouhammed Fakhro
  */
 public class RoomController {
-    private ArrayList<Group> roomPlants = new ArrayList<>();
-    private Group roomView;
-    private Room room;
-    private WidgetHandler widgetHandler = new WidgetHandler(this);
-    private User user;
-    private RoomPlants roomGuiContent;
-    private Group plantInformationView;
-    private PlantInformationPopup plantInformationPopup = new PlantInformationPopup(this);
-    private Boolean isPlantDetailsFrameOpened = false;
+    private final Controller clientController;
+    private final ArrayList<Group> roomPlants = new ArrayList<>();
+    private final Group roomView;
+    private final Room room;
+    private final WidgetHandler widgetHandler = new WidgetHandler(this);
+    private final User user;
+    private final GameHandler gameHandler;
+    private final RoomPlants roomGuiContent;
+    private final Group plantInformationView;
+    private final PlantInformationPopup plantInformationPopup;
+    private final ArrayList<Rectangle> slotZones = new ArrayList<>();
+    private final ArrayList<ImageView> arrowIndicators = new ArrayList<>();
+
+    private boolean isPlantDetailsFrameOpened = false;
     private PottedPlant selectedPottedPlant;
     private Group selectedPottedPlantButton;
-    private ArrayList<Rectangle> slotZones = new ArrayList<>();
-    private ArrayList<ImageView> arrowIndicators = new ArrayList<>();
     private boolean isDragging = false;
+
+    private final InventoryController inventoryController;
 
     /**
      * Constructor for RoomController.
      *
-     * @param roomView the view for the room
-     * @param user the user associated with the room
+     * @param roomView            the view for the room
+     * @param user                the user associated with the room
+     * @param clientController    the client controller
+     * @param inventoryController the inventory controller
      */
-    public RoomController(Group roomView, User user) {
+    public RoomController(Group roomView, User user, Controller clientController, InventoryController inventoryController) {
+        this.clientController = clientController;
         this.roomView = roomView;
         this.user = user;
         this.room = user.getRoom(0);
         this.roomGuiContent = new RoomPlants(roomView);
-        this.plantInformationView = plantInformationPopup.getInformationRectangle();
-
+        this.inventoryController = inventoryController;
+        this.gameHandler = new GameHandler(this.user);
         spawnUserPottedPlants();
+        this.plantInformationPopup = new PlantInformationPopup(this);
+        this.plantInformationView = plantInformationPopup.getInformationRectangle();
+        roomView.getChildren().add(plantInformationView);
     }
 
     /**
@@ -65,11 +81,18 @@ public class RoomController {
         return roomGuiContent.generateRoomPlants(plantFilePath, potFilePath, posX, posY);
     }
 
+    private void updatePlantAndPotImages(Group plantButton, PottedPlant pottedPlant) {
+        String plantFilePath = pottedPlant.getPlantTop().getImageFilePath();
+        String potFilePath = pottedPlant.getPot().getImageFilePath();
+
+        roomGuiContent.updatePlantandPotImages(plantButton, plantFilePath, potFilePath);
+    }
+
     /**
      * Spawns user potted plants in their respective slots.
      */
     private void spawnUserPottedPlants() {
-        List<PlacementSlot> slots = user.getRoom(0).getSlots();
+        List<PlacementSlot> slots = this.room.getSlots();
 
         for (int i = 0; i < slots.size(); i++) {
             int posX = slots.get(i).getX();
@@ -103,32 +126,69 @@ public class RoomController {
     }
 
     /**
+     * Updates images for all potted plants.
+     */
+    public void updateAllPottedPlantImages() {
+        for (Group plantButton : roomPlants) {
+            PottedPlant pottedPlant = (PottedPlant) plantButton.getProperties().get("PottedPlant");
+            if (pottedPlant != null) {
+                updatePlantAndPotImages(plantButton, pottedPlant);
+            }
+        }
+    }
+
+    /**
+     * Gets the water level for a widget.
+     *
+     * @param pottedPlant the potted plant
+     * @return the water level as a string
+     */
+    public String getWaterLevelForWidget(PottedPlant pottedPlant) {
+        return String.valueOf(clientController.getWaterLevelOf(pottedPlant));
+    }
+
+    /**
+     * Gets the satisfaction level for the popup.
+     *
+     * @return the satisfaction level as a string
+     */
+    public String getSatisfactionLevelForPopup() {
+        return String.valueOf(clientController.getEnvironmentLevelOf(selectedPottedPlant));
+    }
+
+    /**
+     * Updates the available plants in the room.
+     */
+    public void updateAvailablePlants() {
+        for (Group roomPlant : roomPlants) {
+            roomView.getChildren().remove(roomPlant);
+        }
+        arrowIndicators.clear();
+        roomPlants.clear();
+        slotZones.clear();
+
+        spawnUserPottedPlants();
+    }
+
+    /**
      * Sets up mouse events for a given plant group.
      *
-     * @param group the plant group
+     * @param group the plant group (button/image)
      */
     private void setupMouseEvents(Group group) {
-        // Mouse click for the plant. It should open up the menu and update the content with correct water level
-        // information.
         group.setOnMouseClicked(event -> {
             if (!isPlantDetailsFrameOpened && !isDragging) {
-                Group infoRectangleGroup = plantInformationPopup.generateInformationRectangle();
-                roomView.getChildren().add(infoRectangleGroup);
-                plantInformationPopup.animatePopupFramePosition(infoRectangleGroup, 668, 458);
-
+                plantInformationPopup.openInfoPopupFrame();
                 setMenuOpened(true);
                 setSelectedPottedPlant(group);
-
-                PottedPlant currentPlant = getPottedPlantFromGroup(group);
-                plantInformationPopup.updateWaterLevelText(getCurrentWaterLevel(currentPlant));
+                plantInformationPopup.updateWaterLevelText(String.valueOf(clientController.getWaterLevelOf(selectedPottedPlant)));
+                plantInformationPopup.updateHealthLevelText(String.valueOf(clientController.getEnvironmentLevelOf(selectedPottedPlant)));
             }
         });
 
-        // this is used to track the initial X and Y position when dragging.
         final double[] initialX = new double[1];
         final double[] initialY = new double[1];
 
-        // this is used to ensure that the arrows appear when holding a plant.
         group.setOnMousePressed(event -> {
             if (!isPlantDetailsFrameOpened) {
                 initialX[0] = group.getTranslateX() - event.getScreenX();
@@ -142,41 +202,35 @@ public class RoomController {
             }
         });
 
-        // this is used to detect mouse drag for the plants.
         group.setOnMouseDragged(event -> {
-            if (!isPlantDetailsFrameOpened) {
-                this.isDragging = true;
-                roomGuiContent.addGlowToPlant(group);
-                group.setTranslateX(event.getScreenX() + initialX[0]);
-                group.setTranslateY(event.getScreenY() + initialY[0]);
+            this.isDragging = true;
+            roomGuiContent.addGlowToPlant(group);
+            group.setTranslateX(event.getScreenX() + initialX[0]);
+            group.setTranslateY(event.getScreenY() + initialY[0]);
 
-                for (Rectangle emptySlot : slotZones) {
-                    if (group.getBoundsInParent().intersects(emptySlot.getBoundsInParent())) {
-                        if (!group.getProperties().get("SlotIndex").equals(emptySlot.getProperties().get("SlotIndex"))) {
-                            Group droppingPlant = getPlantFromRectangleDetection(emptySlot);
-                            if (droppingPlant != null) {
-                                roomGuiContent.addGlowToPlant(droppingPlant);
-                            } else {
-                                roomGuiContent.removeAllPlantGlows(roomPlants, group);
-                            }
-                            ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
-                            if (arrow.getEffect() == null) {
-                                roomGuiContent.addColorEffectToRoomArrow(arrow);
-
-                                for (ImageView gif : arrowIndicators) {
-                                    if (gif != arrow) {
-                                        roomGuiContent.removeColorEffectFromArrow(gif);
-                                    }
+            for (Rectangle emptySlot : slotZones) {
+                if (group.getBoundsInParent().intersects(emptySlot.getBoundsInParent())) {
+                    if (!group.getProperties().get("SlotIndex").equals(emptySlot.getProperties().get("SlotIndex"))) {
+                        Group droppingPlant = getPlantFromRectangleDetection(emptySlot);
+                        if (droppingPlant != null) {
+                            roomGuiContent.addGlowToPlant(droppingPlant);
+                        } else {
+                            roomGuiContent.removeAllPlantGlows(roomPlants, group);
+                        }
+                        ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
+                        if (arrow.getEffect() == null) {
+                            roomGuiContent.addColorEffectToRoomArrow(arrow);
+                            for (ImageView gif : arrowIndicators) {
+                                if (gif != arrow) {
+                                    roomGuiContent.removeColorEffectFromArrow(gif);
                                 }
                             }
-
-                            group.getProperties().put("SlotDrop", emptySlot.getProperties().get("SlotIndex"));
                         }
-                    } else {
-                        group.setId("");
-                        ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
-                        roomGuiContent.removeColorEffectFromArrow(arrow);
+                        group.getProperties().put("SlotDrop", emptySlot.getProperties().get("SlotIndex"));
                     }
+                } else {
+                    ImageView arrow = arrowIndicators.get((Integer) emptySlot.getProperties().get("SlotIndex"));
+                    roomGuiContent.removeColorEffectFromArrow(arrow);
                 }
             }
         });
@@ -195,20 +249,18 @@ public class RoomController {
                     Rectangle droppingSlot = slotZones.get(droppingIndex);
 
                     if (droppingSlot.getProperties().get("IsEmpty").equals(false)) {
-                        Group switchingPlant;
-
                         for (Group roomPlant2 : roomPlants) {
                             if (roomPlant2.getProperties().get("SlotIndex").equals(droppingIndex)) {
                                 PlacementSlot slot = (PlacementSlot) roomPlant2.getProperties().get("Slot");
-                                switchingPlant = getRoomPlantFromPlacementSlot(slot);
+                                Group switchingPlant = getRoomPlantFromPlacementSlot(slot);
                                 switchPlantLocations(group, switchingPlant);
+                                break;
                             }
                         }
                     } else {
                         updatePlantLocation(group, droppingIndex);
                     }
 
-                    Controller clientController = Controller.getInstance();
                     clientController.swapItems(draggingIndex, droppingIndex);
                 } else {
                     updatePlantLocation(group, (Integer) group.getProperties().get("SlotIndex"));
@@ -216,21 +268,88 @@ public class RoomController {
             }
 
             group.getProperties().put("SlotDrop", null);
-
             roomGuiContent.removeAllPlantGlows(roomPlants, null);
+            checkForPottedPlantMisplacement();
 
-            Thread isDraggingBooleanTask = new Thread(() -> { // we use a thread wait here in order to ensure that
-                // the popup menu does not appear when dropping a plant after dragging it.
+            Thread isDraggingBooleanTask = new Thread(() -> {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                     isDragging = false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             });
 
+            isDraggingBooleanTask.setDaemon(true);
             isDraggingBooleanTask.start();
         });
+    }
+
+    private void checkForPottedPlantMisplacement() {
+        for (Group roomPlant : roomPlants) {
+            PlacementSlot slot = (PlacementSlot) roomPlant.getProperties().get("Slot");
+            if (slot != null) {
+                if (roomPlant.getLayoutX() != slot.getX()) {
+                    roomPlant.setLayoutX(slot.getX());
+                }
+                if (roomPlant.getLayoutY() != slot.getY()) {
+                    roomPlant.setLayoutY(slot.getY());
+                }
+            }
+        }
+    }
+
+    /**
+     * Removes the selected item from the slot.
+     */
+    public void removeItemFromSlot() {
+        if (isPlantDetailsFrameOpened && selectedPottedPlant != null) {
+            if (selectedPottedPlantButton != null && !"IsWidget".equals(selectedPottedPlantButton.getId())) {
+                int placementIndex = (int) selectedPottedPlantButton.getProperties().get("SlotIndex");
+                clientController.removeItemFromSlot(placementIndex);
+                roomView.getChildren().remove(selectedPottedPlantButton);
+                roomPlants.remove(selectedPottedPlantButton);
+            }
+        }
+    }
+
+    /**
+     * Resets the room by removing all items and respawning user potted plants.
+     */
+    public void resetRoom() {
+        ParallelTransition parallelTransition = new ParallelTransition();
+
+        for (ImageView arrowIndicator : arrowIndicators) {
+            roomView.getChildren().remove(arrowIndicator);
+        }
+
+        for (Group roomPlant : roomPlants) {
+            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), roomPlant);
+            translateTransition.setByY(800);
+
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), roomPlant);
+            rotateTransition.setByAngle(360);
+
+            ParallelTransition plantTransition = new ParallelTransition(translateTransition, rotateTransition);
+            parallelTransition.getChildren().add(plantTransition);
+        }
+
+        for (Rectangle slotZone : slotZones) {
+            roomView.getChildren().remove(slotZone);
+        }
+
+        parallelTransition.setOnFinished(event -> {
+            for (Group roomPlant : roomPlants) {
+                roomView.getChildren().remove(roomPlant);
+            }
+            arrowIndicators.clear();
+            roomPlants.clear();
+            slotZones.clear();
+
+            spawnUserPottedPlants();
+        });
+
+        parallelTransition.play();
     }
 
     /**
@@ -247,20 +366,6 @@ public class RoomController {
                 plant.getStyleClass().remove("glow");
             }
         }
-    }
-
-    /**
-     * Gets the potted plant associated with a given group.
-     *
-     * @param group the group
-     * @return the potted plant
-     */
-    private PottedPlant getPottedPlantFromGroup(Group group) {
-        Object pottedPlant = group.getProperties().get("PottedPlant");
-        if (pottedPlant instanceof PottedPlant){
-            return (PottedPlant) pottedPlant;
-        }
-        return null;
     }
 
     /**
@@ -297,24 +402,14 @@ public class RoomController {
     }
 
     /**
-     * Gets the current water level of the specified potted plant.
-     *
-     * @param pottedPlant the potted plant
-     * @return the water level
-     */
-    public String getCurrentWaterLevel(PottedPlant pottedPlant) {
-        return String.valueOf(selectedPottedPlant.getPlantTop().getHealthStat().getWaterLevel());
-    }
-
-    /**
      * Waters the selected potted plant and updates the image.
      *
      * @return the current water level after watering
      */
     public String waterPottedPlant() {
         if (isPlantDetailsFrameOpened && selectedPottedPlant != null) {
-            selectedPottedPlant.getPlantTop().water();
-            String currentWaterLevel = getCurrentWaterLevel(selectedPottedPlant);
+            clientController.waterPlant(selectedPottedPlant);
+            String currentWaterLevel = String.valueOf(clientController.getWaterLevelOf(selectedPottedPlant));
             updatePlantImage(selectedPottedPlantButton, selectedPottedPlant);
             widgetHandler.updatePlantImage(selectedPottedPlant);
             return currentWaterLevel;
@@ -348,6 +443,9 @@ public class RoomController {
 
             plant1.getProperties().put("SlotIndex", plant2SlotIndex);
             plant2.getProperties().put("SlotIndex", plant1SlotIndex);
+
+            setupMouseEvents(plant1);
+            setupMouseEvents(plant2);
         }
     }
 
@@ -386,8 +484,7 @@ public class RoomController {
      *
      * @param selectedPottedPlant the potted plant to set as dead
      */
-    public void setPottedPlantToDead(PottedPlant selectedPottedPlant) { // remove this later. Backend already handles
-        // water level
+    public void setPottedPlantToDead(PottedPlant selectedPottedPlant) {
         for (Group plant : roomPlants) {
             PottedPlant foundPottedPlant = (PottedPlant) plant.getProperties().get("PottedPlant");
             if (foundPottedPlant == selectedPottedPlant) {

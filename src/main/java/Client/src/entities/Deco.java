@@ -4,6 +4,9 @@ import enums.DecoType;
 
 import java.io.Serializable;
 
+/** entity class represents a deco item in the game.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class Deco extends ShopItem implements Placeable, Serializable {
     private PlacementSlot placedAt;
     private DecoType type;

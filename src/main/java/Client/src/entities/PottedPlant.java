@@ -1,8 +1,14 @@
 package entities;
 
+import enums.Stage;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** entity class represents a Potted Plant item in the game.
+ * Class must consist of a PlantTop and a Pot item.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class PottedPlant extends Item implements Placeable, Serializable {
 
     private Pot pot;
@@ -11,7 +17,7 @@ public class PottedPlant extends Item implements Placeable, Serializable {
 
     /** constructor creates a PottedPlant with given Pot and PlantTop instances. */
     public PottedPlant(Pot pot, PlantTop plant){
-        super(pot.getPrice() + plant.getPrice(), plant.getDescriptionText());
+        super(pot.getPrice() + plant.getPrice(), plant.getDescriptionText(), plant.getName());
         this.pot = pot;
         this.plant = plant;
     }
@@ -19,15 +25,6 @@ public class PottedPlant extends Item implements Placeable, Serializable {
     // ------------------------------------------
     // SETTERS
     // ------------------------------------------
-
-    /** Method used when changing the pot of a PottedPlant.
-     * Swaps the current pot with a new one.
-     * Returns reference to the old pot */
-    public Pot swapPot(Pot pot) {
-        Pot oldPot = this.pot;
-        this.pot = pot;
-        return oldPot;
-    }
 
     /** sets the PlacementSlot of this potted plant. */
     @Override
@@ -73,21 +70,10 @@ public class PottedPlant extends Item implements Placeable, Serializable {
 
     /** returns plant name */
     public String getName(){
-        return this.plant.getSpecies().getScientificName();
-    }
-
-    // ------------------------------------------
-    // MOST LIKELY WILL NEVER BE USED:
-    // ------------------------------------------
-
-    /** method returns an arraylist containing the plantTop image (index 0)
-     * and pot image (index 1) */
-    public ArrayList<String> getImagesFilePaths() {
-        ArrayList<String> filePathArray = new ArrayList<>();
-        filePathArray.add(plant.getImageFilePath());
-        filePathArray.add(pot.getImageFilePath());
-
-        return filePathArray;
+        if (this.plant.getStage() == Stage.PLANTED){
+            return "Mystery Plant";
+        }
+        return this.plant.getSpecies().getSpeciesName();
     }
 
 }

@@ -2,6 +2,9 @@ package entities;
 
 import java.io.Serializable;
 
+/** entity class represents the HealthStat of a PlantTop item in the game.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class HealthStat implements Serializable {
     private int overallMood;
     private int waterLevel;

@@ -15,9 +15,10 @@ import main.java.Application.Controllers.WidgetHandler;
 import java.util.ArrayList;
 
 /**
- * client controller class that handles communication between backend and frontend controllers.
+ * Singleton client controller class that handles communication between backend and frontend controllers.
  * @author Rana Noorzadeh
  * @author Christian Storck
+ * @author Mouhammed Fakhro
  * */
 public class Controller {
 
@@ -28,7 +29,6 @@ public class Controller {
     private WeatherUpdater weatherUpdater;
     private InformationConverter infoConverter;
     private User currentUser;
-    private MainController guiController;
     private SoundEffectHandler soundEffectHandler;
     private static Controller instance;
 
@@ -76,8 +76,8 @@ public class Controller {
         inventory.addItem(deco2);
 
         // make potted plants
-        Pot pot = ItemBuilder.buildPot(PotType.POT_STRIPED_BLUE);
-        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.ARROWHEAD_PLANT);
+        Pot pot = ItemBuilder.buildPot(PotType.ROUND_POT_STRIPED_GREEN);
+        PlantTop plantTop = PlantTopBuilder.buildPlantTop(Species.ROSE_PLANT);
         plantTop.raiseAge(440);
         PottedPlant pottedPlant = new PottedPlant(pot, plantTop);
 
@@ -106,6 +106,7 @@ public class Controller {
         plantTop6.raiseAge(18);
         PottedPlant pottedPlant6 = new PottedPlant(pot7, plantTop6);
 
+
         // placing potted plants in room
         room.getSlot(2).setPlacedItem(pottedPlant);
         room.getSlot(9).setPlacedItem(pottedPlant2);
@@ -118,37 +119,8 @@ public class Controller {
         return new User("MarcusPantman", "Marcus@live.se", inventory, rooms, 1000);
     }
 
-    /** method initiates a default User item for a newly signed-up account,
-     * adds starter items and values
-     * @param username the username of the signed up account
-     * @param email the email of the signed up account */
-    public User generateDefaultUser(String username, String email){
-
-        // user gets a default room
-        ArrayList<Room> rooms = new ArrayList<>();
-        Room room = RoomBuilder.buildCommonRoom();
-        rooms.add(room);
-
-        // user starts with two common seeds and two basic pots in their inventory
-        Item pot1 = ItemBuilder.buildPot(PotType.ROUND_POT_CLAY);
-        Item pot2 = ItemBuilder.buildPot(PotType.POT_ORANGE);
-
-        Item seed1 = ItemBuilder.buildSeed(Rarity.COMMON);
-        Item seed2 = ItemBuilder.buildSeed(Rarity.COMMON);
-
-        // create inventory and add the items
-        Inventory inventory = new Inventory();
-        inventory.addItem(pot1);
-        inventory.addItem(pot2);
-        inventory.addItem(seed1);
-        inventory.addItem(seed2);
-
-        // user starts with 400 shop currency
-        return new User(username, email, inventory, rooms, 400);
-    }
-
     /* ----------------------------------------
-     *  methods for ClientConnection, LoginHandler, InformationConverter
+     *  methods for ClientConnection and LoginHandler
      *  --------------------------------------- */
 
     /** method called after a successful login and user data conversion.
@@ -161,15 +133,6 @@ public class Controller {
         //gameHandler.updateSinceLast();
         gameHandler.startTimer();
         //widgetHandler.loadWidgets(currentUser.getUsername());
-    }
-
-    /** MIGHT BE DELETED
-     * method called when user logging in for the first time.
-     * Creates a User with default values, initiates GameHandler, loads game on GUI.
-     * */
-    public void loadGameFirstTime(String username, String email) {
-        this.currentUser = generateDefaultUser(username, email);
-        gameHandler = new GameHandler(currentUser);
     }
 
     /**
@@ -204,14 +167,9 @@ public class Controller {
         return clientConnection.updateAccountInfo(email, username, password);
     }
 
-    /** Method called if email change was NOT approved by server */
-    public void emailChangeUnsuccessful() {
-        // TODO: show error in GUI
-    }
-
-    /* --------------------------
+    /* ------------------------------------------
     *  login/logout methods for GUIController
-    *  -------------------------- */
+    *  ------------------------------------------ */
 
     /**
      * Method called for making a login attempt.
@@ -220,13 +178,14 @@ public class Controller {
      * @return boolean
      */
     public boolean loginAttempt(String email, String password) {
-        /*boolean success = loginHandler.login(email, password);
+       // boolean success = loginHandler.login(email, password);
+        boolean success = true;
         if (success) {
             loadGame(currentUser);
         }
-        return success;*/
-        loadGame(currentUser);
-        return true;
+        return success;
+        //loadGame(currentUser);
+        //return true;
     }
 
     /**
@@ -245,19 +204,15 @@ public class Controller {
      * is saved and then finally we try to log out.
      */
     public void logoutAttempt() {
-        gameHandler.stopTimer();
-        gameHandler = null;
         soundEffectHandler.stopBackgroundMusic();
-        //widgetHandler.updateLocalFile(currentUser.getUsername());
-        clientConnection.saveUser(currentUser);
-        clientConnection.logout();
-    }
 
-    /**
-     * Method called for trying to delete the currently used user account.
-     */
-    public void deleteAccountAttempt() {
-        clientConnection.delete();
+        gameHandler.stopTimer();
+        //saveGame();
+        gameHandler = null;
+
+        //widgetHandler.updateLocalFile(currentUser.getUsername());
+        //clientConnection.saveUser(currentUser);
+        //clientConnection.logout();
     }
 
     public void setJwtToken(String token){
@@ -268,8 +223,8 @@ public class Controller {
      *  methods called by GameHandler/TimeEventHandler
      *  ------------------------------------------- */
 
+    /** method attempts to save the game in the database */
     public void saveGame() {
-        widgetHandler.updateLocalFile(currentUser.getUsername());
         clientConnection.saveUser(currentUser);
     }
 
@@ -280,10 +235,7 @@ public class Controller {
     public String getCurrentWeather(){
         return weatherUpdater.getCurrentWeather();
     }
-    public void popUpMessage(String message) {
-        //TODO: show pop-up message in GUI
-        playPopupSound();
-    }
+
 
     /* ------------------------------------------------
      *  event driven game functions - called by GUI Controller
@@ -305,11 +257,6 @@ public class Controller {
      * @return true if user has enough currency, false if not */
     public boolean purchaseDeco(int index) {
         return gameHandler.purchaseDeco(index);
-    }
-
-    /** waters plant at given placement slot index */
-    public void waterPlant(int placementIndex){
-        gameHandler.waterPlant(0, placementIndex);
     }
 
     /** waters the given plant via gameHandler */
@@ -343,24 +290,6 @@ public class Controller {
      * removes from inventory */
     public void placeDecoInRoom (int inventoryIndex) {
         gameHandler.placeInventoryDecoInRoom(inventoryIndex, 0);
-    }
-
-    /** method places a pottedPlant from the inventory in a room slot,
-     * removes from inventory */
-    public void placePlantInSlot (int inventoryIndex, int placementIndex) {
-        gameHandler.placeInventoryPlantInSlot(inventoryIndex, 0, placementIndex);
-    }
-
-    /** method places a Pot from the inventory in a room slot,
-     * removes from inventory */
-    public void placePotInSlot (int inventoryIndex, int placementIndex) {
-        gameHandler.placeInventoryPotInSlot(inventoryIndex, 0, placementIndex);
-    }
-
-    /** method places a Deco from the inventory in a room slot,
-     * removes from inventory */
-    public void placeDecoInSlot (int inventoryIndex, int placementIndex) {
-        gameHandler.placeInventoryDecoInSlot(inventoryIndex, 0, placementIndex);
     }
 
     /** places item in PlacementSlot back to inventory */
@@ -416,51 +345,13 @@ public class Controller {
         gameHandler.sellInventoryPlant(index);
     }
 
-    /** method places an item back in the inventory. Clears the slot. */
-    public void placeItemBackInInventory(int placementIndex) {
-        gameHandler.placeItemBackInInventory(0, placementIndex);
-    }
-
     /* --------------------------------------------
      *  getters for GUI controller class
      *  ------------------------------------------- */
 
-    /** Gets current player's currency amount */
-    public int getPlayerCoins() {
-        return currentUser.getShopCurrency();
-    }
-
-    /** Gets current player's username */
-    public String getPlayerUsername() {
-        return currentUser.getUsername();
-    }
-
-    /** Gets current player's email */
-    public String getPlayerEmail() {
-        return currentUser.getEmail();
-    }
-
-    /** method returns an ArrayList of String containing filepath to room images,
-     * for daytime (index 0), sunset (index 1), night (index 2), sun-rise (index 3). */
-    public ArrayList<String> getRoomImagePaths() {
-        return gameHandler.getRoomImagePaths(0);
-    }
-
-    /** Method returns an ArrayList containing all items placed in the room as implementations
-     * of Placeable. */
-    public ArrayList<Placeable> getRoomItems() {
-        return gameHandler.getRoomItems(0);
-    }
-
-    /** Method returns an ArrayList containing only the PottedPlant items placed in the room */
-    public ArrayList<PottedPlant> getRoomPlants() {
-        ArrayList<PottedPlant> plants = new ArrayList<PottedPlant>();
-        for (Placeable item : gameHandler.getRoomItems(0)){
-            if (item instanceof PottedPlant){
-                plants.add((PottedPlant) item);
-            }
-        }
-        return plants;
+    /** Returns reference to current logged-in user */
+    public User getCurrentUser() {
+        return this.currentUser;
     }
 
     /** Method returns an ArrayList containing all PottedPlant items in players inventory.*/
@@ -498,60 +389,48 @@ public class Controller {
         return gameHandler.getShopDecos();
     }
 
-    /* --------------------------------------------
-     *  widget methods
-     *  ------------------------------------------- */
-
-    public void addWidget(int index){
-        Placeable item = currentUser.getRoom(0).getSlot(index).getPlacedItem();
-
-        if (item instanceof PottedPlant){
-            widgetHandler.addWidget(item, null);
-        }
-    }
-
     /* ------------------------------------------
     * sound effect methods
     * ------------------------------------------- */
 
+    /** method plays the watering sound */
     public void playWaterSound() {
         soundEffectHandler.playWaterSound();
     }
 
+    /** method plays the swapping items sound */
     public void playSwappingSound() {
         soundEffectHandler.playSwappingSound();
     }
 
-    public void playPopupSound() {
-        soundEffectHandler.playPopupSound();
-    }
-
+    /** method plays the plant dying sound */
     public void playDeathSound() {
         soundEffectHandler.playDeathSound();
     }
 
-    public void playClickSound() {
-        soundEffectHandler.playClickSound();
-    }
-
+    /** method plays cash register sound */
     public void playPurchaseSound() {
         soundEffectHandler.playPurchaseSound();
     }
 
+    /** method plays the planting seed sound */
     public void playPlantingSound() {
         soundEffectHandler.playPlantingSound();
     }
 
+    /** method stops the background music */
     public void pauseMusic() {
         soundEffectHandler.stopBackgroundMusic();
     }
 
+    /** method starts the background music */
     public void playMusic() {
         soundEffectHandler.startBackgroundMusic();
     }
 
-    public void updateBackgroundMusic() {
-        soundEffectHandler.updateBackgroundMusic();
+    /** method checks if music is currently playing */
+    public boolean musicIsPlaying() {
+        return soundEffectHandler.musicIsPlaying();
     }
 
 }

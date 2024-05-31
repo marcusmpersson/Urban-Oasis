@@ -4,12 +4,12 @@ import entities.PlacementSlot;
 import entities.Room;
 import enums.Environment;
 import java.util.ArrayList;
-
+/** Static builder/director class used to build Room items.
+ * @author Rana Noorzadeh
+ * @author Mouhammed Fakhro */
 public class RoomBuilder {
 
-    //this class is lowkey more Director than Builder so may change name later :)
-
-    /** creates and returns the common/default room */
+    /** creates and returns an instance of common/default room */
     public static Room buildCommonRoom(){
         ArrayList<PlacementSlot> slots = new ArrayList<>();
 

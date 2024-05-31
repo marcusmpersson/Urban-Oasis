@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.ArrayList;
 
+/** entity class represents a Seed item in the game.
+ * @author Rana Noorzadeh
+ * @author Ingrid Merz*/
 public class Seed extends ShopItem implements Serializable {
 
     @SerializedName("PossiblePlants")
