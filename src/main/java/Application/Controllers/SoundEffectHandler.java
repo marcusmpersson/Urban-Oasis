@@ -5,6 +5,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.io.File;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class SoundEffectHandler {
 
     private Clip backgroundMusic;
@@ -16,7 +18,8 @@ public class SoundEffectHandler {
 
     public void startBackgroundMusic() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/sounds/defaultMusic.wav"));
+            int randomSong = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/sounds/defaultMusic"+randomSong+".wav"));
             backgroundMusic = AudioSystem.getClip();
             backgroundMusic.open(audioInputStream);
             musicPlaying = true;
