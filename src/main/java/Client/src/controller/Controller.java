@@ -289,6 +289,8 @@ public class Controller {
     public String getCurrentWeather(){
         return weatherUpdater.getCurrentWeather();
     }
+
+
     public void popUpMessage(String message) {
         //TODO: show pop-up message in GUI
         playPopupSound();
@@ -427,11 +429,6 @@ public class Controller {
      * @param index index of the PottedPlant in inventory */
     public void sellInventoryPlant (int index) {
         gameHandler.sellInventoryPlant(index);
-    }
-
-    /** method places an item back in the inventory. Clears the slot. */
-    public void placeItemBackInInventory(int placementIndex) {
-        gameHandler.placeItemBackInInventory(0, placementIndex);
     }
 
     /* --------------------------------------------

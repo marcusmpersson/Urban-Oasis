@@ -59,8 +59,16 @@ public class TimeEventHandler {
                 try {
                     //sleep thread for 1 min, then increase age and currency
                     Thread.sleep(60000);
-                    gameHandler.increaseCurrency(1);
-                    gameHandler.raiseAges(1);
+
+                    // normal mode
+                    // gameHandler.increaseCurrency(1);
+                    // gameHandler.raiseAges(1);
+
+                    //fast mode
+                    gameHandler.increaseCurrency(5);
+                    gameHandler.raiseAges(10);
+                    gameHandler.lowerAllWaterLevels(2, false);
+                    gameHandler.updateEnvSatisfactions(2, false);
                     
                     // check current time
                     // if it's been an hour, update water and environment levels
@@ -68,8 +76,8 @@ public class TimeEventHandler {
                     if (now.isAfter(lastCheckedTime) &&
                             Duration.between(lastCheckedTime, now).toHours() >= 1) {
 
-                        gameHandler.lowerAllWaterLevels(1, false);
-                        gameHandler.updateEnvSatisfactions(1, false);
+                        //gameHandler.lowerAllWaterLevels(1, false);
+                        //gameHandler.updateEnvSatisfactions(1, false);
 
                         // save current time
                         lastCheckedTime = now;
