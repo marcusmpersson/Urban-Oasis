@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Class that handles API calls to weatherAPI.com.
+ * @author Christian Storck
  */
 public class WeatherUpdater {
     private CloseableHttpClient closeableHttpClient;
@@ -20,6 +21,7 @@ public class WeatherUpdater {
     /**
      * Constructor for the class, contains the API key, requested method, as well as locale for our search.
      * @param controller
+     * @author Christian Storck
      */
     public WeatherUpdater(Controller controller){
         this.controller = controller;
@@ -31,6 +33,7 @@ public class WeatherUpdater {
      * Method that gets the current weather in malmö as a Json object and then filters out everything except for the
      * weather description.
      * @return String current weather
+     * @author Christian Storck
      */
     public String getCurrentWeather(){
         try(CloseableHttpResponse response = closeableHttpClient.execute(httpGet)){
