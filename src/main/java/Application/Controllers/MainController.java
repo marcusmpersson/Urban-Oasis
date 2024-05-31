@@ -118,6 +118,8 @@ public class MainController implements Initializable {
 
     /**
      * Switches to the inventory view.
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     public void switchToInventoryView() {
         setViewOpacity(storeView, 0);
@@ -131,6 +133,8 @@ public class MainController implements Initializable {
 
     /**
      * Switches to the store view.
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     public void switchToStoreView() {
         setViewOpacity(roomView, 0);

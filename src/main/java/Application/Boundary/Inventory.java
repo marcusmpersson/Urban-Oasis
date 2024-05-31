@@ -122,6 +122,8 @@ public class Inventory {
      *
      * @param itemType  the type of item
      * @param imageView the ImageView to set the size and position for
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     public void setImageViewSizeAndPositionPopup(String itemType, ImageView imageView) {
         imageView.setPreserveRatio(true);

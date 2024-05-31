@@ -75,6 +75,8 @@ public class InventoryController {
 
     /**
      * Starts the planting process.
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     private void startPlanting() {
         isPlanting = true;
@@ -94,6 +96,8 @@ public class InventoryController {
 
     /**
      * Cancels the planting process.
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     private void cancelPlant() {
         plantSeedButton.setVisible(true);
@@ -233,6 +237,8 @@ public class InventoryController {
 
     /**
      * Updates the inventory buttons with the owned items.
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     private void updateInventoryButtons() {
         clearAllButtonArrays();
@@ -390,6 +396,8 @@ public class InventoryController {
 
     /**
      * Disposes of the currently selected item.
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      */
     public void disposeItem() {
         if (selectedItem != null) {

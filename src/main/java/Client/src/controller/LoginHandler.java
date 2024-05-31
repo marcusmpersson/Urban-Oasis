@@ -16,6 +16,7 @@ import java.io.IOException;
 /**
  * Class that handles the communication between client and Server regarding matters that involve logging in
  * and functions that can be accessed before logging in.
+ * @author Christian Storck
  */
 public class LoginHandler {
     private static final String server_url = "http://129.151.219.155:3000/";
@@ -34,30 +35,30 @@ public class LoginHandler {
      * @param email
      * @param password
      * @return
+     * @author Christian Storck
      */
     public Boolean login(String email, String password) {
         try {
-            httpPost = new HttpPost(server_url + "auth/login");  // Defines what function we're trying to reach from the server.
-            String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}"; // Structures the way we'll send the information to the server.
+            httpPost = new HttpPost(server_url + "auth/login");
+            String requestBody = "{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}";
             StringEntity entity = new StringEntity(requestBody);
             entity.setContentType("application/json");
             httpPost.setEntity(entity);
 
-            try(CloseableHttpResponse response = httpClient.execute(httpPost)) { // Executes the request to the server with the function specified in the httpost.
+            try(CloseableHttpResponse response = httpClient.execute(httpPost)) {
                 int statusCode = response.getStatusLine().getStatusCode();
 
                 if(statusCode == HttpStatus.SC_OK){
-                    HttpEntity responseEntity = response.getEntity(); // Handles the response we get from the server and makes it into an HTTP entity.
+                    HttpEntity responseEntity = response.getEntity();
                     System.out.println(response.toString());
 
 
 
-                    if(responseEntity != null) { // If there is something in the response we'll make a Gson object and fill the object with
-                                                // the requested data.
+                    if(responseEntity != null) {
                         Gson gson = new Gson();
                         JsonObject jsonResponse = gson.fromJson(EntityUtils.toString(responseEntity), JsonObject.class);
 
-                        if(jsonResponse.has("token")){ // If the response contained a JwtToken we set the token and return.
+                        if(jsonResponse.has("token")){
                             String token = jsonResponse.get("token").getAsString();
                             controller.setJwtToken(token);
                             return true;
@@ -82,6 +83,7 @@ public class LoginHandler {
      * @param userName
      * @param password
      * @return String confirmation
+     * @author Christian Storck
      */
     public Boolean register(String email, String userName, String password) {
         try {

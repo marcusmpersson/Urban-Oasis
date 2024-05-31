@@ -149,7 +149,8 @@ public class RoomController {
 
     /**
      * Gets the satisfaction level for the popup.
-     *
+     * @author Mouhammed Fakhro
+     * @author Christian Storck
      * @return the satisfaction level as a string
      */
     public String getSatisfactionLevelForPopup() {
@@ -301,6 +302,7 @@ public class RoomController {
 
     /**
      * Removes the selected item from the slot.
+     * @author Christian Storck
      */
     public void removeItemFromSlot() {
         if (isPlantDetailsFrameOpened && selectedPottedPlant != null) {

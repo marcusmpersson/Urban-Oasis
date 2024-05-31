@@ -98,6 +98,11 @@ public class User implements Serializable {
     // LAST UPDATED TIME
     // ------------------------------------------
 
+    /**
+     * Method for transforming the LocalDateTime datatype to a String which represents time.
+     * @param now
+     * @author Christian Storck
+     */
     public void setLastUpdatedTime(LocalDateTime now) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDateTime = now.format(formatter);
