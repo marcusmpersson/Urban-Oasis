@@ -111,6 +111,14 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
+            <ImageView fx:id="tutorialButton" cache="true" fitHeight="35.0" fitWidth="36.0" layoutX="59.0" layoutY="52.0" onMouseClicked="#tutorialPopUp" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited">
+               <image>
+                  <Image url="@../icons/tutorialButton.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
          </children>
       </Group>
       <Group fx:id="storeView" layoutX="149.0" opacity="0.0">
@@ -239,8 +247,7 @@
                   <Font name="Pixeloid Sans" size="19.0" />
                </font>
             </Text>
-            <ImageView fx:id="closePopupButton" cache="true" fitHeight="48.0" fitWidth="47.0" layoutX="387.0"
-                       layoutY="-11.0" onMouseClicked="#closePopupFrame">
+            <ImageView fx:id="closePopupButton" cache="true" fitHeight="48.0" fitWidth="47.0" layoutX="387.0" layoutY="-11.0" onMouseClicked="#closePopupFrame">
                <image>
                   <Image url="@../closePopupButton.png" />
                </image>
@@ -286,8 +293,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="putInRoomButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0"
-                       layoutY="765.0" opacity="0.0">
+            <ImageView fx:id="putInRoomButton" cache="true" fitHeight="38.0" fitWidth="183.0" layoutX="220.0" layoutY="765.0" opacity="0.0">
                <image>
                   <Image url="@../putInRoomButton.png" />
                </image>
