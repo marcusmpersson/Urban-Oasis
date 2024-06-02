@@ -23,6 +23,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 
 /**
  * MainController handles the main application interface and its transitions.
@@ -40,6 +46,8 @@ public class MainController implements Initializable {
     @FXML
     private ImageView closePopupButton;
     @FXML
+    private ImageView tutorialButton;
+    @FXML
     private ImageView plantSeedButton;
     @FXML
     private ImageView cancelPlantSeed;
@@ -47,7 +55,7 @@ public class MainController implements Initializable {
     private ImageView disposeItem;
     @FXML
     private ImageView putInRoomButton;
-
+    @FXML
     private ImageView soundButton;
     @FXML
     private Group plantInformationPopup;
@@ -367,4 +375,24 @@ public class MainController implements Initializable {
     private void setViewOpacity(Node view, double opacity) {
         view.setOpacity(opacity);
     }
+
+    /**
+     * Creates a popup to a website when used.
+     * @param event
+     * @author Christian Storck
+     */
+    @FXML
+    private void tutorialPopUp(MouseEvent event){
+        String url = "https://urbanoasis.carrd.co/";
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("Desktop is not supported on this platform.");
+        }
+    }
 }
+
