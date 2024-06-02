@@ -21,7 +21,7 @@ public class SoundEffectHandler {
     /** method chooses one of three songs in the resources and starts playing it on loop*/
     public void startBackgroundMusic() {
         try {
-            int randomSong = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+            int randomSong = ThreadLocalRandom.current().nextInt(1, 3 + 1);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/sounds/defaultMusic"+randomSong+".wav"));
             backgroundMusic = AudioSystem.getClip();
             backgroundMusic.open(audioInputStream);
