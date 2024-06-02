@@ -27,7 +27,6 @@ public class Controller {
     private WidgetHandler widgetHandler;
     private LoginHandler loginHandler;
     private WeatherUpdater weatherUpdater;
-    private InformationConverter infoConverter;
     private User currentUser;
     private SoundEffectHandler soundEffectHandler;
     private static Controller instance;
@@ -36,7 +35,6 @@ public class Controller {
     private Controller() {
         clientConnection = new ClientConnection(this);
         loginHandler = new LoginHandler(this);
-        infoConverter = new InformationConverter(this);
         weatherUpdater = new WeatherUpdater(this);
         soundEffectHandler = new SoundEffectHandler();
 

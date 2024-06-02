@@ -46,19 +46,19 @@ public class PlantTop implements Serializable {
     public synchronized void updateStage() {
 
         if (this.stage != Stage.DEAD) {
-            // the plant would be "planted" for 20 minutes:
+            // (on normal speed) the plant would be "planted" for 20 minutes:
             if (age < 20) {
                 this.stage = Stage.PLANTED;
             }
-            // the plant would be a baby for 2 hours (120 mins):
+            // (on normal speed) the plant would be a baby for 2 hours (120 mins):
             else if (age < 22) {
                 this.stage = Stage.BABY;
             }
-            // the plant would be young for 5 hours (300 mins):
+            // (on normal speed) the plant would be young for 5 hours (300 mins):
             else if (age < 24) {
                 this.stage = Stage.YOUNG;
             }
-            // after, the plant would be adult forever (unless it dies):
+            // (on normal speed) after, the plant would be adult forever (unless it dies):
             else {
                 this.stage = Stage.ADULT;
             }
